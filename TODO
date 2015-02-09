@@ -1,0 +1,730 @@
+- En la ventana de saltar a hacer algo con la barra de título.//no se como hacerlo
+
+- Crear un widget que te active una alerta diaria dependiendo a que hora
+empieza tu servicio, de manera automática.
+- Hacer un broadcast para la notificación de que no llega al F2. ALARM_SERVICE
+Así tenemos un daemon que se ejecutará cuando llegue el dia.
+- Que el xml de copia de seguridad tenga el nombre la fecha de creación.
+- Programar de acuerdo con lo que dice Android: http://source.android.com/source/code-style.html
+- Pasar los objetos entre acivitys http://www.sgoliver.net/foro/viewtopic.php?f=5&t=264
+- Sección Ofertas. Poder mostrar diferentes ofertas disponibles para los miembros
+del GRS. Hablar con todo-deporte.com. O que se descargue un fichero xml con las
+ofertas cada cierto tiempo, o que te abra a una página donde se muestren todas.
+Lo malo de esta última forma, sería que los robots de buscadores, podrían
+encontrar dichas ofertas y ya estar disponibles para todo el mundo y de
+exclusividad ya ni hablamos.
+- Hacer que puedas pasar entre los meses del calendario y entre los servicios
+con el dedo, arrastrando la pantalla.
+
+
+- Widget mensual. y de dos semanas.
+- El widget que el primer día sea el lunes.
+- Vista anual.
+- Exportar a pdf la vista anual y un listado de todos los servicios del año
+separado por meses que contengan comentarios, así sería como imprimir la agenda
+por si hay gente que desea tenerlo en papel y así en un futuro no puede usar
+más el movil android pero quiere seguir teniendo todo lo que introdujo de info.
+- Poder añadir varios servicios a un mismo dia. Al lado del dia poner el número
+de servicios, disminuir el tamaño del texto para que entren en cada fila varias
+abreviaturas.
+- Sección notas y recordatorios.
+- Poner el botón de salir de la app en la pantalla de login.
+- Cómputo de horas semanales. Que haya historial, si uno tiene reducción es durante un tiempo, no 
+siempre, ahora si cambio el cómputo me lo cambia de toda la historia, no debería, si tengo reducción
+durante un año, ese año se cambia pero el resto normal.
+- En servicios, tipos y domingos, que puedas poner el color que había la anterior vez, es decir,
+a parte del color por defecto, copiar y pegar, otra opción de anterior color.
+- Poder ordenar los tipos para que salgan en el desplegable como uno quiera.
+- Poder guardar las copias de seguridad en copy.
+- Hacer un backup en un calendario de google.
+- En las comisiones, que controle si lavandería a partir del cuarto dia.
+- Poder poner horas de referencia mensuales en vez de semanales.
+- Cómputo de horas semanales en rango de fechas.
+- Al crear un servicio desde mantener click y después se entra y se borra al volver al calendario,
+al volver a mantener click sobre una celda vacía salta el desplegable en vez de insertar el último
+servicio.
+- Mejorar algunos iconos como los de salir y añadir horas se ven pixelados.
+- Poder introducir texto en minusculas.
+- poder poner vacaciones y asuntos de otro año en el otro año
+- en el resumen si hay vacas que salga el crédito gastado ya que la gente es tan tonta que no ve lo
+ del crédito en configuracion
+- Estadísticas mensuales y anuales.
+- cambiar los festivos a una pantalla donde crearlos todos y no desde dentro del día. Así al borrar 
+un servicio no se pierde el festivo.
+- al hacer click en el icono de horas ver otro formato que sea ver las horas realizadas por semana 
+puesto los domingos//no lo puedo hacer porque sería mucho trabajo, hay que modificar que se graben
+las horas diarias y f2 de cada servicio xk si se lee cada vez que se da al botón de horas del
+calendario sería muchísimo calculo y tardaría en ejecutarse.
+- En comisiones poder ver las horas y el f2 realizado en cada una de ellas.
+- poder ver el calendario como una lista con el día, nombre, horario y comentarios.
+- en las comisiones el dinero total que salga como sumas para que puedas añadir, quitar etc cosas 
+y sepas de que viene la suma de cada cosa
+- poder tener archivos adjuntos a la app, como ficheros con legislación etc...
+- Poder hacer que los días festivos sigan teniendo el color del servicio y no rojo.
+- cúado editas un servicio que si te vas para atrás te salte una ventana diciendote que hay cambios
+ que si quietes guardarlos.
+- cuando eleminas por rango de fechas y terminas en fecha anterior al mes actual borra servicios de
+ todos modos
+- cuando añades servicios que haya algo de deshacer como en los editores fe texto, para deshacer 
+los cambios últimos realizados
+---------------------------------------------------------------------------------------------------
+2-11-2014 Versión Cuadrante 2.1
+---------------------------------------------------------------------------------------------------
+x Bug fixed. Arreglado algun error que me muestra play store de algunos usuarios.
+---------------------------------------------------------------------------------------------------
+31-10-2014 Versión Cuadrante 2.0
+---------------------------------------------------------------------------------------------------
+x Modified. Ahora el índice que hay que sobrepasar para conseguir el F2 es 10.5.
+---------------------------------------------------------------------------------------------------
+29-09-2014 
+---------------------------------------------------------------------------------------------------
+x Bug fixed. Si estás de baja más de 5 días ahora ya no se te notifica el f2.
+x Bug fixed. En el listado de tipos ahora sale escrito el tipo de dia -1.
+---------------------------------------------------------------------------------------------------
+28-09-2014 Versión Cuadrante 1.9
+---------------------------------------------------------------------------------------------------
+x Added. Paleta de colores.
+---------------------------------------------------------------------------------------------------
+27-09-2014
+---------------------------------------------------------------------------------------------------
+x Added. Ahora en turnos, al añadir un tipo que termine al dia siguietne se añade el saliente
+automaticamente en el listado de tipos del turno.
+x Added. Ahora en el calendario un servicio con tipo de dia no computable -1, aparece '--' al lado
+del día, para saber visualmente que ese día no cuenta.
+x Bug fixed. Al editar un servicio que tenia saliente, por otro que no, ahora se elimina el saliente.
+x Bug fixed. Vacaciones ultimo día como festivo ahora descuenta el dia.
+---------------------------------------------------------------------------------------------------
+26-09-2014
+---------------------------------------------------------------------------------------------------
+x Added. En el listado de comisiones, al hacer click en una sale un desplegable con las opciones
+editar o saltar al mes del calendario cuando empieza la comision.
+x Modified. En turnos ya no se gira la pantalla.
+x Bug fixed. Cuando actualizas un tipo o servicio con saliente ahora se actualizan los colores
+del saliente.
+x Bug fixed. Ahora no se puede crear un tipo con el título y abreviatura vacíos.
+---------------------------------------------------------------------------------------------------
+25-09-2014
+---------------------------------------------------------------------------------------------------
+x Modified. Ahora puedes guardar un servicio como tipo de dia y se guardan las horas que hayas
+puesto, pero después no cuentan en el calendario como horas trabajadas.
+x Bug fixed. Ahora al poner en el calendario un dia como festivo se actualiza el widget.
+---------------------------------------------------------------------------------------------------
+24-09-2014
+---------------------------------------------------------------------------------------------------
+x Added. Nuevo tipo de dia, no computable -1 día natural del mes, para servicios los cuales ese día
+no se cuenta como natural del mes (Vuelta ciclista).
+x Added. Añadido el nombre de la comisión en la barra de título dentro de un servicio, si este
+está dentro de las fechas de una comisión.
+x Bug fixed. Arreglado en el widget de que salia incorrectamente a veces el fondo lo de comisión.
+---------------------------------------------------------------------------------------------------
+25-01-2014 Versión Cuadrante 1.8
+---------------------------------------------------------------------------------------------------
+x Added. Búsqueda avanzada.
+---------------------------------------------------------------------------------------------------
+23-01-2014
+---------------------------------------------------------------------------------------------------
+x Modified. Se han añadido en la instalación los servicios MAÑANA, MAÑANA-NOCHE, TARDE, NOCHE,
+PUERTAS, con horarios inventados y también el turno AFRICANO, para que haya un pequeño ejemplo
+de servicios con horarios y la gente sepa como insertar más de un servicio el mismo día.
+x Bug fixed. Al hacer click en el boton "hoy" para llevarte al mes actual, ahora está arreglado el
+que no se mostraba correctamente todos los días.
+---------------------------------------------------------------------------------------------------
+22-01-2014 Versión Cuadrante 1.7
+---------------------------------------------------------------------------------------------------
+x Added. Añadido en el action bar del calendario el botón para ir directo al mes actual del movil, 
+y quitado el de buscar directamente.
+x Modified. Al insertar un turno te pregunta el modo de inserción, si en bloque o hasta una fecha.
+x Modified. Se ha quitado de los menus de las pantallas el saltar a configuración.
+x Modified. Cambiado 'Saltar a' por 'Ir a'.
+---------------------------------------------------------------------------------------------------
+21-01-2014
+---------------------------------------------------------------------------------------------------
+x Added. Turnos corridos.
+x Added. En configuración ahora se puede decidir si se quiere mostrar o no tanto la opción de 
+'Entrar en el servicio' como 'Crear nuevo tipo de servicio' de la lista que aparece al hacer click
+en un día del calendario.
+---------------------------------------------------------------------------------------------------
+16-01-2014 Versión Cuadrante 1.6
+---------------------------------------------------------------------------------------------------
+x Added. En el historial de tipos de servicios, ahora al hacer clic en un año salen listados
+todos los servicios.
+x Added. En el resumen de horas trabajadas y de referencia, ahora se añade las horas de diferencia.
+---------------------------------------------------------------------------------------------------
+13-01-2014 Versión Cuadrante 1.5
+---------------------------------------------------------------------------------------------------
+x Added. Control de la manutención en las comisiones. Ahora según el día de salida y regreso se
+calculará el total dependiendo de dichos horarios.
+---------------------------------------------------------------------------------------------------
+10-01-2014
+---------------------------------------------------------------------------------------------------
+x Added. Ahora se puede cambiar el color de fondo y texto de los festivos.
+x Added. Ahora se puede cambiar el color de fondo y texto por defecto para los servicios nuevos 
+a crear.
+x Modified. Cambiado por defecto el número de asuntos particulares de 3 a 4, según la nueva Orden.
+---------------------------------------------------------------------------------------------------
+09-01-2014
+---------------------------------------------------------------------------------------------------
+x Added. Al sobrepasar las horas del mes, trimestre y f2, los textos se ponen en rojo.
+x Added. Ahora se puede cambiar el color de fondo y texto del día actual en el calendario.
+x Modified. Cambiado el formato del resumen de horas en el calendario, ya no sale .0 por ejemplo.
+x Bug fixed. No contaba correctamente tanto el f2 como las horas para navidad y fin de año.
+---------------------------------------------------------------------------------------------------
+06-01-2014
+---------------------------------------------------------------------------------------------------
+x Modified. Se aumenta la anchura de las celdas para lo de ver horarios en el calendario.
+---------------------------------------------------------------------------------------------------
+05-01-2014
+---------------------------------------------------------------------------------------------------
+x Added. Al mantener click en una celda vacía te inserta el último tipo de servicio usado. El
+tipo debe de ser sin rango de fechas y sin preguntar horarios.
+x Bug fixed. No se actualizaban las horas del mes si se creaba un tipo de servicio directamente
+desde el calendario.
+---------------------------------------------------------------------------------------------------
+17-12-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Las horas de referencia mensuales y trimestrales se redondean a 0, 0.5 ó +1.
+---------------------------------------------------------------------------------------------------
+05-12-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Las horas de referencia mensuales y trimestrales se redondean a 0, 0.25, 0.5, 0.75 ó +1.
+---------------------------------------------------------------------------------------------------
+04-12-2013 Versión Cuadrante 1.4
+---------------------------------------------------------------------------------------------------
+x Added. Real decreto 462/2002, de 24 de mayo, por indemnizaciones por razón de servicio. Ahora
+según el horario de un servicio aparecerá un icono de euro al lado del día en el calendario si
+se tiene derecho a manutención.
+x Modified. Quitado el texto horas en las horas de referencia en el calendario.
+x Bug fixed. Arreglado el cómputo de horas de referencia, en cuanto si un día era festivo y a la
+vez no computable sumaba todo junto, en vez de coger el no computable.
+---------------------------------------------------------------------------------------------------
+01-12-2013 Versión Cuadrante 1.3
+---------------------------------------------------------------------------------------------------
+x Modified. Se cambia el texto "Entrar" por "Editar" al hacer clic en un tipo en el listado de tipos.
+x Bug fixed. En el último servicio del año no contaba correctamente las horas del mes y trimestre.
+x Bug fixed. Si al crear una comisión no se introducían fechas o la fecha de inicio era mayor que
+la fecha fin petaba la aplicación.
+---------------------------------------------------------------------------------------------------
+07-11-2013
+---------------------------------------------------------------------------------------------------
+x Bug fixed. En el último servicio de mañana noche no contaba correctamente las horas de cada mes.
+---------------------------------------------------------------------------------------------------
+27-10-2013 Versión Cuadrante 1.2
+---------------------------------------------------------------------------------------------------
+x Modified. Dado más distancia a la derecha en los resultados del listado de comisiones.
+x Bug fixed. Cambiado la versión de la bd porque en 2 daba error a la gente que tenía instalado
+la versión 1.0 de la app y se actualizaba a la 1.1. Ahora la versión la he puesto a la 7.
+---------------------------------------------------------------------------------------------------
+23-10-2013 Versión Cuadrante 1.1
+---------------------------------------------------------------------------------------------------
+x Modified. Nuevo icono de la aplicación.
+x Modified. Al actualizar la app se vacía la tabla de horas para que ya coja bien las horas de 
+referencia mensuales.
+---------------------------------------------------------------------------------------------------
+22-10-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Se ha modificado en la pantalla del calendario que no se pueda girar la pantalla.
+x Modified. En el listado de comisiones, en la barra inferior donde aparecen los dias comisionados
+totales del año, se ha dejado más espacio hacia la izquierda y la derecha porque en algunos
+dispositivos la barra de desplazamiento pisaban el número de dias sin poder verse.
+x Bug fixed. Al cambiar las horas de referencia semanales en configuración ahora se actualiza
+las horas mensuales en el calendario.
+---------------------------------------------------------------------------------------------------
+20-10-2013 Versión Cuadrante 1.0
+---------------------------------------------------------------------------------------------------
+x Modified. Vacaciones. Ahora se incluye la nueva O.G de Vacaciones del 2013, cuyo cambio principal
+es que se tienen 6 dias como máximo al año para gastar como quieras sin que cuenten findes y
+festivos por medio.
+x Bug fixed. Vacaciones. No contaba correctamente las vacas gastadas si el primer día de todas las
+vacas del año era finde o festivo.
+x Bug fixed. Eliminar por rango de fechas. Ahora se actualiza el widget.
+---------------------------------------------------------------------------------------------------
+19-10-2013
+---------------------------------------------------------------------------------------------------
+x Bug fixed. Calendario. Al añadir un tipo de servicio que había que introducir horarios y este
+servicio era menor del dia 10 no guardaba correctamente el registro.
+x Bug fixed. Imported backup. Al importar una copia de seguridad que contenia horas mensuales
+double daba error y no cargaba toda la configuración.
+x Bug fixed. Calendario. Al mostrar los horarios se corrige el que se mostrara en la misma linea
+sin ser la celda tan ancha.
+x Bug fixed. Calendario. Cuando una comisión era de más de 2 meses el mes intermedio no se mostraba
+en cada celda "COM".
+---------------------------------------------------------------------------------------------------
+01-07-2013
+---------------------------------------------------------------------------------------------------
+x Added. En configuración se añade la sección "Comisiones" y dentro se especifican la dieta diaria,
+como se ve el total de cada comisión si total o 80%, 20% + lavandería, y si se ven lo de días largas
+y cortas y a cuanto equivale.
+x Added. Ahora para cada comisión se puede especificar si ver el total de la dieta o el 80%, 20% + 
+lavandería.
+x Modified. Se quita lo de buscar en el menu desplegable y se pone el botón en la barra de arriba
+en el calendario.
+---------------------------------------------------------------------------------------------------
+28-06-2013
+---------------------------------------------------------------------------------------------------
+x Added. Ahora se incluyen las horas nocturas y festivas y el % que equivale durante ese mes.
+---------------------------------------------------------------------------------------------------
+27-06-2013
+---------------------------------------------------------------------------------------------------
+x Added. Preguntar para insertar horarios. Ahora puedes activar en los tipos de servicios la opción
+de preguntar para insertar horarios, por lo que cuando seleccionas un tipo con esta característica
+desde el calendario te saltará los campos de introducción de hora inicio y fin del servicio.
+x Added. Ahora se impide eliminar el tipo de servicio vinculado a las bajas.
+x Bug fixed. Autobackup. Ahora primero mira si estás logeado y si no es así no crea todavía el
+autobackup.
+x Modified. Nuevo icono de la app.
+---------------------------------------------------------------------------------------------------
+17-06-2013
+---------------------------------------------------------------------------------------------------
+x Added. Eliminar servicios por rango de fechas.
+---------------------------------------------------------------------------------------------------
+16-06-2013
+---------------------------------------------------------------------------------------------------
+x Added. En configuración se puede cambiar los colores de fondo y texto de los domingos.
+x Added. En la selección de colores tanto de fondo como de texto en servicios, tipos y domingos
+ahora está la opción junto con copiar y pegar, la de "Color por defecto", así podemos volver a
+poner el color por defecto que determina la app.
+x Added. Al guardar un servicio con 24 horas de servicio salta un mensaje preguntando si está
+seguro de que es este el horario que quiere. En configuración se puede desactivar este mensaje.
+---------------------------------------------------------------------------------------------------
+15-06-2013
+---------------------------------------------------------------------------------------------------
+x Added. En configuración se puede activar si quieres ver siempre los domingos en rojo aunque tengan
+servicio. El widget también se activa dicho color.
+x Bug fixed. Pas. Ahora al cambiar el pas se actualiza el calendario correctamente.
+---------------------------------------------------------------------------------------------------
+31-05-2013
+---------------------------------------------------------------------------------------------------
+x Added. Widget semanal. Ahora en configuración se puede elegir que día mostrar en la primera celda
+si ayer, hoy o mañana.
+x Added. Imagen de muestra del widget.
+x Added. Guardias combinadas. Ahora se cuentan las horas trabajadas según la O.G de productividad,
+es decir, Clases A, C y D 7 horas, Clase B 16 horas.
+x Modified. Al importar una copia se resetean todas las shared preferences, así no quedan algunas
+sin sobreescribir.
+x Bug fixed. F2. Arreglado error de que no contaban los minutos.
+x Bug fixed. Calendario. Arreglado el que el día actual del movil era 31 salia activado el 1 de
+dicho mes.
+x Bug fixed. F2. Arreglado error de que no contaba correctamente las horas y minutos y f2 del
+último servicio del mes pasado si tenía horas en el mes actual.
+x Bug fixed. Comisiones. Arreglado la importación correcta de hoteles y comisiones de una copia
+de seguridad.
+x Bug fixed. Comisiones. Arreglado el error de que salian a veces un hotel que no correspondia
+con la comisión.
+x Bug fixed. Calendario. Si un dia tenias un servicio, le dabas al botón de ver horarios en el
+calendario y te cambiabas de mes donde no hubiera servicios, se veían los textos del PAS en pequeño,
+ahora arreglado.
+---------------------------------------------------------------------------------------------------
+30-05-2013
+---------------------------------------------------------------------------------------------------
+x Added. F2. Sucesión en el mando.
+x Added. F2. Si se superan los 5 días de baja en el mes ahora se tacha todo el texto del F2 en el 
+calendario, para indicar que no se cobra el F2 ese més.
+x Modified. 3 días de asuntos particulares por defecto en la instalación.
+x Bug fixed. F2. Ahora suma correctamente para navidad y fin de año.
+---------------------------------------------------------------------------------------------------
+29-05-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Si un servicio tiene comentarios y lo cambiamos por otro tipo, ahora te mantiene 
+dichos comentarios.
+x Modified. Al querer editar el título o la abreviatura de un tipo o servicio ahora sale el texto
+que había, no como antes que salía el campo de texto vacío.
+x Bug fixed. Calendario. Fallo del F2. No contaba correctamente con más de un festivo seguido.
+x Bug fixed. Calendario. Un día sin servicio si se le activaba desde el desplegable lo de marcar día
+festivo, se activaban los 4 horarios sumándole 100 horas.
+x Bug fixed. Calendario. Si marcabas desde el desplegable un servicio como festivo no actualizaba
+el F2 y las horas de referencia.
+x Bug fixed. Calendario. Cuando añadías un servicio con rango de fechas no actualizaba las horas de
+referencia.
+x Bug fixed. Widget. Cuando añadías un servicio con rango de fechas no actualizaba el widget.
+x Bug fixed. Widget. Cuando eliminabas un servicio con otro color que no fuera blanco la celda
+en el widget mostraba el color antiguo en vez del blanco para las celdas vacías.
+x Bug fixed. Widget. Cuando lo desactivabas desde admin se seguían mostrando los servicios.
+x Bug fixed. Vacaciones. Ahora si empieza un festivo, sábado o domingo y tiene igual o más de 5
+días hábiles no cuenta ese primer día. Ejemplo: Empieza un sábado y termina el viernes.
+x Bug fixed. La longitud de las abreviaturas no funcionaba al editar un servicio en el calendario.
+x Bug fixed. En resultados de búsqueda si un servicio no tenía horarios aparecían los caracteres |.
+x Bug fixed. En resultados de búsqueda no aparecían los comentarios sobre el texto a buscar cuando
+dicho texto no estaba exactamente igual escrito (mayúsculas o minúsculas).
+---------------------------------------------------------------------------------------------------
+21-04-2013
+---------------------------------------------------------------------------------------------------
+x Added. Horas trimestrales.
+x Modified. El widget ahora se actualiza automaticamente cada 6 horas.
+---------------------------------------------------------------------------------------------------
+14-04-2013
+---------------------------------------------------------------------------------------------------
+x Added. Widget de escritorio semanal donde muestra desde el servicio de ayer 
+hasta 7 días después.
+---------------------------------------------------------------------------------------------------
+10-04-2013
+---------------------------------------------------------------------------------------------------
+x Bug fixed. Fallo del F2. No contaba correctamente con más de un festivo seguido.
+x Bug fixed. Fallo de mostrar horas en el calendario. Si los horarios se mostraban seguidos gracias
+a la anchura de la pantalla, en los servicios donde no había horas mostraba la barra de separación
+entre horas "/".
+---------------------------------------------------------------------------------------------------
+09-04-2013
+---------------------------------------------------------------------------------------------------
+x Added. Al eliminar un servicio y tiene al día siguiente un saliente, ahora lo elimina también.
+x Modified. Suma de 24 horas reales de trabajo. Ahora por defecto los horarios no salen tanto 
+en tipos como en servicios, hay que hacer clic en el botón de 'Añadir franja horaria' para que 
+aparezca. Por supuesto cuando se importa una copia de seguridad de la aplicación grs se actualizan 
+los horarios. 
+x Modified. Al importar una copia de la app grs, cambia "ASUNTOS PROPIOS" por "ASUNTOS PARTICULARES".
+---------------------------------------------------------------------------------------------------
+07-04-2013
+---------------------------------------------------------------------------------------------------
+x Added. Ahora al importar una copia de seguridad y es de la aplicación GRS, entonces actualiza las
+vacaciones y asuntos particulares al valor del tipo de dia correspondiente, y a la vez pide al
+usuario que seleccione los tipos de servicios que tenga vinculado a bajas, y los diferentes permisos
+también para actualizar los servicios a esos y ponerles el tipo de dia adecuado 7.5 o 5.35.
+x Added. Al cambiar los minutos de un servicio o tipo se va en intervalos de 15 minutos, casi siempre
+los servicios van a terminar a en punto, y cuarto y media o a menos cuarto, nunca a y 47 por ejemplo.
+en blanco, independientemente si tiene un servicio o no.
+x Added. En un servicio al editarlo ahora se ve Día importante, si se checkea ese servicio en el calendario
+se verá con una estrella blanca al lado de la fecha del día.
+x Modified. Cuando eliminas un tipo que el nombre se guarde en los comentarios de cada servicio por si en un
+futuro se quiere saber que significaba las siglas del tipo.
+x Modified. El día de hoy en el calendario siempre se va a mostrar ahora con el color de fondo verde y texto
+---------------------------------------------------------------------------------------------------
+28-03-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Al ver el calendario en modo horarios, ahora dependiendo de la anchura de cada celda 
+se ponen los horarios en la misma linea.
+---------------------------------------------------------------------------------------------------
+27-03-2013
+---------------------------------------------------------------------------------------------------
+x Added. Horas de referencia mensual. Ahora en tipos y servicios está el desplegable Tipo de dia, 
+con el que seleccionar si ninguno, no computable (5.35) o especial (7.5). Así se sabe al més 
+cuantas horas se deben de hacer como referencia.
+---------------------------------------------------------------------------------------------------
+26-03-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Si al añadir un servicio que al dia siguiente tienes saliente, y ese día siguiente ya 
+hay un servicio pero sin abreviatura (día festivo) se añade el saliente solamente sin modificar nada
+de ese servicio del día siguiente.
+---------------------------------------------------------------------------------------------------
+24-03-2013
+---------------------------------------------------------------------------------------------------
+x Mejorando las funciones de MainActivity, pasándo algunas a estáticas en la clase Grs, así se
+disminuye el tamaño de lineas de Main.
+x Added. Ahora si se quiere eliminar el tipo de servicio vinculado a vacaciones o asuntos 
+particulares salta una alerta diciendo que no se puede.
+x Added. Sección "contacto". Te abre un email nuevo con la dirección del programador.
+---------------------------------------------------------------------------------------------------
+21-03-2013
+---------------------------------------------------------------------------------------------------
+x Added. Ahora en tipos de servicios, al hacer clic sale un menu para elegir si entrar
+en el tipo o ver el historial. Al ver el historial se puede ver por año cuantos
+servicios se han hecho.
+---------------------------------------------------------------------------------------------------
+20-03-2013
+---------------------------------------------------------------------------------------------------
+x Added. En el calendario poder ver solo los horarios. Ahora en el actionbar sale
+el icono de horarios, para ver los de todo el mes.
+x Modified. Cambiado la imagen de entrada en el login de la app, antes salia el ic_launcher
+ahora sale una imagen "Cuadrante".
+x Added. En el listado de comisiones salen los servicios hechos y el número de cada uno.
+x Modified. En las búsquedas, ahora si no hay resultados aparece un texto.
+x Added. En el resultado de las búsquedas, ahora al hacer clic sale un menu con dos
+opciones, entrar en el servicio o saltar al mes de dicho servicio.
+---------------------------------------------------------------------------------------------------
+19-03-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Se modifica el diálogo de selección de colores para el texto y fondo de los
+servicios y tipos. Ahora es mucho más facil elegir el color deseado.
+---------------------------------------------------------------------------------------------------
+05-03-2013
+---------------------------------------------------------------------------------------------------
+x Added. Eliminar el backup cuando se envie por correo y cuando se importe. 
+x Added. Poder modificar el número de caracteres a mostrar en la abreviatura, ya que
+hay dispositivos android más grandes que hacen que se pueda mostrar más texto.
+x Added. En el calendario, ahora si estás logeado, te sale en la barra de título el
+icono de logout.
+x Bug fixed. Arreglado el que el submenu del calendario salía de fondo negro sin poder
+leerse bien las opciones de configuración, acerca de y ayuda.
+---------------------------------------------------------------------------------------------------
+04-03-2013
+---------------------------------------------------------------------------------------------------
+x Bug fixed. Corrección de comisiones en un calendario. No se mostraban todos los dias de
+una comisión en el calendario.
+x Modified. Cambiado lo de alertas en calendario por guardias combinadas.
+---------------------------------------------------------------------------------------------------
+03-03-2013
+---------------------------------------------------------------------------------------------------
+x Added. Login.
+x Importación correcta de la copia de la app Cuadrante GRS.
+---------------------------------------------------------------------------------------------------
+25-02-2013
+---------------------------------------------------------------------------------------------------
+x Added. Al hacer clic en un dia del calendario o mantener el clic, al salir el 
+desplegable que se añada aparece ahora "Marcar como día festivo", así podemos
+poner o quitar un dia como festivo facilmente, sin tener que entrar dentro
+del servicio.
+---------------------------------------------------------------------------------------------------
+24-02-2013
+---------------------------------------------------------------------------------------------------
+x Modified. Cambiar asuntos propios por particulares.
+---------------------------------------------------------------------------------------------------
+12-02-2013
+---------------------------------------------------------------------------------------------------
+x Added. P.A.S
+---------------------------------------------------------------------------------------------------
+10-02-2013 ------------ CUADRANTE
+---------------------------------------------------------------------------------------------------
+x Added. Comisiones.
+---------------------------------------------------------------------------------------------------
+27-01-2013 Versión 2.8 y 2.9
+---------------------------------------------------------------------------------------------------
+x Calendario. Texto total horas y f2 puesto en negrita.
+---------------------------------------------------------------------------------------------------
+17-01-2013 Version 2.7
+---------------------------------------------------------------------------------------------------
+x Arreglado el que al hacer click en un checkbox en servicio o tipo no se
+guardaban los datos después.
+x Cambiado la pantalla "Acerca de", ahora salen los cambios en las diferentes
+versiones de la app.
+---------------------------------------------------------------------------------------------------
+13-01-2013 Versión 2.6
+---------------------------------------------------------------------------------------------------
+x Arreglado error por el que al copiar un texto de menos de 2 caracteres, al
+intentar cambiar de color un servicio cerraba la app.
+x Arreglado error por el que el F2 no se contaba correctamente si se ponia como
+festivo un domingo.
+x Al actualizar un tipo, si hay algún servicio en festivo cambia el color
+del rojo al que sea. Impedirlo.
+x Al crear un tipo directamente en el cuadrante y es con rango de fechas hacer 
+que al grabar salte lo de meter la fecha.
+---------------------------------------------------------------------------------------------------
+10-12-2012 Versión 2.5
+---------------------------------------------------------------------------------------------------
+x Arreglado error por el cual al no introducir dias en el F2, al arrancar el
+programa daba error y cerraba la aplicación, no pudiendo funcionar.
+x Quitado botón cancelar en la pantalla de editar/crear servicio y tipo de servicio.
+---------------------------------------------------------------------------------------------------
+30-11-2012
+---------------------------------------------------------------------------------------------------
+x Se quita la opción de votar por la app, ya que google ha añadido ayer día 29
+que todo aquel usuario que comente una app tenga que añadir su identidad de
+Google+, eso implica en mi app, que todo aquel que vote se verá que es guardia.
+Si alguien quiere votar que vote por su cuenta y riesgo.
+---------------------------------------------------------------------------------------------------
+23-11-2012
+---------------------------------------------------------------------------------------------------
+x Incitar al usuario a que vote la aplicación en google play, al mes de tenerla
+instalada mostrarle un mensaje de que si quiere ir a votar la app a la página
+de google play. Cuando se inicie 200 veces la app le saldrá el mensaje.
+---------------------------------------------------------------------------------------------------
+22-11-2012 Version 2.4
+---------------------------------------------------------------------------------------------------
+x Arreglado fallo en el recuento de días de vacaciones. No contaba correctamente
+si el último dia de un rango de vacas terminaba en dia laborable.
+x Arreglado el que si no introducias texto en la búsqueda de comentarios, te 
+mostraba todos los servicios hasta el 2020 por lo menos.
+x Arreglado título de la pantalla de resultados de la búsqueda.
+x Cambiado color del título de la ventana de saltar a.
+---------------------------------------------------------------------------------------------------
+20-11-2012
+---------------------------------------------------------------------------------------------------
+x Añadido iconos propios para la aplicación, tanto menú como actionbar, así se
+ quita de usar los que vienen con el sistema.
+---------------------------------------------------------------------------------------------------
+19-11-2012 Version 2.3
+---------------------------------------------------------------------------------------------------
+x Arreglado notificación del F2. No se activaba correctamente.
+---------------------------------------------------------------------------------------------------
+19-11-2012 Versión 2.2
+---------------------------------------------------------------------------------------------------
+x Al hacer click en un día del calendario que no tenga servicio aparece ahora
+el menu desplegable con los tipos de servicio y con una opción de todos modos
+para acceder al servicio y modificarlo desde 0. Si el dia tiene servicio entra
+directo. El mantener el dedo encima sigue saliendo el desplegable.
+---------------------------------------------------------------------------------------------------
+18-11-2012
+---------------------------------------------------------------------------------------------------
+x Cambiado el diseño de las pantallas de crear/editar servicios y tipos.
+x Arreglado fallo por el cual al no introducir el número de vacaciones o
+de asuntos propios cerraba la aplicación.
+---------------------------------------------------------------------------------------------------
+16-11-2012
+---------------------------------------------------------------------------------------------------
+x Arreglado pequeño fallo encontrado en el F2, que no sumaba correctamente
+si el inicio del horario del servicio era anterior a las 6 de la mañana.
+x Quitado opción de menú "Añadir horario" en el listado de tipos de servicio.
+---------------------------------------------------------------------------------------------------
+12-11-2012 Versión 2.1
+---------------------------------------------------------------------------------------------------
+x Botón de +horas en servicio y tipo al lado de los botones de Listo, cancelar
+y eliminar, ya que los usuarios por defecto no saben que si le dan al botón menu
+puedes añadir otra franja horario dentro de un servicio o tipo.
+x Cambiado algunos textos.
+x Cambiado ventana de "Acerca de", ahora muestra la ventana de "Primeros pasos".
+---------------------------------------------------------------------------------------------------
+30-10-2012 Versión 2.0
+---------------------------------------------------------------------------------------------------
+x Cambiado los botones de copiar y pegar color. Ahora están más separados del de 
+confirmar y color por defecto.
+x Arreglado la segunda linea de texto que aparece en el listado de tipos
+de servicios. Ahora se ve mejor si es alerta, si tiene rango, y separado mejor
+los horarios.
+---------------------------------------------------------------------------------------------------
+29-10-2012 
+---------------------------------------------------------------------------------------------------
+x Cuando se hacen tipos de servicios, estaría bien poder copiar los colores,
+ya que hay veces que quieres el mismo color para varios tipos de servicio. 
+---------------------------------------------------------------------------------------------------
+28-10-2012
+---------------------------------------------------------------------------------------------------
+x Incluir en el backup los shared preferences y que se reinstalen con la importación.
+x Cuando se importa el backup, hay que salir de la app, para que cargue de nuevo
+las pantallas. Hacer algo para que no se tenga que cargar.
+x Se ha mejorado el tiempo de carga del cuadrante en 600ms, pasando de 
+alrededor de 2500ms a 1800ms más o menos.
+x La notificación del F2 seguía saltando cuando navegabas a algún mes el cual
+no habías conseguido el F2. Arreglado.
+---------------------------------------------------------------------------------------------------
+27-10-2012
+---------------------------------------------------------------------------------------------------
+x Arreglado el texto "File dialog" que salia en la ventana de Acerca de.
+x Cambiado el nombre de la aplicación y del package a es.progmac.android.grs
+x Añadido las ventanas de Changelog cuando se instala o actualiza la app, y la
+ventana Primeros pasos.
+x Añadido el que tenga que tener más de 5 servicios un mes para que salte la
+notifición del F2. Pasaba que si se instalaba la applicación al final de un mes
+saltaba la notifiación automaticamente por no tener ningún servicio.
+---------------------------------------------------------------------------------------------------
+26-10-2012 Versión 1.8.4
+---------------------------------------------------------------------------------------------------
+x En el backup poder configurar el backup automatico, cada dia, cada semana, 
+cada mes.
+x Cambio de nombre del package de algunas clases: es.progmac.android
+---------------------------------------------------------------------------------------------------
+25-10-2012 Versión 1.8.3
+---------------------------------------------------------------------------------------------------
+x Saltar a un mes en concreto.
+---------------------------------------------------------------------------------------------------
+25-10-2012 Versión 1.8.2
+---------------------------------------------------------------------------------------------------
+x Se ha vuelto a generar el apk ya que una vez actualizado a la 1.8.1 no
+abria la app. Se ha cambiado algunas cosas de la configuración del build path
+y se ha vuelto a generar el apk con la contraseña.
+---------------------------------------------------------------------------------------------------
+25-10-2012 Versión 1.8.1
+---------------------------------------------------------------------------------------------------
+x Las vacaciones si empieza el dia un fin de semana o festivo o termina en
+fin de semana o festivo que cuente gastados esos dias, es decir, si empiezas las
+vacas un sabado, ese sábado cuenta, si terminas un domingo ese domingo cuenta
+como gastado.
+---------------------------------------------------------------------------------------------------
+22-10-2012	Versión 1.8
+---------------------------------------------------------------------------------------------------
+x Hacer un backup de la bd y que te la envie por email a tu correo electronico
+para asi tener siempre copias disponibles en el correo por si cambiamos de movil
+poder volver a instalar la app, bajar el backup e instalarlo.
+---------------------------------------------------------------------------------------------------
+12-10-2012
+---------------------------------------------------------------------------------------------------
+x Añadido iconos a los menus.
+x Que una semana antes de que termine el mes actual te salga una alerta en el 
+movil, de que no llegas al F2.
+---------------------------------------------------------------------------------------------------
+10-10-2012	Versión 1.7
+---------------------------------------------------------------------------------------------------
+x Calcular los festivos para el F2.	
+x Hacer que te contabilice en vacaciones los festivos.
+x Pantalla Acerca de donde pondrá la versión de la aplicación, fecha release y 
+por quien está hecha.
+x Cuando se instala la aplicación, la primera vez que se va a la pantalla
+configuración da error y se cierra la app.
+x Parece que un dia de juicio son 7 horas trabajadas, poner que son como de 
+8 a 15 horas, para que no pille de noche y sea F2.
+x Arreglado error de calculo de los minutos en el F2.
+x Modificado el texto de F2 en la pagina de Calendario, ahora también sale el numero
+de alertas que se ha hecho en el mes de 4 alertas para conseguir el F2.
+---------------------------------------------------------------------------------------------------
+03-10-2012
+---------------------------------------------------------------------------------------------------
+x Poder poner para cada año (1 de Febrero al 31 de Enero del año siguiente)
+cuantos dias de vacaciones vas a tener y de asuntos propios para asi ir 
+calculándotelos. 
+x Página de configuración.
+---------------------------------------------------------------------------------------------------
+02-10-2012
+---------------------------------------------------------------------------------------------------
+x En vacaciones pongas el principio y el fin y los días que hay en medio se
+pongan solos. (baja también)
+---------------------------------------------------------------------------------------------------
+29-09-2012
+---------------------------------------------------------------------------------------------------
+x F2: Noche: 22:00 - 06:00
+	Horario festivo: sábado 15:00 hasta el lunes a las 06:00
+	F2 - se hacen con 4 alertas o 10 horas nocturas y festivas, pero las horas
+	son el cálculo de horas nocturnas /4 y las horas festivas entre 2.
+	22:00 - 06:00 - 8 horas nocturas / 4 = 2 horas
+	domingo 08:00 - 15:00 -> 7 horas festivas / 2 = 3.5 horas
+	pues así hasta las 10 horas del mes así se cobra el F2 o con 4 alertas.
+x El ultimo dia del mes y el último del mes anterior calcular las horas
+realizadas durante el horario dentro del propio mes 22:00 - 06:00.
+---------------------------------------------------------------------------------------------------
+25-09-2012
+---------------------------------------------------------------------------------------------------
+x Búsqueda de servicios por comentarios.
+---------------------------------------------------------------------------------------------------
+24-09-2012
+---------------------------------------------------------------------------------------------------
+x Cambiar lo del acceso a la base de datos, tengo dos clases que abren cada
+una una conexión a la base de datos para que cada una acceda a su tabla. Esto
+no puede ser, solo puede abrirse una conexión y ya ejecutar las consultas
+independientemente que tablas sean.
+x Da error de base de datos de que no se cierra en ningún momento que se pasa
+de activity.
+x Cuando se crea un nuevo tipo de servicio desde el desplegable al mantener
+pulsado un dia, los datos los graba, pero no el type_id por lo que no vincula
+el nuevo tipo de servicio con el dia.
+x Los campos shedule deben de llamarse schedule.
+x Nuevo campo de un servicio: Comentarios
+para asi poder poder guardar que hicistes en ese servicio.
+---------------------------------------------------------------------------------------------------
+23-09-2012
+---------------------------------------------------------------------------------------------------
+x Ahora el listado de tipos de servicios al mantener el click en un dia del 
+calendario no se lista por orden alfabético.
+x Al instalar el programa que genere automaticamente los tipos de servicios.
+x Cambiar el icono de la aplicación por el brazo típico del grs.
+---------------------------------------------------------------------------------------------------
+31-08-2012
+---------------------------------------------------------------------------------------------------
+x Arreglado el que al meter un servicio al final del mes daba error porque 
+buscaba el dia 32 y al no existir problem.
+---------------------------------------------------------------------------------------------------
+26-08-2012
+---------------------------------------------------------------------------------------------------
+x Al poner un servicio de noche que te salga saliente al dia siguiente por 
+defecto.
+x Mirar si se puede quitar el título de la aplicación para que haya más pantalla. 
+	styles.xml
+---------------------------------------------------------------------------------------------------
+25-08-2012
+---------------------------------------------------------------------------------------------------
+x ScrollView para el resumen ya que si es muy alto tapa el calendario.
+x Al borrar un tipo de servicio que actualice todos los servicios que tenian
+ese tipo de servicio a 0, pero no eliminarlos.
+x Al editar un tipo de servicio preguntar si se quiere actualizar los datos de 
+todos los servicios ya creados, sería solo pisar la abreviatura, alerta y colores.
+x Al eliminar un servicio, tipo de servicio, que te pregunte si estás seguro
+de querer eliminarlo.
+---------------------------------------------------------------------------------------------------
+23-08-2012
+---------------------------------------------------------------------------------------------------
+x Al editar un horario salga el horario que hay escrito, ahora siempre sale 00:00
+x Debajo del Calendario que salgan cuantos tipos de servicios está habiendo
+durante el mes.
+---------------------------------------------------------------------------------------------------
+22-08-2012
+---------------------------------------------------------------------------------------------------
+x El pasar los meses para atrás o para adelante que sean más grandes xk en el
+movil cuesta a veces hacer click.
+x Al mantener el click en un dia del calendario salga un desplegable con los 
+tipos de servicios, para así rapidamente elegir el servicio adecuado y se guarde.
+x Botón eliminar de un servicio activarlo.
+x Poner en rojo los domingos.

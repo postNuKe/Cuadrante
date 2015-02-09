@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="calendar_service_default_text">#fff</color>
+    
+	<color name="servicio_list_item_title">#f00</color>
+	<color name="servicio_list_item_description">#80ff0000</color>
+	
+	<color name="commission_list_item_on">#fff</color>
+	<color name="commission_list_item_off">#f8f8f8</color>
+	
+	<color name="item_commission">#8a8a8a</color>
+</resources>

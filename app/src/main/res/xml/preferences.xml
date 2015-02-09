@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:threefiftyprefs="http://schemas.android.com/apk/res/es.progmac.android.grs"
+    key="pref_screen" >
+
+    <PreferenceCategory
+        android:key="db"
+        android:title="@string/backup_db_title" >
+        <Preference
+            android:key="backup_db_export"
+            android:summary="@string/backup_db_export_summary"
+            android:title="@string/backup_db_export" />
+        <Preference
+            android:key="backup_db_import"
+            android:summary="@string/backup_db_import_summary"
+            android:title="@string/backup_db_import" />
+
+        <ListPreference
+            android:defaultValue="month"
+            android:entries="@array/backupDBAutoEntries"
+            android:entryValues="@array/backupDBAutoValues"
+            android:key="backup_db_auto"
+            android:summary="@string/backup_db_auto_summary"
+            android:title="@string/backup_db_auto" />
+
+        <EditTextPreference
+            android:defaultValue="tuemail@email.com"
+            android:dialogTitle="@string/email"
+            android:key="email"
+            android:summary="@string/email_summary"
+            android:title="@string/email" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="holidays"
+        android:title="@string/holidays" >
+        <EditTextPreference
+            android:defaultValue="22"
+            android:dialogTitle="@string/days_holidays"
+            android:key="days_holidays"
+            android:numeric="integer"
+            android:summary="@string/interval_anual"
+            android:title="@string/days_holidays" />
+
+        <ListPreference
+            android:defaultValue="6"
+            android:entries="@array/empty_array"
+            android:entryValues="@array/empty_array"
+            android:key="type_service_holidays"
+            android:summary="@string/type_service_holidays_summary"
+            android:title="@string/type_service_holidays" />
+
+        <Preference
+            android:key="num_days_holidays"
+            android:title="@string/resume" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="own_affairs"
+        android:title="@string/own_affairs" >
+        <EditTextPreference
+            android:defaultValue="3"
+            android:dialogTitle="@string/days_own_affairs"
+            android:key="days_own_affairs"
+            android:numeric="integer"
+            android:summary="@string/interval_anual"
+            android:title="@string/days_own_affairs" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/empty_array"
+            android:entryValues="@array/empty_array"
+            android:key="type_service_own_affairs"
+            android:summary="@string/type_service_own_affairs_summary"
+            android:title="@string/type_service_own_affairs" />
+
+        <Preference
+            android:key="num_own_affairs"
+            android:title="@string/resume" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="f2"
+        android:title="@string/f2_title" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="f2_notify_active"
+            android:summary="@string/f2_notify_active_summary"
+            android:title="@string/f2_notify_active" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="f2_notify_active"
+            android:key="f2_notify_flag_sound"
+            android:summary="@string/f2_notify_flag_sound_summary"
+            android:title="@string/f2_notify_flag_sound" />
+
+        <EditTextPreference
+            android:defaultValue="5"
+            android:dependency="f2_notify_active"
+            android:dialogTitle="@string/f2_rest_days"
+            android:key="f2_rest_days"
+            android:numeric="integer"
+            android:summary="@string/f2_rest_days_summary"
+            android:title="@string/f2_rest_days" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="comisiones"
+        android:title="@string/commissiones" >
+        <EditTextPreference
+            android:key="daily_expenses"
+            android:numeric="decimal"
+            android:defaultValue="0"
+            android:dialogTitle="@string/daily_expenses"
+            android:summary="@string/daily_expenses_summary"
+            android:title="@string/daily_expenses" />   
+        <EditTextPreference
+            android:key="daily_manutencion_expenses"
+            android:numeric="decimal"
+            android:defaultValue="0"
+            android:dialogTitle="@string/daily_manutencion_expenses"
+            android:summary="@string/daily_manutencion_expenses_summary"
+            android:title="@string/daily_manutencion_expenses" />   
+        <ListPreference
+            android:key="commissions_total_expenses"
+            android:defaultValue="0"
+            android:entries="@array/commissions_total_expenses_entries"
+            android:entryValues="@array/commissions_total_expenses_values"
+            android:summary="@string/commissions_total_expenses_summary"
+            android:title="@string/commissions_total_expenses_title" />            
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="commissions_days_length_active"
+            android:summary="@string/commissions_days_length_active_summary"
+            android:title="@string/commissions_days_length_active" />
+        <EditTextPreference
+            android:dependency="commissions_days_length_active"
+            android:key="comisiones_length_days"
+            android:numeric="integer"
+            android:defaultValue="10"
+            android:dialogTitle="@string/commissions_days_length"
+            android:summary="@string/commissions_days_length_summary"
+            android:title="@string/commissions_days_length" />                 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="commissions_manutencion_active"
+            android:summary="@string/commissions_manutencion_active_summary"
+            android:title="@string/commissions_manutencion_active" />
+        
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="colors"
+        android:title="@string/colors" >
+        <Preference
+            android:key="service_default_bg_color"
+            android:summary="@string/service_default_bg_color_summary"
+            android:title="@string/service_default_bg_color" />
+        <Preference
+            android:key="service_default_text_color"
+            android:summary="@string/service_default_text_color_summary"
+            android:title="@string/service_default_text_color" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="today_default_color_active"
+            android:summary="@string/today_default_color_active_summary"
+            android:title="@string/today_default_color_active" />        
+        <Preference
+            android:dependency="today_default_color_active"
+            android:key="today_bg_color"
+            android:summary="@string/today_bg_color_summary"
+            android:title="@string/today_bg_color" />
+        <Preference
+            android:dependency="today_default_color_active"
+            android:key="today_text_color"
+            android:summary="@string/today_text_color_summary"
+            android:title="@string/today_text_color" />
+        <Preference
+            android:key="holiday_bg_color"
+            android:summary="@string/holiday_bg_color_summary"
+            android:title="@string/holiday_bg_color" />
+        <Preference
+            android:key="holiday_text_color"
+            android:summary="@string/holiday_text_color_summary"
+            android:title="@string/holiday_text_color" />
+        <Preference
+            android:key="sunday_bg_color"
+            android:summary="@string/sunday_bg_color_summary"
+            android:title="@string/sunday_bg_color" />
+        <Preference
+            android:key="sunday_text_color"
+            android:summary="@string/sunday_text_color_summary"
+            android:title="@string/sunday_text_color" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sunday_color_active"
+            android:summary="@string/sunday_color_active_summary"
+            android:title="@string/sunday_color_active" />        
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="others"
+        android:title="@string/others" >
+        <Preference
+            android:key="login"
+            android:summary="@string/login_summary"
+            android:title="@string/login_title" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/computing_hours_per_week"
+            android:key="computing_hours_per_week"
+            android:numeric="decimal"
+            android:summary="@string/computing_hours_per_week_summary"
+            android:title="@string/computing_hours_per_week" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pas_active"
+            android:summary="@string/pas_active_summary"
+            android:title="@string/pas_active" />
+
+        <ListPreference
+            android:defaultValue="p"
+            android:dependency="pas_active"
+            android:entries="@array/pas_entries"
+            android:entryValues="@array/pas_values"
+            android:key="pas"
+            android:summary="@string/pas_summary"
+            android:title="@string/pas_title" />
+
+        <EditTextPreference
+            android:defaultValue="3"
+            android:dialogTitle="@string/length_service_name"
+            android:key="length_service_name"
+            android:numeric="integer"
+            android:summary="@string/length_service_name_summary"
+            android:title="@string/length_service_name" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="interval_minutes_active"
+            android:summary="@string/interval_minutes_active_summary"
+            android:title="@string/interval_minutes_active" />
+
+        <ListPreference
+            android:defaultValue="3"
+            android:entries="@array/empty_array"
+            android:entryValues="@array/empty_array"
+            android:key="type_service_medical_leave"
+            android:summary="@string/type_service_medical_leave_summary"
+            android:title="@string/type_service_medical_leave" />
+        <ListPreference
+            android:defaultValue="today"
+            android:entries="@array/widget_week_entries"
+            android:entryValues="@array/widget_week_values"
+            android:key="widget_week_first_day"
+            android:summary="@string/widget_week_summary"
+            android:title="@string/widget_week" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="ask_service_24_hours"
+            android:summary="@string/ask_service_24_hours_summary"
+            android:title="@string/ask_service_24_hours" />
+        
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enter_to_service"
+            android:title="@string/enter_to_service"
+            android:summary="@string/enter_to_service_summary"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="create_new_type_service"
+            android:title="@string/create_new_type_service"
+            android:summary="@string/create_new_type_service_summary"/>
+        
+        
+        <!--
+		<es.progmac.android.grs.lib.ListPreferenceMultiSelect
+		    android:dialogTitle="@string/dialog_title_types_services_comision"
+		    android:entries="@array/empty_array"
+		    android:entryValues="@array/empty_array"
+		    android:key="types_services_comision"
+		    android:summary="@string/types_services_comision_summary"
+		    android:title="@string/types_services_comision"
+		    threefiftyprefs:separator="|" 
+		/>
+		<ListPreference 
+			android:key="type_service_default_comision"
+			android:title="@string/type_service_default_comision"
+			android:summary="@string/type_service_default_comision_summary"
+		    android:entries="@array/empty_array"
+		    android:entryValues="@array/empty_array"
+			android:defaultValue="" 
+		/>					
+        -->
+    </PreferenceCategory>
+
+</PreferenceScreen>

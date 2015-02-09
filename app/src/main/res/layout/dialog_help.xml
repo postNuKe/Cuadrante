@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+    <ScrollView
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:background="#000">
+    	<LinearLayout
+	    	style="@style/LinearLayoutDialog">    	
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_name"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_versionName"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_versionDate"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="By Macias"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="----------------------------------------------"/>
+		    		    		    		    		    
+		    		
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="Modifique los horarios de los tipos de servicios"/>	      	
+		    <TextView
+		        style="@style/TextViewChangelog"
+		        android:text="- Por motivos de seguridad, no se han añadido los
+		        horarios de los diferentes servicios que realiza la unidad.
+		        Para ello haga click en el 'Botón menú del movil -> Tipos de servicios',
+		        y vaya modificando los horarios. Puede añadir una franja horaria
+		        dentro de un tipo de servicio haciendo click de nuevo en el botón
+		        menú del movil -> Añadir horario." />
+		    
+			<TextView
+		        style="@style/TextViewH3"
+		        android:text="Configuración"/>		
+		    <TextView
+		        style="@style/TextViewChangelog"
+		        android:text="- Cada miembro del GRS tiene su forma de configurar
+		        esta aplicación.\n Vaya a Menú->Configuración, y realice los
+		        cambios que vea oportunos, principalmente céntrese en los dias
+		        de vacaciones y asuntos propios y los tipos de servicios vinculados
+		        a estos permisos." />
+		
+		    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

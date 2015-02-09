@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/spinner_type_services"
+        android:prompt="@string/select_type_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+ 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        
+        <ListView
+            android:id="@+id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+ 
+    </FrameLayout>
+
+    <LinearLayout
+        style="@android:style/ButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+ 
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ready"
+            android:onClick="onSetData" />
+ 
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:onClick="onSetCancel" />
+   
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/add_shedule"
+            android:text="@string/add_schedule"
+            android:onClick="onSetAddSchedule" />
+         
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:id="@+id/delete_schedule"
+            android:text="@string/delete_schedule"
+            android:onClick="onSetDeleteSchedule" />
+         
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/delete"
+            android:onClick="onSetDelete" />
+        
+        
+        </LinearLayout>
+ 
+</LinearLayout>

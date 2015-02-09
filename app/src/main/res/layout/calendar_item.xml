@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grid_day"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#bd3e3e"
+    android:orientation="vertical"
+    android:padding="4dp" >
+
+    <LinearLayout
+        android:id="@+id/date_line_a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/date"
+            style="@style/calendar_item_date_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+        </TextView>
+        
+        <TextView
+            android:id="@+id/type_day_no_count_natural"
+            style="@style/calendar_item_date_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:visibility="gone"
+            android:text="@string/negative" >
+        </TextView>
+        <ImageView
+            android:id="@+id/manutencion_entera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:contentDescription="@string/manutencion_entera"
+            android:src="@drawable/ic_euro2"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/manutencion_media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:contentDescription="@string/manutencion_media"
+            android:src="@drawable/ic_euro"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/important_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:contentDescription="@string/important_star"
+            android:src="@drawable/important_star"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/date_servicio"
+        style="@style/calendar_item_date_servicio_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </TextView>
+
+</LinearLayout>

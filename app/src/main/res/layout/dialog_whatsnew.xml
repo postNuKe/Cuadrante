@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+    <ScrollView
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:background="#000">
+    	<LinearLayout
+	    	style="@style/LinearLayoutDialog">  
+	    	<TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_name"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_versionName"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_versionDate"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="By progMac"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="@string/app_email_address"/>
+		    <TextView
+		        style="@style/TextViewH3"
+		        android:text="----------------------------------------------"/>
+		    
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 2.1 - 2 de noviembre de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Arreglado error por lo que no arrancaba la app.\n
+- Arreglado algunos fallos reportados por usuarios.\n" />  
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 2.0 - 2 de noviembre de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Modificado el índice para conseguir el F2. Ahora es necesario superar 10.5 y no 10 como estaba
+hasta ahora.\n
+- Arreglado el error de que si estabas más de 5 días de baja en el mes, aún así se te saltaba la
+alarma de que no llegabas al F2.\n
+- Arreglado algún pequeño error.\n" />          
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.9 - 28 de septiembre de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Añadido un tipo de día no computable -1 día natural del mes. Necesario para algunos servicios
+extraordinarios donde se está fuera de SIGO y no se cuenta como día natural del mes para el
+cómputo de horas mensuales y trimestrales.\n
+- Añadida una paleta de colores como opción más en el cuadro de selección de color tanto en
+servicios, tipos y en configuración.\n
+- Ahora al hacer click en una comisión puedes saltar al mes del calendario.\n
+- Arreglado error de cómputo de vacaciones.\n
+- Arreglado pequeños errores encontrados.\n" />        
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.8 - 25 de enero de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Mejorada la búsqueda por comentarios. Ahora se puede elegir entre rango de fechas y por tipo de 
+servicio.\n
+- Arreglado error de que no se mostraba correctamente el mes actual al darle al botón de 'Hoy' en
+la barra de herramientas de la app.\n" />        
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.7 - 22 de enero de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Añadido 'Turnos' en la pantalla de tipos de servicio.\n
+- En configuración ahora se puede decidir si se quiere mostrar 'Entrar en el servicio' y
+'Crear nuevo tipo de servicio' en el listado de tipos al hacer click en un día del calendario.\n
+- Se añade el botón 'Hoy' para volver al mes actual en el calendario.\n
+- Cambiado 'Saltar a' por 'Ir a'.\n" />        
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.6 - 16 de enero de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Mejorado el historial para los tipos de servicio. Ahora en cada año se puede ver cada servicio
+realizado y haciendo clic se puede elegir entre saltar al servicio o al mes.\n
+- Añadido en el resumen de horas del mes en el calendario, la diferencia de horas mensuales y
+trimestrales.\n" />        
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.5 - 13 de enero de 2014"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Añadido la manutención diaria por comisión, así se calculará el coste total dependiendo del día
+de regreso y salida, según el Real decreto 462/2002, de 24 de mayo, por indemnizaciones por 
+razón de servicio.\n
+- Añadido el que se pueda cambiar el color del texto y fondo para los servicios nuevos a crear por
+defecto, para el día actual y para los festivos.\n
+- Ahora al sobrepasar las horas del mes, trimestre y f2 se ponen los datos en rojo.\n
+- Cambiado el formato de las horas en el resumen del calendario, ya no sale el decimal .0\n
+- Arreglado error F2 en Navidad y fin de año.\n
+- Añadido el que al mantener el dedo encima de un día del calendario sin servicio te inserte
+automaticamente el último servicio añadido.\n" />               
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.4 - 4 de diciembre de 2013"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Añadida la opción de ver el derecho a manutención según lo explicado en el 
+Real decreto 462/2002, de 24 de mayo, por indemnizaciones por razón de servicio.\n
+- Quitado el texto horas en el resumen del calendario del mes.\n
+- Arreglado error del cómputo de horas de referencia mensuales y trimestrales al no contar 
+correctamente los días festivos y a la vez que fueran días no computables.\n" />          
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.3 - 1 de diciembre de 2013"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Cambiado el texto 'Entrar' por 'Editar' al hacer clic en un tipo de servicio en el listado de tipos.\n
+- Arreglado error de que no contaba correctamente el f2 y las horas mensuales y trimestrales si se
+introducía un servicio al final del mes con más de un horario.\n
+- Arreglado error que cerraba la aplicación si se introducía una comisión sin fechas o si la fecha
+de inicio era mayor que la fecha fin.\n" />          
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.2 - 27 de octubre de 2013"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Arreglado error de que no abría la aplicación al actualizar de la versión 1.0 a la 1.1.\n
+- Se ha dado más espacio a la derecha a los resultados del listado de comisiones, ya que en
+algunos móviles la barra de desplazamiento tapaba los resultados de días comisionado.\n" />          
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.1 - 23 de octubre de 2013"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Nuevo icono de la aplicación.\n
+- Se ha modificado en la pantalla del calendario que no se pueda girar la pantalla.\n
+- En el listado de comisiones, en la barra inferior donde aparecen los días comisionados
+totales del año, se ha dejado más espacio hacia la izquierda y la derecha porque en algunos
+dispositivos la barra de desplazamiento pisaba el número de días sin poder verse.\n
+- Al cambiar las horas de referencia semanales en configuración ahora se actualiza
+las horas mensuales en el calendario.\n" />          
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 1.0 - 20 de octubre de 2013"/>        
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Nueva O.G número 2 de 2013 de vacaciones y permisos.\n
+- Tipos de días. Para cada servicio o tipo de servicio se añade la opción 'Tipo de día' con los
+valores 'Día ordinario no computable (5.35)' y 'Día especial no computable (7.5)' necesario para
+el cálculo de las horas de referencia mensuales.\n
+- Sección Comisiones. Ahora se puede saber el número anual de comisiones, dieta, dias concentrado
+e historial.\n
+- Login. Autentificación en la aplicación. Si lo desea, el usuario podrá introducir una contraseña
+numérica para poder acceder a la aplicación.\n
+- P.A.S. Los miembros del GRS podrán controlar en qué semana se encuentran.\n
+- Servicios. Ahora se pueden añadir servicios de 24 horas.\n
+- Servicios. Posibilidad de que al añadir un servicio salte la opción de añadir el horario.\n
+- Calendario. Ahora se ven las horas de referencia mensuales.\n
+- Calendario. Se añade la opción 'Ver horarios'.\n
+- Calendario. Nueva opción en el desplegable de selección de tipo de servicio, ahora se puede marcar
+directamente un dia como festivo sin tener que entrar en el día y seleccionar la opción de festivo.\n
+- Calendario. Ahora se ven las horas nocturas y festivas del mes y el % de las horas totales.\n
+- Cambiado 'Asuntos Propios', por 'Asuntos Particulares'.\n
+- Copias de seguridad. Importación correcta de las copias de seguridad de la aplicación Cuadrante 
+GRS versión 2.9.\n
+- Alertas. Ahora se llaman 'Guardias combinadas' y se puede elegir la clase.\n
+- Para dispositivos móviles de pantalla mayor, ahora se puede determinar en configuración cuantos
+caracteres se pueden ver de la abreviatura de un servicio.\n
+- Selección de colores. Ahora en servicios y tipos, se ha cambiado la ventana de selección de color,
+ tanto para el texto como para el fondo, ahora es mucho más facil de elegir el color deseado.\n
+- Tipos de servicios. Se añade la opción 'Historial', para poder saber cada año cuantos servicios 
+ha hecho el usuario.\n
+- Mejoradas muchas más opciones de la aplicación base y añadidos otras.\n
+- Basado en la aplicación Cuadrante GRS versión 2.9.\n" />
+		    		    		    		    		
+		    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

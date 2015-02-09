@@ -1,0 +1,5 @@
+<resources>
+    <string name="settings_bg_color_confirm">Confirmar</string>
+    <string name="settings_default_color_confirm">Color por defecto</string>
+    <string name="settings_bg_color_dialog">Color</string>
+</resources>

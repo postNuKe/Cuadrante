@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.2.1" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/libs" />
+            <option value="$PROJECT_DIR$/libs/ActionBarSherlock" />
+            <option value="$PROJECT_DIR$/libs/ColorMixer" />
+            <option value="$PROJECT_DIR$/libs/ViewPageIndicator" />
+            <option value="$PROJECT_DIR$/libs/com.codeslap.dateslider" />
+            <option value="$PROJECT_DIR$/libs/es.progmac.android" />
+            <option value="$PROJECT_DIR$/libs/es.progmac.android.fileexplorer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
+

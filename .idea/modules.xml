@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/libs/ActionBarSherlock/ActionBarSherlock.iml" filepath="$PROJECT_DIR$/libs/ActionBarSherlock/ActionBarSherlock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/ColorMixer/ColorMixer.iml" filepath="$PROJECT_DIR$/libs/ColorMixer/ColorMixer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Cuadrante.iml" filepath="$PROJECT_DIR$/Cuadrante.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/ViewPageIndicator/ViewPageIndicator.iml" filepath="$PROJECT_DIR$/libs/ViewPageIndicator/ViewPageIndicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/com.codeslap.dateslider/com.codeslap.dateslider.iml" filepath="$PROJECT_DIR$/libs/com.codeslap.dateslider/com.codeslap.dateslider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/es.progmac.android/es.progmac.android.iml" filepath="$PROJECT_DIR$/libs/es.progmac.android/es.progmac.android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/es.progmac.android.fileexplorer/es.progmac.android.fileexplorer.iml" filepath="$PROJECT_DIR$/libs/es.progmac.android.fileexplorer/es.progmac.android.fileexplorer.iml" />
+    </modules>
+  </component>
+</project>
+

@@ -1,0 +1,12 @@
+int array empty_array 0x7f030000
+int attr checkAll 0x7f010000
+int attr separator 0x7f010001
+int drawable ic_action_search 0x7f020000
+int drawable ic_launcher 0x7f020001
+int string settings_bg_color_confirm 0x7f040000
+int string settings_bg_color_dialog 0x7f040002
+int string settings_default_color_confirm 0x7f040001
+int style AppTheme 0x7f050000
+int[] styleable ListPreferenceMultiSelect { 0x7f010000, 0x7f010001 }
+int styleable ListPreferenceMultiSelect_checkAll 0
+int styleable ListPreferenceMultiSelect_separator 1

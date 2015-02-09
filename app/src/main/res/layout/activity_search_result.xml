@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+	<ListView
+	    android:id="@+id/android:list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" />
+	
+    <RelativeLayout
+        style="@style/LoginFormContainer"
+        android:id="@+id/count_results"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:visibility="gone" >
+
+		<TextView
+		    android:id="@+id/zero_results"
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent"
+		    android:gravity="center_vertical"
+		    android:text="@string/zero_results"
+		    style="@android:style/TextAppearance.Large" />
+	</RelativeLayout>
+
+</RelativeLayout>

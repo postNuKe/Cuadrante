@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_slider_title">Seleccionar fecha</string>
+    <!-- <string name="app_name">DateSlider v1 Demo</string> -->
+    <string name="set">Listo</string>
+    <string name="cancel">cancelar</string>
+</resources>

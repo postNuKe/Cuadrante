@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">Explorador de archivos</string>
+    <string name="location">Location</string>
+    <string name="cant_read_folder">¡El directorio no se puede leer!</string>
+    <string name="nnew">Nuevo</string>
+    <string name="select">Seleccionar</string>
+    <string name="file_name">Nombre del fichero:</string>
+    <string name="cancel">Cancelar</string>
+    <string name="create">Guardar</string>
+    <string name="no_data">Sin datos</string>
+    <color name="gray">#ffff0000</color>
+    <string name="err">Error</string>
+</resources>

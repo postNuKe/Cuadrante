@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="es.progmac.cuadrante"
+    android:versionCode="21"
+    android:versionName="@string/app_versionName" >
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="20" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        tools:replace="android:theme"
+        android:theme="@style/Theme.SIGO" >
+
+        <receiver
+            android:name="es.progmac.cuadrante.AlarmDeleteFileReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+        <receiver
+            android:name="es.progmac.cuadrante.AppWidgetWeekProvider"
+            android:label="@string/weekly_quadrant" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_info" />
+        </receiver>
+        
+        <activity
+            android:name="es.progmac.cuadrante.MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.ServicioActivity"
+            android:label="@string/title_activity_servicio"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+        </activity>
+        <!--
+        <activity
+            android:name="es.progmac.cuadrante.__TipoServicioListActivity"
+            android:label="@string/title_activity_tipo_servicio_list"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+            -->
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        <!-- </activity> -->
+        <activity
+            android:name="es.progmac.cuadrante.TipoServicioActivity"
+            android:label="@string/title_activity_tipo_servicio"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.SearchResultActivity"
+            android:label="@string/title_activity_search_result"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.preference.PreferenceActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.ComisionListActivity"
+            android:label="@string/title_activity_comision_list"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.ComisionActivity"
+            android:label="@string/title_activity_comision"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.actionbarsherlock.app.SherlockListActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.HotelActivity"
+            android:label="@string/title_activity_hotel"
+            android:screenOrientation="portrait"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.actionbarsherlock.app.SherlockListActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.android.fileexplorer.FileDialog"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.codeslap.dateslider" />
+        <activity
+            android:name="es.progmac.cuadrante.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.actionbarsherlock.app.SherlockListActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.TypeServiceHistoryActivity"
+            android:label="@string/title_activity_type_service_history"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.TypeServiceListActivity"
+            android:label="@string/title_activity_type_service"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.progmac.cuadrante.MainActivity" />
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.TurnActivity"
+            android:label="@string/title_activity_turn"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="es.progmac.cuadrante.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>

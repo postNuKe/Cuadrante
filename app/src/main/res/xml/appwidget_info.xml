@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:minWidth="294dp"
+    android:minHeight="54dp"
+    android:updatePeriodMillis="21600000"
+    android:initialLayout="@layout/appwidget_week"
+    android:resizeMode="horizontal"
+    android:label="@string/weekly_quadrant"
+    android:previewImage="@drawable/preview_widget_week"
+    android:widgetCategory="home_screen">
+</appwidget-provider>

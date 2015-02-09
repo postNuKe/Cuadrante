@@ -1,0 +1,1 @@
+include ':app', ':libs:ActionBarSherlock', ':libs:ColorMixer', ':libs:ViewPageIndicator', ':libs:es.progmac.android.fileexplorer', ':libs:es.progmac.android', ':libs:com.codeslap.dateslider'

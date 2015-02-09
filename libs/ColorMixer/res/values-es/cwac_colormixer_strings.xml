@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cwac_colormixer_red">R</string>
+  <string name="cwac_colormixer_green">V</string>
+  <string name="cwac_colormixer_blue">A</string>
+  <string name="cwac_colormixer_set">Guardar</string>
+  <string name="cwac_colormixer_cancel">Cancelar</string>
+  <string name="cwac_colormixer_options">Opciones</string>
+  <string name="cwac_colormixer_defaultcolor">Color por defecto</string>
+  <string name="cwac_colormixer_copy">Copiar color</string>
+  <string name="cwac_colormixer_palette">Paleta de colores</string>
+  <string name="cwac_colormixer_paste">Pegar color</string>
+  <string name="cwac_colormixer_selectingoptions">Selección de opciones</string>
+  <string name="cwac_colormixer_copiedcolortoclipboard">Color copiado al portapapeles</string>
+  <string name="cwac_colormixer_colorpasted">Color pegado</string>
+</resources>

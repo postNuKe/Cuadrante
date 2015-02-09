@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+        android:id="@+id/bar_ready"
+        android:title="@string/ready"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_ready"/>
+    <!-- <item 
+        android:id="@+id/bar_cancel"
+        android:title="@string/cancel"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_revert"/>
+     -->
+    <item 
+        android:id="@+id/bar_add_schedule"
+        android:title="@string/add_schedule"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_add_schedule"/>
+     <item 
+        android:id="@+id/bar_delete_schedule"
+        android:title="@string/delete_schedule"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_remove_schedule"/>
+     <item 
+        android:id="@+id/bar_delete"
+        android:title="@string/delete"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_action_delete"/>  
+</menu>

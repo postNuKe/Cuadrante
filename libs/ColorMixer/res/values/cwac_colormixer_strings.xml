@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="cwac_colormixer_red">R</string>
+  <string name="cwac_colormixer_green">G</string>
+  <string name="cwac_colormixer_blue">B</string>
+  <string name="cwac_colormixer_set">Set</string>
+  <string name="cwac_colormixer_cancel">Cancel</string>
+  <string name="cwac_colormixer_options">Options</string>
+  <string name="cwac_colormixer_defaultcolor">Default color</string>
+  <string name="cwac_colormixer_copy">Copy color</string>
+  <string name="cwac_colormixer_palette">Palette</string>
+  <string name="cwac_colormixer_paste">Paste color</string>
+  <string name="cwac_colormixer_selectingoptions">Selecting Options</string>
+  <string name="cwac_colormixer_copiedcolortoclipboard">Copied color to clipboard</string>
+  <string name="cwac_colormixer_colorpasted">Color pasted</string>
+</resources>
