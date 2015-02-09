@@ -707,7 +707,7 @@ public abstract class ActionBarSherlock {
      * Sets the visibility of the progress bar in the title.
      * <p>
      * In order for the progress bar to be shown, the feature must be requested
-     * via {@link #requestWindowFeature(int)}.
+     * via {@link #requestFeature(int)}.
      *
      * @param visible Whether to show the progress bars in the title.
      */
@@ -717,7 +717,7 @@ public abstract class ActionBarSherlock {
      * Sets the visibility of the indeterminate progress bar in the title.
      * <p>
      * In order for the progress bar to be shown, the feature must be requested
-     * via {@link #requestWindowFeature(int)}.
+     * via {@link #requestFeature(int)}.
      *
      * @param visible Whether to show the progress bars in the title.
      */
@@ -728,7 +728,7 @@ public abstract class ActionBarSherlock {
      * is always indeterminate).
      * <p>
      * In order for the progress bar to be shown, the feature must be requested
-     * via {@link #requestWindowFeature(int)}.
+     * via {@link #requestFeature(int)}.
      *
      * @param indeterminate Whether the horizontal progress bar should be indeterminate.
      */
@@ -738,7 +738,7 @@ public abstract class ActionBarSherlock {
      * Sets the progress for the progress bars in the title.
      * <p>
      * In order for the progress bar to be shown, the feature must be requested
-     * via {@link #requestWindowFeature(int)}.
+     * via {@link #requestFeature(int)}.
      *
      * @param progress The progress for the progress bar. Valid ranges are from
      *            0 to 10000 (both inclusive). If 10000 is given, the progress
