@@ -216,7 +216,7 @@ public class MenuInflater {
             } catch (Exception e) {
                 InflateException ex = new InflateException(
                         "Couldn't resolve menu item onClick handler " + methodName +
-                        " in class " + c.getName());
+                                " in class " + c.getName());
                 ex.initCause(e);
                 throw ex;
             }
@@ -385,8 +385,8 @@ public class MenuInflater {
             final boolean hasActionProvider = itemActionProviderClassName != null;
             if (hasActionProvider && itemActionViewLayout == 0 && itemActionViewClassName == null) {
                 itemActionProvider = newInstance(itemActionProviderClassName,
-                            ACTION_PROVIDER_CONSTRUCTOR_SIGNATURE,
-                            mActionProviderConstructorArguments);
+                        ACTION_PROVIDER_CONSTRUCTOR_SIGNATURE,
+                        mActionProviderConstructorArguments);
             } else {
                 if (hasActionProvider) {
                     Log.w(LOG_TAG, "Ignoring attribute 'actionProviderClass'."
@@ -410,13 +410,13 @@ public class MenuInflater {
 
         private void setItem(MenuItem item) {
             item.setChecked(itemChecked)
-                .setVisible(itemVisible)
-                .setEnabled(itemEnabled)
-                .setCheckable(itemCheckable >= 1)
-                .setTitleCondensed(itemTitleCondensed)
-                .setIcon(itemIconResId)
-                .setAlphabeticShortcut(itemAlphabeticShortcut)
-                .setNumericShortcut(itemNumericShortcut);
+                    .setVisible(itemVisible)
+                    .setEnabled(itemEnabled)
+                    .setCheckable(itemCheckable >= 1)
+                    .setTitleCondensed(itemTitleCondensed)
+                    .setIcon(itemIconResId)
+                    .setAlphabeticShortcut(itemAlphabeticShortcut)
+                    .setNumericShortcut(itemNumericShortcut);
 
             if (itemShowAsAction >= 0) {
                 item.setShowAsAction(itemShowAsAction);
@@ -479,7 +479,7 @@ public class MenuInflater {
 
         @SuppressWarnings("unchecked")
         private <T> T newInstance(String className, Class<?>[] constructorSignature,
-                Object[] arguments) {
+                                  Object[] arguments) {
             try {
                 Class<?> clazz = mContext.getClassLoader().loadClass(className);
                 Constructor<?> constructor = clazz.getConstructor(constructorSignature);
