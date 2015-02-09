@@ -260,7 +260,7 @@ public abstract class ActionBar {
      *                 selects a navigation item.
      */
     public abstract void setListNavigationCallbacks(SpinnerAdapter adapter,
-            OnNavigationListener callback);
+                                                    OnNavigationListener callback);
 
     /**
      * Set the selected navigation item in list or tabbed navigation modes.
@@ -906,18 +906,18 @@ public abstract class ActionBar {
          * @see android.view.Gravity
          */
         @ViewDebug.ExportedProperty(mapping = {
-            @ViewDebug.IntToString(from =  -1,                       to = "NONE"),
-            @ViewDebug.IntToString(from = Gravity.NO_GRAVITY,        to = "NONE"),
-            @ViewDebug.IntToString(from = Gravity.TOP,               to = "TOP"),
-            @ViewDebug.IntToString(from = Gravity.BOTTOM,            to = "BOTTOM"),
-            @ViewDebug.IntToString(from = Gravity.LEFT,              to = "LEFT"),
-            @ViewDebug.IntToString(from = Gravity.RIGHT,             to = "RIGHT"),
-            @ViewDebug.IntToString(from = Gravity.CENTER_VERTICAL,   to = "CENTER_VERTICAL"),
-            @ViewDebug.IntToString(from = Gravity.FILL_VERTICAL,     to = "FILL_VERTICAL"),
-            @ViewDebug.IntToString(from = Gravity.CENTER_HORIZONTAL, to = "CENTER_HORIZONTAL"),
-            @ViewDebug.IntToString(from = Gravity.FILL_HORIZONTAL,   to = "FILL_HORIZONTAL"),
-            @ViewDebug.IntToString(from = Gravity.CENTER,            to = "CENTER"),
-            @ViewDebug.IntToString(from = Gravity.FILL,              to = "FILL")
+                @ViewDebug.IntToString(from =  -1,                       to = "NONE"),
+                @ViewDebug.IntToString(from = Gravity.NO_GRAVITY,        to = "NONE"),
+                @ViewDebug.IntToString(from = Gravity.TOP,               to = "TOP"),
+                @ViewDebug.IntToString(from = Gravity.BOTTOM,            to = "BOTTOM"),
+                @ViewDebug.IntToString(from = Gravity.LEFT,              to = "LEFT"),
+                @ViewDebug.IntToString(from = Gravity.RIGHT,             to = "RIGHT"),
+                @ViewDebug.IntToString(from = Gravity.CENTER_VERTICAL,   to = "CENTER_VERTICAL"),
+                @ViewDebug.IntToString(from = Gravity.FILL_VERTICAL,     to = "FILL_VERTICAL"),
+                @ViewDebug.IntToString(from = Gravity.CENTER_HORIZONTAL, to = "CENTER_HORIZONTAL"),
+                @ViewDebug.IntToString(from = Gravity.FILL_HORIZONTAL,   to = "FILL_HORIZONTAL"),
+                @ViewDebug.IntToString(from = Gravity.CENTER,            to = "CENTER"),
+                @ViewDebug.IntToString(from = Gravity.FILL,              to = "FILL")
         })
         public int gravity = -1;
 
