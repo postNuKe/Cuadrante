@@ -754,7 +754,7 @@ public abstract class ActionBarSherlock {
      * progress shows the play progress.
      * <p>
      * In order for the progress bar to be shown, the feature must be requested
-     * via {@link #requestWindowFeature(int)}.
+     * via {@link #requestFeature(int)}.
      *
      * @param secondaryProgress The secondary progress for the progress bar. Valid ranges are from
      *            0 to 10000 (both inclusive).
