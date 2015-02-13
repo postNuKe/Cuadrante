@@ -214,6 +214,7 @@
         abreviatura, color fondo y color del texto.</string>
     <string name="miercoles">mié.</string>
     <string name="monday_short">L</string>
+    <string name="monthly">Mensual</string>
     <string name="name">Nombre:</string>
     <string name="negative">--</string>
     <string name="nights">Noches:</string>
@@ -353,6 +354,7 @@
     <string name="view_history">Ver historial</string>
     <string name="wait_please">Espere por favor</string>
     <string name="wednesday_short">X</string>
+    <string name="weekly">Semanal</string>
     <string name="weekly_quadrant">Cuadrante semanal</string>
     <string name="widget_week">Widget semanal</string>
     <string name="widget_week_summary">Qué día se debe de mostrar en la primera celda.</string>

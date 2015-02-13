@@ -262,6 +262,12 @@ public class Sp {
 	/** Variable que guarda si se quiere mostrar la opción 'Crear nuevo tipo de servicio' */
 	public static final String SP_CREATE_NEW_TYPE_SERVICE = "create_new_type_service";
 	public static final boolean SP_CREATE_NEW_TYPE_SERVICE_DV = true;
+
+    /** Variable que guarda que formato de calendario se debe de mostrar */
+    public static final String SP_CALENDAR = "calendar";
+    /** Tipo de calendario a mostrar*/
+    public static final String SP_CALENDAR_DV = "week";
+
 	
 	/**
 	 * Map que guarda los nombres de las shared_preferences y que tipo de 
@@ -273,6 +279,7 @@ public class Sp {
     	SHARED_PREFERENCES.put(SP_ASK_SERVICE_24_HOURS, "boolean");		    
     	SHARED_PREFERENCES.put(SP_BACKUP_DB_AUTO, "string");
     	SHARED_PREFERENCES.put(SP_BACKUP_DB_AUTO_DATE, "string");
+        SHARED_PREFERENCES.put(SP_CALENDAR, "string");
     	SHARED_PREFERENCES.put(SP_CHANGELOG_VERSION_KEY, "int");
     	SHARED_PREFERENCES.put(SP_COMMISSIONS_DAYS_LENGTH, "int");
     	SHARED_PREFERENCES.put(SP_COMMISSIONS_DAYS_LENGTH_ACTIVE, "boolean");
@@ -1119,6 +1126,23 @@ public class Sp {
     public static boolean getCreateNewTypeService(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean(SP_CREATE_NEW_TYPE_SERVICE, SP_CREATE_NEW_TYPE_SERVICE_DV);
-    }   
-    
+    }
+
+    /**
+     * Devuelve que tipo de calendario se debe de mostrar
+     * @param context
+     */
+    public static String getCalendar(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).
+                getString(SP_CALENDAR, SP_CALENDAR_DV);
+    }
+    /**
+     * Establece el tipo de calendario a mostrar
+     * @param context
+     */
+    public static void setCalendar(Context context, String pas){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SP_CALENDAR, pas).commit();
+    }
+
+
 }

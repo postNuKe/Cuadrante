@@ -21,6 +21,7 @@ import es.progmac.cuadrante.lib.ColorPickerWithCopyDialog;
 import es.progmac.cuadrante.lib.DatabaseHandler;
 import es.progmac.cuadrante.lib.Cuadrante;
 import es.progmac.cuadrante.lib.CuadranteDates;
+import es.progmac.cuadrante.lib.Extra;
 import es.progmac.cuadrante.lib.IntvlMinTimePickerDialog;
 import es.progmac.cuadrante.lib.MyLog;
 import es.progmac.cuadrante.lib.PromptDialog;
@@ -81,7 +82,7 @@ public class ServicioActivity extends SherlockListActivity implements
 	/**
 	 * Posición en el array de items
 	 * 
-	 * @see list_items
+	 * @see #list_items
 	 */
 	static final int DIALOG_ID_NAME = 0;
 	static final int DIALOG_ID_COMMENTS = 1;
@@ -190,18 +191,8 @@ public class ServicioActivity extends SherlockListActivity implements
 		Intent intent = getIntent();
 
 		// obtenemos la fecha seleccionada en formato YYYY-mm-dd
-		DATE_SELECTED = intent.getStringExtra("date");
-		CuadranteDates temp = new CuadranteDates(DATE_SELECTED);
-		year = temp.getYear();
-		month = temp.getMonth();
-		day = temp.getDay();
-		// obtenemos los nombres de los meses
-		//String[] months = new DateFormatSymbols().getMonths();
-		// Cambiamos el titulo de la pantalla para indicar que fecha vamos a
-		// editar
-		//setTitle(String.format("Servicio para el %d de %s de %d", day,
-		//		months[month - 1], year));
-		String title = new DateTime(year, month, day, 0, 0).toString("dd MMMM YYYY");
+		DATE_SELECTED = intent.getStringExtra(Extra.DATE);
+		String title = CuadranteDates.formatDateToHumans4(DATE_SELECTED);
 		List<ComisionInfo> comisions = db.getComisionFromInterval(DATE_SELECTED, DATE_SELECTED);
 		if(comisions.size() > 0){
 			title = title.concat(" | ").concat(comisions.get(0).getName());

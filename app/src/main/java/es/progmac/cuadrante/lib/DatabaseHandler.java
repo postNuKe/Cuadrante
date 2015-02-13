@@ -956,8 +956,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	/**
 	 * Encuentra los servicios entre dos fechas
-	 * @param String start_date yyyy-MM-dd
-	 * @param String end_date yyyy-MM-dd
+	 * @param start_date yyyy-MM-dd
+	 * @param end_date yyyy-MM-dd
 	 * @return List<ServicioInfo>
 	 */
 	public List<ServicioInfo> getServicesFromInterval(String start_date, String end_date){
@@ -1480,8 +1480,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	/**
 	 * Obtiene todas las comisiones que hay activas entre dos fechas
-	 * @param dateStart
-	 * @param dateEnd
+	 * @param dateStart yyyy-mm-dd
+	 * @param dateEnd yyyy-mm-dd
 	 * @return
 	 */
 	public List<ComisionInfo> getComisionFromInterval(String dateStart, String dateEnd) {

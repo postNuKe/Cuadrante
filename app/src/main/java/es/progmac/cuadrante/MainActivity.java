@@ -114,9 +114,9 @@ public class MainActivity extends SherlockActivity {
      */
     int selectedDay = 0;
     /**
-     * guardara el dia seleccionado como tal, 01, 02, etc...
+     * guardara la fecha seleccionada YYYY-mm-dd
      */
-    int selectedDay2;
+    String selectedDate;
     /**
      * type_id que se usa en el date_range de un typeId seleccionado
      */
@@ -258,16 +258,10 @@ public class MainActivity extends SherlockActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View v,
                                            int position, long id) {
                 MyLog.d(TAG, "longClick " + mIsItemClick);
-                TextView date = (TextView) v.findViewById(R.id.date);
-                if (date instanceof TextView && !date.getText().equals("")) {
-                    String day = date.getText().toString();
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
-                    String dateLong = android.text.format.DateFormat.format("yyyy-MM",
-                            month) + "-" + day;
-                    //MyLog.d(TAG, "long click:" + dateLong);
-                    ServicioInfo service = db.getServicio(dateLong);
+                TextView txtDate = (TextView) v.findViewById(R.id.date_long);
+                if (txtDate instanceof TextView && !txtDate.getText().equals("")) {
+                    String date = txtDate.getText().toString();
+                    ServicioInfo service = db.getServicio(date);
                     if (service.getId() > 0) {
                         mIsItemClick = false;
                         return false;
@@ -277,13 +271,13 @@ public class MainActivity extends SherlockActivity {
                         return false;
                     } else {//long click en celda vacía
                         //MyLog.d(TAG, "long click en celda vacia");
-                        if (Cuadrante.canServiceSaves(mContext, Sp.getLastUsedTypeService(mContext), dateLong, dateLong)) {
+                        if (Cuadrante.canServiceSaves(mContext, Sp.getLastUsedTypeService(mContext), date, date)) {
                             Intent intent = new Intent(mContext, ServicioActivity.class);
                             // return chosen date as string format
                             intent.putExtra("ACTIVITY", "mainActivity");
                             intent.putExtra("ACTION", "selectTipo");
                             intent.putExtra("TYPE_ID", Sp.getLastUsedTypeService(mContext));
-                            intent.putExtra("date", dateLong);
+                            intent.putExtra(Extra.DATE, date);
                             // setResult(RESULT_OK, intent);
                             // si se pone finish termina con la pantalla del calendario
                             // pero entonces no se puede volver para atrás con el botón
@@ -311,24 +305,15 @@ public class MainActivity extends SherlockActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 mIsItemClick = true;
-                TextView date = (TextView) v.findViewById(R.id.date);
-                if (date instanceof TextView && !date.getText().equals("")) {
-                    String day = date.getText().toString();
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
-                    String dateLong = android.text.format.DateFormat.format("yyyy-MM",
-                            month) + "-" + day;
-                    //MyLog.d(TAG, "sigle:" + dateLong);
-                    ServicioInfo service = db.getServicio(dateLong);
+                TextView txtDate = (TextView) v.findViewById(R.id.date_long);
+                if (txtDate instanceof TextView && !txtDate.getText().equals("")) {
+                    String date = txtDate.getText().toString();
+                    ServicioInfo service = db.getServicio(date);
                     if (service.getId() > 0) {
                         Intent intent = new Intent(MainActivity.this,
                                 ServicioActivity.class);
                         // return chosen date as string format
-                        intent.putExtra(
-                                "date",
-                                android.text.format.DateFormat.format("yyyy-MM",
-                                        month) + "-" + day);
+                        intent.putExtra(Extra.DATE, date);
                         // setResult(RESULT_OK, intent);
                         // si se pone finish termina con la pantalla del calendario
                         // pero entonces no se puede volver para atrás con el botón
@@ -340,7 +325,6 @@ public class MainActivity extends SherlockActivity {
                     } else {
                         openContextMenu(v);
                     }
-
                 }
             }
         });
@@ -419,48 +403,33 @@ public class MainActivity extends SherlockActivity {
     public boolean onContextItemSelected(android.view.MenuItem item) {
         //MyLog.d("onContextItemSelected", "dentro");
         GridView g = (GridView) findViewById(R.id.gridview);
-        String day = (String) g.getItemAtPosition(this.selectedDay);
-        this.selectedDay2 = Integer.valueOf(day);
+        MyLog.d(TAG, "selectedDay:" + this.selectedDay);
+        String date = (String) g.getItemAtPosition(this.selectedDay);//yyyy-mm-dd
+        this.selectedDate = date;
+        MyLog.d(TAG, "selectedDate:" + selectedDate);
 
         switch (item.getGroupId()) {
             case 1://entrar en el servicio
-                if (!day.equals("")) {
-                    Intent intent = new Intent(MainActivity.this,
-                            ServicioActivity.class);
-
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
+                if (!selectedDate.equals("")) {
+                    Intent intent = new Intent(MainActivity.this, ServicioActivity.class);
                     // return chosen date as string format
-                    intent.putExtra(
-                            "date",
-                            android.text.format.DateFormat.format("yyyy-MM",
-                                    month) + "-" + day);
+                    intent.putExtra(Extra.DATE, selectedDate);
                     startActivityForResult(intent, requestCode);
                 }
                 break;
             case 2://crear nuevo tipo de servicio
-                if (!day.equals("")) {
+                if (!date.equals("")) {
                     // Toast.makeText(this, "Action 1, Item "+s + " id:" +
                     // item.getItemId(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, TipoServicioActivity.class);
                     intent.putExtra("ACTIVITY", "mainActivity");
                     intent.putExtra("ACTION", "createTipo");
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
-                    intent.putExtra("DATE",
-                            android.text.format.DateFormat.format("yyyy-MM", month)
-                                    + "-" + day);
+                    intent.putExtra("DATE", date);
                     startActivityForResult(intent, Cuadrante.REQUEST_CODE_CREATE_TYPE);
                 }
                 break;
             case 3://Marca el día como festivo
-                if (!day.equals("")) {
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
-                    String date = android.text.format.DateFormat.format("yyyy-MM", month) + "-" + day;
+                if (!date.equals("")) {
                     ServicioInfo servicio = db.getServicio(date);
                     if (servicio.getId() > 0) {
                         if (servicio.getIsHoliday() == 1) {
@@ -510,19 +479,15 @@ public class MainActivity extends SherlockActivity {
             case 6://añadir turno
                 switch (item.getItemId()) {
                     case 0://bloque
-                        selectedDay2 = (selectedDay2 == 0) ? 1 : selectedDay2;
-                        DateTime dt = new DateTime(
-                                month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, selectedDay2, 0, 0);
+                        DateTime dt = CuadranteDates.getDateTime(selectedDate);
                         List<TurnTypeInfo> types = db.getTurnTypes(sSelectedTurnId);
                         for (TurnTypeInfo type : types) {
-                            String date = CuadranteDates.formatDate(dt);
                             TipoServicioInfo typeService = db.getTipoServicio(type.getTypeId());
                             //si se excede no grabamos el servicio ese dia y continuamos
-                            if (Cuadrante.canServiceSaves(mContext, typeService.getId(), date)) {
+                            if (Cuadrante.canServiceSaves(mContext, typeService.getId(), selectedDate)) {
                                 saveTypeToService(typeService, date);
                                 if (type.getSaliente() == 1) {
                                     dt = dt.plusDays(1);
-                                    date = CuadranteDates.formatDate(dt);
                                     //creo  un tipo temporal para así poder usar la funcion saveTypeToService
                                     //y no tener que crear una nueva
                                     TipoServicioInfo typeSaliente =
@@ -548,21 +513,14 @@ public class MainActivity extends SherlockActivity {
                 }
                 break;
             case 7:
-                if (!day.equals("")) {
-                    // Toast.makeText(this, "Action 1, Item "+s + " id:" +
-                    // item.getItemId(), Toast.LENGTH_SHORT).show();
-                    if (day.length() == 1) {
-                        day = "0" + day;
-                    }
-                    String date = android.text.format.DateFormat.format("yyyy-MM", month)
-                            + "-" + day;
+                if (!date.equals("")) {
                     if (Cuadrante.canServiceSaves(this, item.getItemId(), date, date)) {
                         Intent intent = new Intent(this, ServicioActivity.class);
                         // return chosen date as string format
                         intent.putExtra("ACTIVITY", "mainActivity");
                         intent.putExtra("ACTION", "selectTipo");
                         intent.putExtra("TYPE_ID", item.getItemId());
-                        intent.putExtra("date", date);
+                        intent.putExtra(Extra.DATE, date);
                         Sp.setLastUsedTypeService(mContext, item.getItemId());
                         // setResult(RESULT_OK, intent);
                         // si se pone finish termina con la pantalla del calendario
@@ -579,13 +537,13 @@ public class MainActivity extends SherlockActivity {
             //grupo de tipos de servicio que al hacer click sale el DatePicker
             //para elegir el rango de fechas
             case 8://servicio como rango de fechas
-                if (!day.equals("")) {
+                if (!date.equals("")) {
                     this.typeId = item.getItemId();
                     showDialog(DIALOG_ID_TYPE_SERVICE_DATE_RANGE);
                 }
                 break;
             case 9:
-                if (!day.equals("")) {
+                if (!date.equals("")) {
                     this.typeId = item.getItemId();
                     showDialog(DIALOG_ID_ASK_SCHEDULE);
                 }
@@ -691,7 +649,10 @@ public class MainActivity extends SherlockActivity {
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new DatePickerDialog(this, datePickerListener, month.get(Calendar.YEAR), month.get(Calendar.MONTH) - 1, this.selectedDay2);
+        return new DatePickerDialog(this, datePickerListener,
+                CuadranteDates.getYear(this.selectedDate),
+                CuadranteDates.getMonth(this.selectedDate) - 1,
+                CuadranteDates.getDay(this.selectedDate));
     }
 
     protected Dialog onCreateDialog(int id) {
@@ -724,10 +685,12 @@ public class MainActivity extends SherlockActivity {
 				*/
                 break;
             case DIALOG_ID_TYPE_SERVICE_DATE_RANGE:
-                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDay2);
+                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDate);
                 Toast.makeText(this, R.string.select_date_range, Toast.LENGTH_LONG).show();
                 return new DatePickerDialog(this, datePickerListener,
-                        month.get(Calendar.YEAR), month.get(Calendar.MONTH), this.selectedDay2);
+                        CuadranteDates.getYear(this.selectedDate),
+                        CuadranteDates.getMonth(this.selectedDate),
+                        CuadranteDates.getDay(this.selectedDate));
 
             case DIALOG_ID_ABOUT_ME:
                 // 1. Instantiate an AlertDialog.Builder with its constructor
@@ -774,12 +737,12 @@ public class MainActivity extends SherlockActivity {
                 dialogVote.show();
                 break;
             case DIALOG_ID_DELETE_DATE_RANGE_START:
-                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDay2);
+                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDate);
                 Toast.makeText(this, R.string.select_delete_date_range_start, Toast.LENGTH_LONG).show();
                 return new DatePickerDialog(this, datePickerDeleteStartListener,
                         month.get(Calendar.YEAR), month.get(Calendar.MONTH), 1);
             case DIALOG_ID_DELETE_DATE_RANGE_END:
-                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDay2);
+                //MyLog.d("onCreateDialog", "fecha:" + month.get(Calendar.YEAR) + "-" + month.get(Calendar.MONTH) + "-" +this.selectedDate);
                 Toast.makeText(this, R.string.select_delete_date_range_end, Toast.LENGTH_LONG).show();
                 return new DatePickerDialog(this, datePickerDeleteEndListener,
                         month.get(Calendar.YEAR), month.get(Calendar.MONTH), 1);
@@ -792,7 +755,9 @@ public class MainActivity extends SherlockActivity {
             case DIALOG_ID_DATE_TURN:
                 Toast.makeText(this, R.string.selecte_turn_date_end, Toast.LENGTH_LONG).show();
                 return new DatePickerDialog(this, datePickerTurnListener,
-                        month.get(Calendar.YEAR), month.get(Calendar.MONTH), this.selectedDay2);
+                        CuadranteDates.getYear(this.selectedDate),
+                        CuadranteDates.getMonth(this.selectedDate),
+                        CuadranteDates.getDay(this.selectedDate));
 
         }
         return null;
@@ -845,7 +810,10 @@ public class MainActivity extends SherlockActivity {
         switch (id) {
             case DIALOG_ID_TYPE_SERVICE_DATE_RANGE:
             case DIALOG_ID_DATE_TURN:
-                ((DatePickerDialog) dialog).updateDate(month.get(Calendar.YEAR), month.get(Calendar.MONTH), this.selectedDay2);
+                ((DatePickerDialog) dialog).updateDate(
+                        CuadranteDates.getYear(this.selectedDate),
+                        CuadranteDates.getMonth(this.selectedDate),
+                        CuadranteDates.getDay(this.selectedDate));
                 break;
             case DIALOG_ID_DELETE_DATE_RANGE_START:
             case DIALOG_ID_DELETE_DATE_RANGE_END:
@@ -876,23 +844,13 @@ public class MainActivity extends SherlockActivity {
                 }
 
                 public void saveService() {
-			/*
-			Toast.makeText(mContext, 
-					mScheduleStart + " " + mScheduleEnd + " " + 
-					mScheduleStart2 + " " + mScheduleEnd2 + " " + 
-					mScheduleStart3 + " " + mScheduleEnd3 + " " + 
-					mScheduleStart4 + " " + mScheduleEnd4, Toast.LENGTH_LONG).show();
-			*/
-                    String date = android.text.format.DateFormat.format("yyyy-MM", month)
-                            + "-" + CuadranteDates.pad(selectedDay2);
-                    MyLog.d(TAG, selectedDay + " " + selectedDay2);
-                    if (Cuadrante.canServiceSaves(mContext, typeId, date, date)) {
+                    if (Cuadrante.canServiceSaves(mContext, typeId, selectedDate, selectedDate)) {
                         Intent intent = new Intent(mContext, ServicioActivity.class);
                         // return chosen date as string format
                         intent.putExtra("ACTIVITY", "mainActivity");
                         intent.putExtra("ACTION", "selectTipo");
                         intent.putExtra("TYPE_ID", typeId);
-                        intent.putExtra("date", date);
+                        intent.putExtra(Extra.DATE, selectedDate);
                         intent.putExtra("SCHEDULE_START", mScheduleStart);
                         intent.putExtra("SCHEDULE_END", mScheduleEnd);
                         // setResult(RESULT_OK, intent);
@@ -1056,8 +1014,10 @@ public class MainActivity extends SherlockActivity {
                 // when dialog box is closed, below method will be called.
                 public void onDateSet(DatePicker view, int selectedYear,
                                       int selectedMonth, int selectedDay) {
-                    selectedDay2 = (selectedDay2 == 0) ? 1 : selectedDay2;
-                    DateTime dStart = new DateTime(month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, selectedDay2, 0, 0);
+                    DateTime dStart = new DateTime(
+                            CuadranteDates.getYear(selectedDate),
+                            CuadranteDates.getMonth(selectedDate) + 1,
+                            CuadranteDates.getDay(selectedDate), 0, 0);
                     DateTime dEnd = new DateTime(selectedYear, selectedMonth + 1, selectedDay, 0, 0);
 			/*
 			MyLog.d("onDateSet", dStart.toString());
@@ -1100,9 +1060,10 @@ public class MainActivity extends SherlockActivity {
                 // when dialog box is closed, below method will be called.
                 public void onDateSet(DatePicker view, int selectedYear,
                                       int selectedMonth, int selectedDay) {
-                    selectedDay2 = (selectedDay2 == 0) ? 1 : selectedDay2;
                     DateTime dStart = new DateTime(
-                            month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, selectedDay2, 0, 0);
+                            CuadranteDates.getYear(selectedDate),
+                            CuadranteDates.getMonth(selectedDate) + 1,
+                            CuadranteDates.getDay(selectedDate), 0, 0);
                     DateTime dEnd = new DateTime(selectedYear, selectedMonth + 1, selectedDay, 0, 0);
                     //si la fecha de inicio es mayor eso es un error por lo que
                     //volvemos a mostrar el datepicker

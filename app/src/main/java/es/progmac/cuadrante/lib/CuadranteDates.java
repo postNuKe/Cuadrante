@@ -28,7 +28,7 @@ public class CuadranteDates {
 	 */
 	public CuadranteDates(String date) {
 		if(date.length() == 0){
-			DateTime today = new DateTime();
+			DateTime today = new DateTime().withMillisOfDay(0);
 			_GRSDates(today);
 		}else{
 			String[] temp = date.split("-");
@@ -69,7 +69,35 @@ public class CuadranteDates {
 	public int getDay(){
 		return this.day;
 	}
-	
+
+    /**
+     * Devuelve el dia de una fecha en formato YYYY-mm-dd
+     * @param date
+     * @return
+     */
+    public static int getDay(String date){
+        CuadranteDates dt = new CuadranteDates(date);
+        return dt.getDay();
+    }
+    /**
+     * Devuelve el mes de una fecha en formato YYYY-mm-dd
+     * @param date
+     * @return
+     */
+    public static int getMonth(String date){
+        CuadranteDates dt = new CuadranteDates(date);
+        return dt.getMonth();
+    }
+    /**
+     * Devuelve el año de una fecha en formato YYYY-mm-dd
+     * @param date
+     * @return
+     */
+    public static int getYear(String date){
+        CuadranteDates dt = new CuadranteDates(date);
+        return dt.getYear();
+    }
+
 	public String getDate(){
 		return this.date;
 	}
@@ -80,8 +108,8 @@ public class CuadranteDates {
 	
 	/**
 	 * Devuelve los días entre dos fechas en formato yyyy-mm-dd
-	 * @param String formato yyyy-MM-dd
-	 * @return int devuelve el número de dias, negativo es que date1 es mayor
+	 * @param date1 formato yyyy-MM-dd
+	 * @return date2 devuelve el número de dias, negativo es que date1 es mayor
 	 * que date2
 	 */
 	public static int getDaysBetweenDates(String date1, String date2){
@@ -120,7 +148,7 @@ public class CuadranteDates {
 	}
 	/**
 	 * Crea una cadena de fecha en formato dd-MM-yyyy
-	 * @param String formato yyyy-MM-dd
+	 * @param date formato yyyy-MM-dd
 	 * @return String dd-MM-yyyy
 	 */
 	public static String formatDateToHumans(String date){
@@ -154,7 +182,7 @@ public class CuadranteDates {
 	}
 	/**
 	 * Crea una cadena de fecha en formato dd de MM
-	 * @return String dd de MM
+	 * @return dd de MM
 	 */
 	public String formatDateToHumans2(){
 		String month;
@@ -166,7 +194,7 @@ public class CuadranteDates {
 	}	
 	/**
 	 * Crea una cadena de fecha en formato dd de MM
-	 * @param String yyyy-MM-dd
+	 * @param date yyyy-MM-dd
 	 * @return String dd de MM
 	 */
 	public static String formatDateToHumans2(String date){
@@ -187,13 +215,23 @@ public class CuadranteDates {
 	}
 	/**
 	 * Crea una cadena de fecha en formato dd de MM de yyyy
-	 * @param String yyyy-MM-dd
+	 * @param date yyyy-MM-dd
 	 * @return String dd de MM de yyyy
 	 */
 	public static String formatDateToHumans3(String date){
 		CuadranteDates dt = new CuadranteDates(date);
 		return dt.formatDateToHumans3();		
 	}
+
+    /**
+     * Crea una cadena de fecha en formato dd MM yyyy
+     * @param date
+     * @return 02 Febrero 2015
+     */
+    public static String formatDateToHumans4(String date){
+        CuadranteDates cDate = new CuadranteDates(date);
+        return cDate.getDateTime().toString("dd MMMM YYYY");
+    }
 	
 	/**
 	 * devuelve la fecha en DateTime, sobre una fecha en formato yyyy-MM-dd
@@ -208,8 +246,8 @@ public class CuadranteDates {
 	/**
 	 * Genera en formato cadena la hora, 16:30
 	 * 
-	 * @param int hourOfDay
-	 * @param int minuteOfHour
+	 * @param hourOfDay
+	 * @param minuteOfHour
 	 * @return string
 	 */
 	public static String formatTime(int hourOfDay, int minuteOfHour) {
@@ -236,7 +274,7 @@ public class CuadranteDates {
 	
 	/**
 	 * Devuelve un objeto DateTime sobre una cadena de fecha Y-MM-dd HH:mm
-	 * @param String date en formato Y-MM-dd HH:mm
+	 * @param date en formato Y-MM-dd HH:mm
 	 * @return DateTime
 	 */
 	public static DateTime getDateTimefromDate(String date){
@@ -254,7 +292,7 @@ public class CuadranteDates {
 	/**
 	 * Añade el 0 a los números inferiores a 10
 	 * 
-	 * @param int c
+	 * @param c
 	 * @return string
 	 */
 	public static final String pad(int c) {
@@ -266,7 +304,7 @@ public class CuadranteDates {
 	
 	/**
 	 * Devuelve la hora de un horario en formato 00:00
-	 * @param String time horario en formato string
+	 * @param time horario en formato string
 	 * @return int horas
 	 */
 	public static int getHour(String time){
@@ -282,7 +320,7 @@ public class CuadranteDates {
 	
 	/**
 	 * Devuelve los minutos de un horario en formato 00:00
-	 * @param String time horario en formato string
+	 * @param time horario en formato string
 	 * @return int minutos
 	 */
 	public static int getMinutes(String time){
@@ -298,7 +336,7 @@ public class CuadranteDates {
 	
 	/**
 	 * Si una hora es null devuelve 00:00
-	 * @param time
+	 * @param schedule
 	 * @return
 	 */
 	public static String verifySchedule(String schedule){

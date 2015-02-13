@@ -128,9 +128,7 @@ public class CalendarAdapter extends BaseAdapter {
 		View v = convertView;
 		TextView dayView;
 		boolean schedule_same_line = false;
-		/**
-		 * si el item actual equivale al dia actual del calendario para ponerlo como activo
-		 */
+		/** si el item actual equivale al dia actual del calendario para ponerlo como activo */
 		boolean isViewDayFocused = false;
 
 		if (convertView == null) { // if it's not recycled, initialize some
@@ -164,9 +162,13 @@ public class CalendarAdapter extends BaseAdapter {
 		dayServiceView.setTextColor(-1);
 		dayView.setTextColor(-1);
 		v.setVisibility(View.VISIBLE);
-		TextView typeDayNoCountNaturalView = 
-				(TextView) v.findViewById(R.id.type_day_no_count_natural);
-		typeDayNoCountNaturalView.setVisibility(View.GONE);
+        TextView typeDayNoCountNaturalView =
+                (TextView) v.findViewById(R.id.type_day_no_count_natural);
+        typeDayNoCountNaturalView.setVisibility(View.GONE);
+        //guarda la fecha completa del dia YYYY-mm-dd
+        TextView dateLong = (TextView) v.findViewById(R.id.date_long);
+        dateLong.setVisibility(View.GONE);
+        dateLong.setText(days[position]);
 		//imagen importante estrella
 		ImageView important_image = (ImageView) v.findViewById(R.id.important_star);
 		important_image.setVisibility(View.GONE);
@@ -176,17 +178,24 @@ public class CalendarAdapter extends BaseAdapter {
 		//imagen media manutencion
 		ImageView manutencion_media = (ImageView) v.findViewById(R.id.manutencion_media);
 		manutencion_media.setVisibility(View.GONE);
-		
+
 		// disable empty days from the beginning
 		if (days[position].equals("")) {
 			v.setVisibility(View.INVISIBLE);
 		} else {
 			//MyLog.d("getview", "dia: " + selectedDate.get(Calendar.DAY_OF_MONTH));
 			// mark current day as focused
+            /*
 			if (month.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR)
 					&& month.get(Calendar.MONTH) == selectedDate.get(Calendar.MONTH)
 					&& days[position].equals(""
 							+ selectedDate.get(Calendar.DAY_OF_MONTH))) {
+							*/
+            if(days[position].equals(
+                    CuadranteDates.formatDate(
+                        selectedDate.get(Calendar.YEAR),
+                        selectedDate.get(Calendar.MONTH) + 1,
+                        selectedDate.get(Calendar.DAY_OF_MONTH)))){
 				isViewDayFocused = true;
 				if(Sp.getTodayColorActive(mContext)){
 					v.setBackgroundColor(Sp.getTodayBgColor(mContext));
@@ -213,8 +222,8 @@ public class CalendarAdapter extends BaseAdapter {
 			dayView.setTextColor(Sp.getSundayTextColor(mContext));
 			typeDayNoCountNaturalView.setTextColor(Sp.getSundayTextColor(mContext));
 		}
-
-		dayView.setText(days[position]);
+        CuadranteDates cDay = new CuadranteDates(days[position]);
+		dayView.setText(Integer.toString(cDay.getDay()));
 		
 		// imprimimos la abreviatura del servicio de este dia
 		if (daysWithServices[position].getId() > 0) {
@@ -314,93 +323,131 @@ public class CalendarAdapter extends BaseAdapter {
 				dayServiceView.setTextAppearance(v.getContext(), R.style.calendar_item_pas);				
 			}
 		}
-
-
-		// create date string for comparison
-		String date = days[position];
-
-		if (date.length() == 1) {
-			date = "0" + date;
-		}
-		String monthStr = "" + (month.get(Calendar.MONTH) + 1);
-		if (monthStr.length() == 1) {
-			monthStr = "0" + monthStr;
-		}
 		return v;
 	}
 
 	public void refreshDays() {
 		// clear items
 		items.clear();
-		
+
 		pasObj = new Pas(mContext);
+        DateTime dtFirstDay, dtLastDay, dt;
+        dtFirstDay = dt = new DateTime(month).withDayOfMonth(1).withMillisOfDay(0);
+        dtLastDay = new DateTime(month).dayOfMonth().withMaximumValue().withMillisOfDay(0);
 
-		int lastDay = month.getActualMaximum(Calendar.DAY_OF_MONTH);
-		// MyLog.d(TAG, "lastDay: " + lastDay);
-		int firstDay = (int) month.get(Calendar.DAY_OF_WEEK);
-		// MyLog.d(TAG, "firstDay: " + firstDay);
-		// obtenemos todos los servicios del mes
-		List<ServicioInfo> servicios = db.getServicesInMonth(
-				month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1);
-		//obtenemos todas las comisiones del mes
-		List<ComisionInfo> comisions = db.getComisionInMonth(
-				month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1);
+            if(dtFirstDay.getDayOfWeek() > 4){//jueves, pasamos a la siguiente semana
+                dtFirstDay = dtFirstDay.plusWeeks(1).withDayOfWeek(1);
+            }else{//cogemos toda la semana desde el lunes, siendo del mes pasado
+                dtFirstDay = dtFirstDay.withDayOfWeek(1);
+            }
+            MyLog.d(TAG, "dtFirstDay:" + dtFirstDay.toString());
+            if(dtLastDay.getDayOfWeek() >= 4){//cogemos el domingo de esta semana
+                dtLastDay = dtLastDay.withDayOfWeek(7);
+            }else{
+                dtLastDay = dtLastDay.minusWeeks(1).withDayOfWeek(7);
+            }
+            MyLog.d(TAG, "dtLastDay:" + dtLastDay.toString());
+            CuadranteDates dateFirst = new CuadranteDates(dtFirstDay);
+            CuadranteDates dateLast = new CuadranteDates(dtLastDay);
+            // obtenemos todos los servicios entre las fechas
+            List<ServicioInfo> servicios = db.getServicesFromInterval(
+                    dateFirst.getDate(), dateLast.getDate());
+            //obtenemos todas las comisiones entre las fechas
+            List<ComisionInfo> comisions = db.getComisionFromInterval(
+                    dateFirst.getDate(), dateLast.getDate());
+            int numDays =
+                    CuadranteDates.getDaysBetweenDates(dateFirst.getDate(), dateLast.getDate()) + 1;
+            MyLog.d(TAG, "numDays:" + numDays);
+            days = new String[numDays];
+            daysWithServices = new ServicioInfo[numDays];
+            daysWithComisions = new ComisionInfo[numDays];
+            // populate days
+            DateTime dateDay = dtFirstDay;
+            for (int i = 0; i < days.length; i++) {
+                daysWithServices[i] = new ServicioInfo();
+                for (ServicioInfo servicio : servicios) {
+                    if (servicio.getDate().equals(CuadranteDates.formatDate(dateDay))) {
+                        daysWithServices[i] = servicio;
+                        break;
+                    }
+                }
+                daysWithComisions[i] = new ComisionInfo();
+                for (ComisionInfo comision : comisions) {
+                    if (comision.getInterval().contains(dateDay)) {
+                        daysWithComisions[i] = comision;
+                        break;
+                    }
+                }
+                days[i] = CuadranteDates.formatDate(dateDay);//"" + dateDay.dayOfMonth().get();
+                dateDay = dateDay.plusDays(1);
+            }
 
-		/**
-		 * Numero de celdas del mes, contando con las iniciales del mes pasado
-		 */
-		int numDays;
-		// figure size of the array
-		if (firstDay == 1) {
-			numDays = lastDay + (FIRST_DAY_OF_WEEK * 6);
-		} else {
-			numDays = lastDay + firstDay - (FIRST_DAY_OF_WEEK + 1);
-		}
-		days = new String[numDays];
-		daysWithServices = new ServicioInfo[numDays];
-		daysWithComisions = new ComisionInfo[numDays];
-		int j = FIRST_DAY_OF_WEEK;
+        /*
+            int lastDay = month.getActualMaximum(Calendar.DAY_OF_MONTH);
+            MyLog.d(TAG, "lastDay: " + lastDay);
+            int firstDay = (int) month.get(Calendar.DAY_OF_WEEK);
+            MyLog.d(TAG, "firstDay: " + firstDay);
+            // obtenemos todos los servicios del mes
+            List<ServicioInfo> servicios = db.getServicesInMonth(
+                    month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1);
+            //obtenemos todas las comisiones del mes
+            List<ComisionInfo> comisions = db.getComisionInMonth(
+                    month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1);
 
-		// populate empty days before first real day
-		if (firstDay > 1) {
-			for (j = 0; j < firstDay - FIRST_DAY_OF_WEEK; j++) {
-				days[j] = "";
-				daysWithServices[j] = new ServicioInfo();
-				daysWithComisions[j] = new ComisionInfo();
-				// MyLog.d("firstDay > 1 j", "" + j);
-			}
-		} else {
-			for (j = 0; j < FIRST_DAY_OF_WEEK * 6; j++) {
-				days[j] = "";
-				daysWithServices[j] = new ServicioInfo();
-				daysWithComisions[j] = new ComisionInfo();
-			}
-			j = FIRST_DAY_OF_WEEK * 6 + 1; // sunday => 1, monday => 7
-		}
+            int numDays;
+            // figure size of the array
+            if (firstDay == 1) {
+                numDays = lastDay + (FIRST_DAY_OF_WEEK * 6);
+            } else {
+                numDays = lastDay + firstDay - (FIRST_DAY_OF_WEEK + 1);
+            }
+            days = new String[numDays];
+            daysWithServices = new ServicioInfo[numDays];
+            daysWithComisions = new ComisionInfo[numDays];
+            int j = FIRST_DAY_OF_WEEK;
 
-		// populate days
-		int dayNumber = 1;
-		DateTime dateDay = new DateTime(month.get(Calendar.YEAR), 
-				month.get(Calendar.MONTH) + 1, dayNumber, 0, 0);
-		for (int i = j - 1; i < days.length; i++) {
-			daysWithServices[i] = new ServicioInfo();
-			for (ServicioInfo servicio : servicios) {
-				if (servicio.getDay() == dayNumber) {
-					daysWithServices[i] = servicio;
-					break;
-				}
-			}
-			daysWithComisions[i] = new ComisionInfo();
-			for (ComisionInfo comision: comisions){
-				if(comision.getInterval().contains(dateDay)){
-					daysWithComisions[i] = comision;
-					break;
-				}
-			}
-			dateDay = dateDay.plusDays(1);
-			days[i] = "" + dayNumber;
-			dayNumber++;
-		}
+            // populate empty days before first real day
+            if (firstDay > 1) {
+                for (j = 0; j < firstDay - FIRST_DAY_OF_WEEK; j++) {
+                    days[j] = "";
+                    daysWithServices[j] = new ServicioInfo();
+                    daysWithComisions[j] = new ComisionInfo();
+                    // MyLog.d("firstDay > 1 j", "" + j);
+                }
+            } else {
+                for (j = 0; j < FIRST_DAY_OF_WEEK * 6; j++) {
+                    days[j] = "";
+                    daysWithServices[j] = new ServicioInfo();
+                    daysWithComisions[j] = new ComisionInfo();
+                }
+                j = FIRST_DAY_OF_WEEK * 6 + 1; // sunday => 1, monday => 7
+            }
+
+            // populate days
+            int dayNumber = 1;
+            DateTime dateDay = new DateTime(month.get(Calendar.YEAR),
+                    month.get(Calendar.MONTH) + 1, dayNumber, 0, 0);
+            for (int i = j - 1; i < days.length; i++) {
+                daysWithServices[i] = new ServicioInfo();
+                for (ServicioInfo servicio : servicios) {
+                    if (servicio.getDay() == dayNumber) {
+                        daysWithServices[i] = servicio;
+                        break;
+                    }
+                }
+                daysWithComisions[i] = new ComisionInfo();
+                for (ComisionInfo comision : comisions) {
+                    if (comision.getInterval().contains(dateDay)) {
+                        daysWithComisions[i] = comision;
+                        break;
+                    }
+                }
+                dateDay = dateDay.plusDays(1);
+                days[i] = "" + dayNumber;
+                dayNumber++;
+            }
+        }
+        */
 	}
 	
 	/**
