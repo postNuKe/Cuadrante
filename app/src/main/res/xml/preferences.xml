@@ -62,7 +62,7 @@
             android:title="@string/days_holidays" />
 
         <ListPreference
-            android:defaultValue="6"
+            android:defaultValue="2"
             android:entries="@array/empty_array"
             android:entryValues="@array/empty_array"
             android:key="type_service_holidays"
@@ -77,7 +77,7 @@
         android:key="own_affairs"
         android:title="@string/own_affairs" >
         <EditTextPreference
-            android:defaultValue="3"
+            android:defaultValue="5"
             android:dialogTitle="@string/days_own_affairs"
             android:key="days_own_affairs"
             android:numeric="integer"
@@ -85,7 +85,7 @@
             android:title="@string/days_own_affairs" />
 
         <ListPreference
-            android:defaultValue="2"
+            android:defaultValue="1"
             android:entries="@array/empty_array"
             android:entryValues="@array/empty_array"
             android:key="type_service_own_affairs"

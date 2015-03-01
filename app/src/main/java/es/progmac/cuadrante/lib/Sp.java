@@ -26,7 +26,7 @@ public class Sp {
 	 * Nombre de la variable que guarda el número de dias de asuntos particulares
 	 */
 	public static final String SP_DAYS_OWN_AFFAIRS = "days_own_affairs";
-	public static final String SP_DAYS_OWN_AFFAIRS_DV = "4";
+	public static final String SP_DAYS_OWN_AFFAIRS_DV = "5";
 	/**
 	 * Nombre de la variable que guarda el tipo de servicio asignado para las vacaciones
 	 */
@@ -34,7 +34,7 @@ public class Sp {
 	/**
 	 * Id del tipo de servicio asignado a las vacaciones por defecto
 	 */
-	public static final String SP_TYPE_SERVICE_HOLIDAYS_DV = "6";
+	public static final String SP_TYPE_SERVICE_HOLIDAYS_DV = "2";
 	/**
 	 * Nombre de la variable que guarda el tipo de servicio asignado para los asuntos particulares
 	 */
@@ -42,7 +42,7 @@ public class Sp {
 	/**
 	 * Id del tipo de servicio asignado a los asuntos propios por defecto
 	 */
-	public static final String SP_TYPE_SERVICE_OWN_AFFAIRS_DV = "2";
+	public static final String SP_TYPE_SERVICE_OWN_AFFAIRS_DV = "1";
 	/**
 	 * Nombre de la variable que guarda el tipo de servicio asignado para las bajas médicas
 	 */
