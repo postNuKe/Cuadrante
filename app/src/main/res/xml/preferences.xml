@@ -96,6 +96,7 @@
             android:key="num_own_affairs"
             android:title="@string/resume" />
     </PreferenceCategory>
+    <!--
     <PreferenceCategory
         android:key="f2"
         android:title="@string/f2_title" >
@@ -120,6 +121,7 @@
             android:summary="@string/f2_rest_days_summary"
             android:title="@string/f2_rest_days" />
     </PreferenceCategory>
+    -->
     <PreferenceCategory
         android:key="comisiones"
         android:title="@string/commissiones" >
@@ -256,7 +258,7 @@
             android:key="interval_minutes_active"
             android:summary="@string/interval_minutes_active_summary"
             android:title="@string/interval_minutes_active" />
-
+        <!--
         <ListPreference
             android:defaultValue="3"
             android:entries="@array/empty_array"
@@ -264,6 +266,7 @@
             android:key="type_service_medical_leave"
             android:summary="@string/type_service_medical_leave_summary"
             android:title="@string/type_service_medical_leave" />
+            -->
         <ListPreference
             android:defaultValue="today"
             android:entries="@array/widget_week_entries"

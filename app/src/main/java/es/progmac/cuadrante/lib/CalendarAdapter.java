@@ -325,10 +325,13 @@ public class CalendarAdapter extends BaseAdapter {
 		}else if(pasObj.active() && pasObj.isCreateList() && !getItem(position).equals("")){			
 			//MyLog.d(TAG, "pas active:" + pasObj.active());
 			//MyLog.d(TAG, "pas list:" + pasObj.isCreateList());
+            /*
 			DateTime dtView = new DateTime(
 				month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, 
 				Integer.parseInt((String) getItem(position)), 0, 0);
 			String pasText = pasObj.getDay(dtView);
+			*/
+            String pasText = pasObj.getDay(CuadranteDates.getDateTime((String) getItem(position)));
 			if(pasText != null){
 				dayServiceView.setText(pasText);
 				dayServiceView.setTextAppearance(v.getContext(), R.style.calendar_item_pas);				

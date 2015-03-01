@@ -34,7 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	// declare constants fields
 	public static final String DB_NAME = "cuadrante";
-	public static final int DB_VERSION = 11;
+	public static final int DB_VERSION = 12;
 
 	public static final String SERVICE_TABLE_NAME = "service";
 	public static final String SERVICE_COLUMN_ID = "_id";
@@ -363,17 +363,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ TYPE_SERVICE_COLUMN_IS_DATE_RANGE + ", " 
 				+ TYPE_SERVICE_COLUMN_GUARDIA_COMBINADA + ", " 
 				+ TYPE_SERVICE_COLUMN_TYPE_DAY + ") ";
-		db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 1, 0);");
-		db.execSQL(sqlColumns + " VALUES (\"ASUNTOS PARTICULARES\", \"AP\", -9178339, -16777216, 0, 0, 1);");
-		db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, 1);");
-		db.execSQL(sqlColumns + " VALUES (\"LIBRE\", \"L\", -16139282, -16777216, 1, 0, 0);");
-		db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, 0);");
-		db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, 1);");
-		db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"LF\", -16139282, -16777216, 0, 0, 0);");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO INCORPORACIÓN\", \"PIN\", -10448442, -16777216, 1, 0, 1);");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO SS Y NAVIDAD\", \"PSN\", -10448442, -16777216, 1, 0, 1);");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO URGENTE\", \"PUR\", -10448442, -16777216, 1, 0, 1);");
-		
+        db.execSQL(sqlColumns + " VALUES (\"ASUNTOS PARTICULARES\", \"AP\", -9178339, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"DESCANSO SEMANAL\", \"DS\", -16139282, -16777216, 1, 0, 0);");
+        db.execSQL(sqlColumns + " VALUES (\"DESCANSO SINGULARIZADO\", \"DSI\", -16139282, -16777216, 1, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"LF\", -16139282, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"LIBRE COMPENSATORIO\", \"LC\", -16139282, -16777216, 0, 0, 0);");
+		db.execSQL(sqlColumns + " VALUES (\"PERMISO\", \"PER\", -10448442, -16777216, 1, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, 0);");
+        db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 1, 0);");
+        db.execSQL(sqlColumns + " VALUES (\"GUARDIA LOCALIZACION\", \"GL\", -15454022, -1, 0, 1, 0);");
+        db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"INDISPOSICION\", \"IND\", -287128, -16777216, 1, 0, 1);");//12
+
 		sqlColumns = "INSERT INTO " + TYPE_SERVICE_TABLE_NAME + "(" 
 				+ TYPE_SERVICE_COLUMN_TITLE + ", " 
 				+ TYPE_SERVICE_COLUMN_NAME+ ", " 
@@ -398,10 +400,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(TURN_TABLE_CREATE);
 		db.execSQL("INSERT INTO " + TURN_TABLE_NAME + " VALUES ('1', 'AFRICANO');");
 		db.execSQL(TURN_TYPE_TABLE_CREATE);
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '15', '0', '0');");//tarde
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '12', '1', '1');");//m-n
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '4', '2', '0');");//libre
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '4', '3', '0');");//libre
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '17', '0', '0');");//tarde
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '14', '1', '1');");//m-n
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '3', '2', '0');");//descanso semanal
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '3', '3', '0');");//descanso semanal
 	}
 
 	@Override
@@ -418,6 +420,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
         //Cambiar todas las guardias combinadas a valor 1, tipo de dia mayor que 0 a 1
         if(oldVersion < 12){
+            db.execSQL("DELETE FROM " + HOURS_TABLE_NAME);
             db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
                     SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
                     "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
@@ -432,6 +435,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
                     "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
         }
+
 		/*
 		if(oldVersion < 2){//columna important
 			db.execSQL("ALTER TABLE " + SERVICE_TABLE_NAME + " ADD COLUMN " + SERVICE_COLUMN_IS_IMPORTANT + " INTEGER DEFAULT 0;");
@@ -1970,7 +1974,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		db.close();
 		*/
-	}		
-	
-	
+	}
+
+    /**
+     * Te pasa las guardias y tipos a 1.
+     * Para actualizar a la nueva OG del 2015 ya no son necesarios los diferentes tipos de dias
+     * y las diferentes guardias. Al actualizar la app de la 2.1 a la 3 y al importar una copia
+     * antigua de la 2.1 a la 3
+     */
+    public void updateGuardiasTypeDay(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + HOURS_TABLE_NAME);
+        db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
+                SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
+                "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
+        db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
+                SERVICE_COLUMN_TYPE_DAY + " = '1' " +
+                "WHERE " + SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+
+        db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
+                SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
+                "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
+        db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
+                TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
+                "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+        db.close();
+    }
 }

@@ -729,14 +729,14 @@ public class TipoServicioActivity extends SherlockListActivity implements
 			    });
 			    dialog.create();
 			    dialog.show();	
-		    }else if(TYPE_ID == Sp.getTypeServiceMedicalLeave(this)){
+		    /*}else if(TYPE_ID == Sp.getTypeServiceMedicalLeave(this)){
 			    dialog.setMessage(getString(R.string.message_alert_delete_type_service_medical_leave));
 			    dialog.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			    	public void onClick(DialogInterface dialog, int id) {   				    		
 			    	}
 			    });
 			    dialog.create();
-			    dialog.show();		    	
+			    dialog.show();	*/
 			}else{
 				//alertamos si está seguro de querer eliminar el servicio
 			    dialog.setMessage(getString(R.string.message_alert_delete_tipo_servicio));

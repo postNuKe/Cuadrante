@@ -104,10 +104,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		ListPreference listOwnAffairs = (ListPreference) findPreference(Sp.SP_TYPE_SERVICE_OWN_AFFAIRS);
 		listOwnAffairs.setEntries(entries);
 		listOwnAffairs.setEntryValues(entryValues);
-
+        /*
 		ListPreference listMedicalLeave = (ListPreference) findPreference(Sp.SP_TYPE_SERVICE_MEDICAL_LEAVE);
 		listMedicalLeave.setEntries(entries);
 		listMedicalLeave.setEntryValues(entryValues);
+		*/
 
 		//tipos servicios para comisiones
 		/*

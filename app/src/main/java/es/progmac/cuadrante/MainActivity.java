@@ -656,7 +656,7 @@ public class MainActivity extends SherlockActivity {
                 month.set(
                         today.get(Calendar.YEAR),
                         today.get(Calendar.MONTH),
-                        15);//si pone el today.get(Calendar.DAY_OF_MONTH) no muestra el calendar correctamente
+                        today.get(Calendar.DAY_OF_MONTH));//si pone el today.get(Calendar.DAY_OF_MONTH) no muestra el calendar correctamente
                 //obtenemos el mes correcto según la fecha seleccionada por el usuario, movil, salto, o busqueda
                 month = CuadranteDates.getCalendar(month);
                 refreshCalendar();

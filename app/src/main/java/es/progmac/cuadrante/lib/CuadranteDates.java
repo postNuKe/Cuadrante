@@ -559,6 +559,8 @@ public class CuadranteDates {
     public static Calendar getCalendar(Calendar calendar){
         DateTime dtFirstDay, dtLastDay, dtFinal, dt2, dt = new DateTime(calendar);
         Map<String, DateTime> aMap = getStartEndMonth(calendar);
+        //MyLog.d(TAG, aMap.get("firstDay").toString());
+        //MyLog.d(TAG, aMap.get("lastDay").toString());
 
         dt = dt.millisOfDay().withMinimumValue();
         dt2 = dt.millisOfDay().withMaximumValue();
@@ -572,7 +574,7 @@ public class CuadranteDates {
         }else{
             dtFinal = dt;
         }
-        //MyLog.d(TAG, "dtFinal:" + dtFinal);
+        //MyLog.d(TAG, "dtFinal:" + dtFinal.getDayOfMonth());
         calendar.set(dtFinal.getYear(), dtFinal.getMonthOfYear() - 1, dtFinal.getDayOfMonth());
         return calendar;
     }

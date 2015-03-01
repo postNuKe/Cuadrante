@@ -543,6 +543,7 @@ public class DatabaseAssistant
 		    	        						Integer.valueOf(record.get(DatabaseHandler.TURN_TYPE_COLUMN_SALIENTE)));
 		    	        				_db2.insertTurnType(turnType);	    	        				
 		    	        			}
+                                    _db2.updateGuardiasTypeDay();
 		    	        		//shared preferences
 		    	        		}else{
 		    	        			MyLog.d("importer", "shared_preferences");
