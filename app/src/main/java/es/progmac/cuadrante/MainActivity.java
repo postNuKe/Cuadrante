@@ -55,6 +55,7 @@ import es.progmac.cuadrante.lib.CuadranteDates;
 import es.progmac.cuadrante.lib.DatabaseHandler;
 import es.progmac.cuadrante.lib.Extra;
 import es.progmac.cuadrante.lib.IntvlMinTimePickerDialog;
+import es.progmac.cuadrante.lib.MonthlyHours;
 import es.progmac.cuadrante.lib.MyLog;
 import es.progmac.cuadrante.lib.Notify;
 import es.progmac.cuadrante.lib.Sp;
@@ -188,19 +189,32 @@ public class MainActivity extends SherlockActivity {
         onNewIntent(getIntent());
 
         //de SearchResult saltamos a un mes en concreto
+        //obtenemos el dia, mes y año de la búsqueda
         Intent intent = getIntent();
         int extra_day = intent.getIntExtra(Extra.DAY, month.get(Calendar.DAY_OF_MONTH));
         int extra_month = intent.getIntExtra(Extra.MONTH, month.get(Calendar.MONTH));
         int extra_year = intent.getIntExtra(Extra.YEAR, month.get(Calendar.YEAR));
-        month.set(extra_year, extra_month, 1);
+
+        //dtToday = CuadranteDates.getMonthCalendarOfDate(new DateTime(extra_year, extra_month + 1, extra_day, 0, 0));
+        //month.set(dtToday.getYear(), dtToday.getMonthOfYear() - 1, dtToday.getDayOfMonth());
+        //por defecto ponemos el mes y año pero el dia a medias para cuando es el salto de mes a mes
+        month.set(extra_year, extra_month, 15);
+
         //MyLog.d(TAG, "onCreate year:" + month.get(Calendar.YEAR) + " month:" + month.get(Calendar.MONTH) + " day:" + month.get(Calendar.DAY_OF_MONTH));
         //si el dia actual del mes del movil es menor que el máximo del mes seleccionado por el 
         //user en la búsqueda pues ponemos el dia actual del mes en el movil
-        if (extra_day <= month.getActualMaximum(Calendar.DAY_OF_MONTH))
+        if (extra_day <= month.getActualMaximum(Calendar.DAY_OF_MONTH)) {
             month.set(Calendar.DAY_OF_MONTH, extra_day);
+        }
+        //guardamos la fecha actual
+        String selectedDate = CuadranteDates.formatDate(month);
+        //obtenemos el mes correcto según la fecha seleccionada por el usuario, movil, salto, o busqueda
+        month = CuadranteDates.getCalendar(month);
+        //MyLog.d(TAG, "month:" + CuadranteDates.formatDate(month));
 
         items = new ArrayList<String>();
         adapter = new CalendarAdapter(this, month);
+        adapter.setSelectedDate(selectedDate);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(adapter);
@@ -480,14 +494,16 @@ public class MainActivity extends SherlockActivity {
                 switch (item.getItemId()) {
                     case 0://bloque
                         DateTime dt = CuadranteDates.getDateTime(selectedDate);
+                        MyLog.d(TAG, "dt turno:" + dt.toString());
                         List<TurnTypeInfo> types = db.getTurnTypes(sSelectedTurnId);
                         for (TurnTypeInfo type : types) {
+                            MyLog.d(TAG, "tipo servicio:" + type.getName());
                             TipoServicioInfo typeService = db.getTipoServicio(type.getTypeId());
+                            String tmpDate = CuadranteDates.formatDate(dt);
                             //si se excede no grabamos el servicio ese dia y continuamos
-                            if (Cuadrante.canServiceSaves(mContext, typeService.getId(), selectedDate)) {
-                                saveTypeToService(typeService, date);
+                            if (Cuadrante.canServiceSaves(mContext, typeService.getId(), tmpDate)) {
+                                saveTypeToService(typeService, tmpDate);
                                 if (type.getSaliente() == 1) {
-                                    dt = dt.plusDays(1);
                                     //creo  un tipo temporal para así poder usar la funcion saveTypeToService
                                     //y no tener que crear una nueva
                                     TipoServicioInfo typeSaliente =
@@ -498,7 +514,9 @@ public class MainActivity extends SherlockActivity {
                                                     Cuadrante.SCHEDULE_NULL, Cuadrante.SCHEDULE_NULL,
                                                     Cuadrante.SCHEDULE_NULL, Cuadrante.SCHEDULE_NULL, 0, 0,
                                                     0, 0);
-                                    saveTypeToService(typeSaliente, date);
+                                    dt = dt.plusDays(1);
+                                    tmpDate = CuadranteDates.formatDate(dt);
+                                    saveTypeToService(typeSaliente, tmpDate);
                                 }
                             }
                             dt = dt.plusDays(1);
@@ -634,13 +652,13 @@ public class MainActivity extends SherlockActivity {
                 showDialog(DIALOG_ID_DELETE_DATE_RANGE_START);
                 return true;
             case R.id.menu_today:
-
                 Calendar today = Calendar.getInstance();
                 month.set(
                         today.get(Calendar.YEAR),
                         today.get(Calendar.MONTH),
-                        1);//si pone el today.get(Calendar.DAY_OF_MONTH) no muestra el calendar correctamente
-                //MyLog.d(TAG, "menu_today year:" + month.get(Calendar.YEAR) + " month:" + month.get(Calendar.MONTH) + " day:" + month.get(Calendar.DAY_OF_MONTH));
+                        15);//si pone el today.get(Calendar.DAY_OF_MONTH) no muestra el calendar correctamente
+                //obtenemos el mes correcto según la fecha seleccionada por el usuario, movil, salto, o busqueda
+                month = CuadranteDates.getCalendar(month);
                 refreshCalendar();
                 return true;
             default:
@@ -756,7 +774,7 @@ public class MainActivity extends SherlockActivity {
                 Toast.makeText(this, R.string.selecte_turn_date_end, Toast.LENGTH_LONG).show();
                 return new DatePickerDialog(this, datePickerTurnListener,
                         CuadranteDates.getYear(this.selectedDate),
-                        CuadranteDates.getMonth(this.selectedDate),
+                        CuadranteDates.getMonth(this.selectedDate) - 1,
                         CuadranteDates.getDay(this.selectedDate));
 
         }
@@ -812,7 +830,7 @@ public class MainActivity extends SherlockActivity {
             case DIALOG_ID_DATE_TURN:
                 ((DatePickerDialog) dialog).updateDate(
                         CuadranteDates.getYear(this.selectedDate),
-                        CuadranteDates.getMonth(this.selectedDate),
+                        CuadranteDates.getMonth(this.selectedDate) - 1,
                         CuadranteDates.getDay(this.selectedDate));
                 break;
             case DIALOG_ID_DELETE_DATE_RANGE_START:
@@ -1014,40 +1032,40 @@ public class MainActivity extends SherlockActivity {
                 // when dialog box is closed, below method will be called.
                 public void onDateSet(DatePicker view, int selectedYear,
                                       int selectedMonth, int selectedDay) {
-                    DateTime dStart = new DateTime(
-                            CuadranteDates.getYear(selectedDate),
-                            CuadranteDates.getMonth(selectedDate) + 1,
-                            CuadranteDates.getDay(selectedDate), 0, 0);
-                    DateTime dEnd = new DateTime(selectedYear, selectedMonth + 1, selectedDay, 0, 0);
-			/*
-			MyLog.d("onDateSet", dStart.toString());
-			MyLog.d("onDateSet", dEnd.toString());
-			*/
-                    //si la fecha de inicio es mayor eso es un error por lo que
-                    //volvemos a mostrar el datepicker
-                    if (dStart.isBefore(dEnd) || dStart.isEqual(dEnd)) {
-                        TipoServicioInfo typeService = db.getTipoServicio(typeId);
-                        if (typeService.getId() > 0) {
-                            //miramos si se puede grabar el servicio entre las fechas
-                            //seleccionadas
-                            if (Cuadrante.canServiceSaves(MainActivity.this, typeService.getId(), dStart, dEnd)) {
-                                while (dStart.isBefore(dEnd) || dStart.isEqual(dEnd)) {
-                                    String date = CuadranteDates.formatDate(dStart.getYear(),
-                                            dStart.getMonthOfYear(), dStart.getDayOfMonth());
-                                    saveTypeToService(typeService, date);
-                                    //MyLog.d("onDateSet", dStart.toString());
-                                    Cuadrante.deleteHoursDate(mContext, date);
-                                    dStart = dStart.plusDays(1);
-                                }
-                                Cuadrante.refreshWidget(mContext);
-                                //Cuadrante.deleteHoursDate(mContext, CuadranteDates.formatDate(dStart));
-                                //Cuadrante.deleteHoursDate(mContext, CuadranteDates.formatDate(dEnd));
-                            } else {
-                                Toast.makeText(getApplicationContext(), R.string.error_cant_save_service_exceeded_limit, Toast.LENGTH_LONG).show();
+                DateTime dStart = new DateTime(
+                        CuadranteDates.getYear(selectedDate),
+                        CuadranteDates.getMonth(selectedDate),
+                        CuadranteDates.getDay(selectedDate), 0, 0);
+                DateTime dEnd = new DateTime(selectedYear, selectedMonth + 1, selectedDay, 0, 0);
+                /*
+                MyLog.d("onDateSet", dStart.toString());
+                MyLog.d("onDateSet", dEnd.toString());
+                */
+                //si la fecha de inicio es mayor eso es un error por lo que
+                //volvemos a mostrar el datepicker
+                if (dStart.isBefore(dEnd) || dStart.isEqual(dEnd)) {
+                    TipoServicioInfo typeService = db.getTipoServicio(typeId);
+                    if (typeService.getId() > 0) {
+                        //miramos si se puede grabar el servicio entre las fechas
+                        //seleccionadas
+                        if (Cuadrante.canServiceSaves(MainActivity.this, typeService.getId(), dStart, dEnd)) {
+                            while (dStart.isBefore(dEnd) || dStart.isEqual(dEnd)) {
+                                String date = CuadranteDates.formatDate(dStart.getYear(),
+                                        dStart.getMonthOfYear(), dStart.getDayOfMonth());
+                                saveTypeToService(typeService, date);
+                                //MyLog.d("onDateSet", dStart.toString());
+                                Cuadrante.deleteHoursDate(mContext, date);
+                                dStart = dStart.plusDays(1);
                             }
+                            Cuadrante.refreshWidget(mContext);
+                            //Cuadrante.deleteHoursDate(mContext, CuadranteDates.formatDate(dStart));
+                            //Cuadrante.deleteHoursDate(mContext, CuadranteDates.formatDate(dEnd));
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.error_cant_save_service_exceeded_limit, Toast.LENGTH_LONG).show();
                         }
-                        refreshCalendar();
                     }
+                    refreshCalendar();
+                }
 
                 }
             };
@@ -1062,7 +1080,7 @@ public class MainActivity extends SherlockActivity {
                                       int selectedMonth, int selectedDay) {
                     DateTime dStart = new DateTime(
                             CuadranteDates.getYear(selectedDate),
-                            CuadranteDates.getMonth(selectedDate) + 1,
+                            CuadranteDates.getMonth(selectedDate),
                             CuadranteDates.getDay(selectedDate), 0, 0);
                     DateTime dEnd = new DateTime(selectedYear, selectedMonth + 1, selectedDay, 0, 0);
                     //si la fecha de inicio es mayor eso es un error por lo que
@@ -1284,88 +1302,44 @@ public class MainActivity extends SherlockActivity {
         //eliminamos todos los textview anteriores, xk cada vez que pasemos de mes
         //se verían encima de los del nuevo mes
         layout_resume.removeAllViews();
-        //añadimos el textview donde pondrá la suma de horas totales del mes
+        //añadimos el computo del mes
         TextView txtTotalTime = new TextView(getApplicationContext());
         txtTotalTime.setId(-1);
         txtTotalTime.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
         txtTotalTime.setText(Html.fromHtml("<b>" + getString(R.string.total_hours) + "</b>"));
         layout_resume.addView(txtTotalTime);
-        //añadimos el textview donde pondrá la suma de horas trimestrales
-        TextView txtQuarter = new TextView(getApplicationContext());
-        txtQuarter.setId(-1);
-        txtQuarter.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
-        txtQuarter.setText(Html.fromHtml("<b>" + getString(R.string.total_quarter_hours) + "</b>"));
-        layout_resume.addView(txtQuarter);
-        //añadimos el textview donde pondrá la suma de horas del f2
-        TextView txtF2Hours = new TextView(getApplicationContext());
-        txtF2Hours.setId(-1);
-        txtF2Hours.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
-        txtF2Hours.setText(Html.fromHtml("<b>" + getString(R.string.total_f2_hours) + "</b>"));
-        layout_resume.addView(txtF2Hours);
-        //añadimos el textview donde pondrá la suma del F2
-        TextView txtF2 = new TextView(getApplicationContext());
-        txtF2.setId(-1);
-        txtF2.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
-        txtF2.setText(Html.fromHtml("<b>" + getString(R.string.f2) + "</b>"));
-        layout_resume.addView(txtF2);
 
+        //miramos que tipo de computo de horas se debe mostrar de mas, trimestral o cuatrimestral
+        TextView txtWorkdayComputing = new TextView(getApplicationContext());
+        if(!Sp.getSpWorkdayComputingHours(mContext).equals("monthly")) {
+            txtWorkdayComputing.setId(-1);
+            txtWorkdayComputing.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
+            String text = "";
+            switch (Sp.getSpWorkdayComputingHours(mContext)) {
+                case "quarterly":
+                    text = getString(R.string.total_quarter_hours);
+                    break;
+                case "quarterly2":
+                    text = getString(R.string.total_quarter2_hours);
+                    break;
+            }
+            txtWorkdayComputing.setText(Html.fromHtml("<b>" + text + "</b>"));
+            layout_resume.addView(txtWorkdayComputing);
+        }
 
-        //dsTipoServicio = new TipoServicioDataSource(this);
-        //dsTipoServicio.open();
-        /**
-         * Horas totales trabajadas, hours, minutes
-         */
+        /** Horas totales trabajadas, hours, minutes*/
         HashMap<String, Integer> total_time = new HashMap<String, Integer>();
-        total_time.put("hours", 0);
-        total_time.put("minutes", 0);
+        total_time.put(MonthlyHours.HOURS, 0);
+        total_time.put(MonthlyHours.MINUTES, 0);
 
-        //db.destroyHoursTable();
-
-        //obtenemos las horas del trimestre
+        //obtenemos las horas del mes, trimestre o cuatrimestre
         int actualMonth = month.get(Calendar.MONTH) + 1;
         HoursInfo actualMonthInfo = new HoursInfo();
+        db.destroyHoursTable();
 
-        SparseArray<HoursInfo> quarterMonthsHours =
-                db.getQuarterHours(month.get(Calendar.YEAR), actualMonth);
+        MonthlyHours monthlyHours = new MonthlyHours(mContext, db, month, actualMonth);
+        actualMonthInfo = monthlyHours.getHoursInfo();
 
-        List<Integer> months = CuadranteDates.getQuarterMonths(actualMonth);
-
-
-        double totalReferenceHours = 0;
-        double totalHours = 0;
-        for (Integer m : months) {
-            //MyLog.d(TAG, "----------------------------------");
-            //MyLog.d(TAG, "m: " + m + " actualMonth:" + actualMonth);
-            HoursInfo monthInfo = new HoursInfo();
-            //MyLog.d(TAG, "mes:" + m);
-            if (quarterMonthsHours.indexOfKey(m) < 0) {
-                //MyLog.d(TAG, "el mes " + m + " no tiene horas guardadas");
-                Calendar tmpMonth = (Calendar) month.clone();
-                tmpMonth.set(Calendar.MONTH, m - 1);
-                CalendarAdapter tmpAdapter = new CalendarAdapter(this, tmpMonth);
-                //MyLog.d(TAG, tmpMonth.get(Calendar.MONTH) + " " + tmpMonth.get(Calendar.YEAR));
-                monthInfo = setHoursInfo(tmpMonth, tmpAdapter);
-            } else {
-                monthInfo = quarterMonthsHours.get(m);
-            }
-            totalReferenceHours += monthInfo.getReference();
-            totalHours += monthInfo.getHours();
-            if (m == actualMonth) {
-                actualMonthInfo = monthInfo;
-            }
-        }
-        totalReferenceHours = Cuadrante.round(Cuadrante.doubleTwoDigits(totalReferenceHours));
-		
-		
-		/*
-		SparseArray<TipoServicioInfo> newTypeServices = new SparseArray<TipoServicioInfo>();
-		//buscamos el tipo de servicio en la lista de tipos
-		TipoServicioInfo ts = new TipoServicioInfo();
-		for(TipoServicioInfo typeService:typeServices){
-			newTypeServices.put(typeService.getId(), typeService);
-		}
-		ts = newTypeServices.get(dServices[i].getTypeId());
-		*/
         ServicioInfo[] dServices = adapter.daysWithServices;
         List<TipoServicioInfo> typeServices = db.getAllTipoServicios();
 
@@ -1376,19 +1350,8 @@ public class MainActivity extends SherlockActivity {
          */
         SparseIntArray type_qty = new SparseIntArray();
 
-        int qtyGuardias = 0;
-        /**
-         * Cantidad de veces que hay de cada tipo de dia
-         * <type_day, qty>
-         */
-        SparseIntArray type_day_qty = new SparseIntArray();
-        /**
-         * Número de bajas médicas en el mes
-         */
-        int qtyMedicalLeave = 0;
         // miramos todos los dias del mes si tienen servicio
         for (int i = 0, qty = 0; i < dServices.length; i++) {
-
             //TipoServicioInfo ts = db.getTipoServicio(dServices[i].getTypeId());
             //buscamos el tipo de servicio en la lista de tipos
             TipoServicioInfo ts = new TipoServicioInfo();
@@ -1419,53 +1382,8 @@ public class MainActivity extends SherlockActivity {
                     layout_resume.addView(tv);
                 }
                 type_qty.put(dServices[i].getTypeId(), qty);
-                //si el tipo de servicio es el de bajas sumamos
-                if (ts.getId() == Sp.getTypeServiceMedicalLeave(mContext)) qtyMedicalLeave++;
             }
-            if (dServices[i].getGuardiaCombinada() > 0) qtyGuardias++;
-
         }
-		/*
-		//miramos si existen las vacaciones para insertar el credito que se ha gastado y el que
-		//queda, pero solo para el año actual del movil
-		TextView tvHolidays = 
-				(TextView) layout_resume.findViewById(Sp.getHolidaysTypeService(mContext));
-		DateTime dtToday = new DateTime();
-		DateTime dtHolidaysStart = new DateTime();
-		DateTime dtHolidaysEnd = new DateTime();
-		Interval intervalHolidays = null;
-		if(dtToday.getMonthOfYear() == 1){//empezamos el año pasado
-			dtHolidaysStart = dtToday.withMonthOfYear(2).minusYears(1).withDayOfMonth(1);
-			dtHolidaysEnd = dtToday.withDayOfMonth(31);
-			intervalHolidays = new Interval(
-					dtHolidaysStart,
-					dtHolidaysEnd);
-		}else{//este año para el siguiente
-			dtHolidaysStart = dtToday.withDayOfMonth(1).withMonthOfYear(2);
-			dtHolidaysEnd = dtToday.withMonthOfYear(1).plusYears(1).withDayOfMonth(31);
-			intervalHolidays = new Interval(
-					dtHolidaysStart,
-					dtHolidaysEnd);			       	
-		}		
-		DateTime dtMonth = new DateTime(month);
-		if(tvHolidays != null && intervalHolidays.overlaps(new Interval(dtMonth, dtMonth))){
-			CuadranteDates cDS = new CuadranteDates(dtMonth.withDayOfMonth(1));
-			CuadranteDates cDE = new CuadranteDates(dtMonth.dayOfMonth().withMaximumValue());
-			List<ServicioInfo> services = db.getServicesFromTypeService(
-					Sp.getHolidaysTypeService(this), 
-					cDS.getDate(),
-					cDE.getDate(), true, false);
-			int numServicesSpent = Cuadrante.getDaysHolidaysSpent(services);
-			tvHolidays.setText(
-					String.format(
-							getString(R.string.resume_holidays),
-							tvHolidays.getText(),
-							numServicesSpent
-					)
-			);			
-		}
-		*/
-
 
         double dif = actualMonthInfo.getHours() - actualMonthInfo.getReference();
         DecimalFormat dfH = new DecimalFormat("#.##");
@@ -1475,419 +1393,32 @@ public class MainActivity extends SherlockActivity {
                         dfH.format(actualMonthInfo.getHours()),
                         dfH.format(actualMonthInfo.getReference()),
                         dfH.format(dif)));
-        dif = totalHours - totalReferenceHours;
-        //txtQuarter.append(" " + dfH.format(totalHours) + " / " + dfH.format(totalReferenceHours) + " referencia / " + dfH.format(dif) + " diferencia");
-        txtQuarter.append(" " +
-                String.format(
-                        getString(
-                                R.string.resume_total_time),
-                        dfH.format(totalHours),
-                        dfH.format(totalReferenceHours),
-                        dfH.format(dif)));
-        txtF2Hours.append(" " + dfH.format(actualMonthInfo.getF2Hours()) + " / " + dfH.format(actualMonthInfo.getF2Percent()) + "%");
-        if (qtyMedicalLeave > 5) //tachamos el f2
-            txtF2.setPaintFlags(txtF2.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        txtF2.append(" " + dfH.format(actualMonthInfo.getF2()) + " superior a 10.5");
-        //int numAlerts = db.getGuardiasCombinadasServicesInMonth(month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1).size();
-        if (qtyGuardias > 0) txtF2.append(" ó " + qtyGuardias + " de 4 guardias combinadas");
-
         //si sobrepasan algunos valores ponemos en rojo todo el texto
         if (actualMonthInfo.getHours() > actualMonthInfo.getReference()
-                && actualMonthInfo.getReference() > 0)
+                && actualMonthInfo.getReference() > 0) {
             txtTotalTime.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-        if (totalHours > totalReferenceHours && totalReferenceHours > 0)
-            txtQuarter.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-        if (actualMonthInfo.getF2() > 10.5)
-            txtF2.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-        if (qtyGuardias >= 4)
-            txtF2.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-
-
-        //revisamos si el mes actual del calendario es el mismo que el del
-        //movil, si es asi entonces revisamos si tenemos que mostrar la
-        //notificación del F2
-        String today = CuadranteDates.formatDate(new DateTime().withDayOfMonth(1));
-        String monthCalendar = CuadranteDates.formatDate(
-                month.get(Calendar.YEAR), month.get(Calendar.MONTH) + 1, 1);
-        //no podemos notificar el f2 si hay más de 5 bajas en este mes
-        if (today.equals(monthCalendar) && qtyMedicalLeave <= 5) {
-            //MyLog.d("refreshResume", "today:" + today + " - monthCalendar:" + monthCalendar);
-            Notify.f2(this, db, actualMonthInfo.getF2(), qtyGuardias);
+        }
+        //txtQuarter.append(" " + dfH.format(totalHours) + " / " + dfH.format(totalReferenceHours) + " referencia / " + dfH.format(dif) + " diferencia");
+        switch (Sp.getSpWorkdayComputingHours(mContext)){
+            case MonthlyHours.QUARTERLY:
+            case MonthlyHours.QUARTERLY2:
+                MonthlyHours quarterHours = new MonthlyHours(
+                        mContext, db, month, actualMonth, Sp.getSpWorkdayComputingHours(mContext));
+                dif = quarterHours.getHours() - quarterHours.getReferenceHours();
+                txtWorkdayComputing.append(" " +
+                        String.format(
+                                getString(R.string.resume_total_time),
+                                dfH.format(quarterHours.getHours()),
+                                dfH.format(quarterHours.getReferenceHours()),
+                                dfH.format(dif))
+                );
+                if (quarterHours.getHours() > quarterHours.getReferenceHours()
+                        && quarterHours.getReferenceHours() > 0) {
+                    txtWorkdayComputing.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
+                }
+                break;
         }
     }
-
-    public HoursInfo setHoursInfo(Calendar actualMonth, CalendarAdapter calendarAdapter) {
-        /**
-         * Horas totales trabajadas, hours, minutes
-         */
-        HashMap<String, Integer> total_time = new HashMap<String, Integer>();
-        total_time.put("hours", 0);
-        total_time.put("minutes", 0);
-
-        HashMap<String, Double> f2_data = new HashMap<String, Double>();
-        f2_data.put("indice", 0.0);
-        f2_data.put("hours", 0.0);
-        HashMap<String, Double> f2_data_tmp = new HashMap<String, Double>();
-
-        //MyLog.d(TAG, "actualMonth:" + actualMonth.get(Calendar.MONTH));
-        //miramos el servicio del ultimo dia del mes anterior por si tiene
-        //horas pertenecientes al mes actual (22:00 - 06:00 pejem)
-        int previousMonth = actualMonth.get(Calendar.MONTH);
-        //previousMonth--;
-        int previousYear = actualMonth.get(Calendar.YEAR);
-        if (actualMonth.get(Calendar.MONTH) == 0) {
-            previousMonth = 12;
-            previousYear--;
-        }
-        //MyLog.d(TAG, "previousMonth:" + previousMonth);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(previousYear, previousMonth - 1, 1);
-        //lastServicePreviousMonth
-        ServicioInfo lSPM = db.getServicio(
-                CuadranteDates.formatDate(
-                        previousYear,
-                        previousMonth,
-                        calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
-        if (lSPM.getId() > 0) {
-            MyLog.d("refreshResume", "date previous service month:" + lSPM.getDate());
-            Period day_period_previous = new Period();
-            Period day_period_previous2 = new Period();
-            Period day_period_previous3 = new Period();
-            Period day_period_previous4 = new Period();
-            if (!lSPM.getStartSchedule().equals(Cuadrante.SCHEDULE_NULL) ||
-                    !lSPM.getEndSchedule().equals(Cuadrante.SCHEDULE_NULL) &&
-                            lSPM.getTypeDay() == 0) {
-                f2_data_tmp = Cuadrante.getHoursToF2(
-                        db,
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule(),
-                        lSPM.getEndSchedule(),
-                        true);
-                f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-
-                day_period_previous = Cuadrante.getTimeFromService(
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule(),
-                        lSPM.getEndSchedule(),
-                        true);
-            }
-            if (!lSPM.getStartSchedule2().equals(Cuadrante.SCHEDULE_NULL) ||
-                    !lSPM.getEndSchedule2().equals(Cuadrante.SCHEDULE_NULL) &&
-                            lSPM.getTypeDay() == 0) {
-                f2_data_tmp = Cuadrante.getHoursToF2(
-                        db,
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule2(),
-                        lSPM.getEndSchedule2(),
-                        true);
-                f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                day_period_previous2 = Cuadrante.getTimeFromService(
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule2(),
-                        lSPM.getEndSchedule2(),
-                        true);
-            }
-            if (!lSPM.getStartSchedule3().equals(Cuadrante.SCHEDULE_NULL) ||
-                    !lSPM.getEndSchedule3().equals(Cuadrante.SCHEDULE_NULL) &&
-                            lSPM.getTypeDay() == 0) {
-                f2_data_tmp = Cuadrante.getHoursToF2(
-                        db,
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule3(),
-                        lSPM.getEndSchedule3(),
-                        true);
-                f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                day_period_previous3 = Cuadrante.getTimeFromService(
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule3(),
-                        lSPM.getEndSchedule3(),
-                        true);
-            }
-            if (!lSPM.getStartSchedule4().equals(Cuadrante.SCHEDULE_NULL) ||
-                    !lSPM.getEndSchedule4().equals(Cuadrante.SCHEDULE_NULL) &&
-                            lSPM.getTypeDay() == 0) {
-                f2_data_tmp = Cuadrante.getHoursToF2(
-                        db,
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule4(),
-                        lSPM.getEndSchedule4(),
-                        true);
-                f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                day_period_previous4 = Cuadrante.getTimeFromService(
-                        lSPM.getYear(),
-                        lSPM.getMonth(),
-                        lSPM.getDay(),
-                        lSPM.getStartSchedule4(),
-                        lSPM.getEndSchedule4(),
-                        true);
-            }
-            int hours = day_period_previous.getHours() + day_period_previous2.getHours() +
-                    day_period_previous3.getHours() + day_period_previous4.getHours();
-            int minutes = day_period_previous.getMinutes() +
-                    day_period_previous2.getMinutes() + day_period_previous3.getMinutes() +
-                    day_period_previous4.getMinutes();
-
-            total_time.put("hours", hours);
-            total_time.put("minutes", minutes);
-            //MyLog.d("refreshResume", "time previous service month:" + hours + " " + minutes);
-        }
-
-        ServicioInfo[] dServices = calendarAdapter.daysWithServices;
-
-
-        /**
-         * Cantidad de veces que ha salido este mes un type_id
-         * <type_id, qty>
-         */
-        SparseIntArray type_qty = new SparseIntArray();
-
-        int qtyGuardias = 0;
-        //MyLog.d(TAG, "last service: " + hoursToF2);
-        /**
-         * Cantidad de veces que hay de cada tipo de dia
-         * <type_day, qty>
-         */
-        SparseIntArray type_day_qty = new SparseIntArray();
-        // miramos todos los dias del mes si tienen servicio
-        for (int i = 0; i < dServices.length; i++) {
-            int qty = 0;
-            Period day_period = new Period();
-            Period day_period2 = new Period();
-            Period day_period3 = new Period();
-            Period day_period4 = new Period();
-            if (dServices[i].getId() > 0) {// el dia tiene servicio
-                //si es guardia significa que no hay que sumar las horas de los horarios
-                //si no lo que tiene cada tipo de guardia
-                boolean isGuardia = false;
-                /**
-                 * Computo de tiempos de servicio.
-                 A efectos de determinar la superación del tiempo de referencia para el
-                 cálculo de sobreesfuerzos, las guardias combinadas computarán:
-                  Clases A, C y D: 7 horas, con independencia de que se haya llegado o
-                 no a requerir la presencia del perceptor durante el período de
-                 localización.
-                  Clase B: 16 horas, con igual criterio respecto de la presencia del
-                 perceptor.
-                  Clase E y F: tendrán la consideración de días deducibles.
-                 */
-                switch (dServices[i].getGuardiaCombinada()) {
-                    case 1://A
-                    case 3://C
-                    case 4://D
-                        day_period = day_period.plusHours(7);
-                        isGuardia = true;
-                        MyLog.d(TAG, day_period.getHours());
-                        break;
-                    case 2://B
-                        day_period = day_period.plusHours(16);
-                        isGuardia = true;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!dServices[i].getStartSchedule().equals(Cuadrante.SCHEDULE_NULL) &&
-                        !dServices[i].getEndSchedule().equals(Cuadrante.SCHEDULE_NULL) &&
-                        dServices[i].getTypeDay() == 0) {
-                    //MyLog.d("main", "dentro de schedule 1 :"+ dServices[i].getStartSchedule());
-                    //horas para conseguir el F2
-                    f2_data_tmp = Cuadrante.getHoursToF2(
-                            db,
-                            dServices[i].getYear(),
-                            dServices[i].getMonth(),
-                            dServices[i].getDay(),
-                            dServices[i].getStartSchedule(),
-                            dServices[i].getEndSchedule());
-                    f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                    f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                    MyLog.d(TAG, "dia total hours f2:" + f2_data.get("hours"));
-                    if (!isGuardia) {
-                        // horas totales
-                        day_period = Cuadrante.getTimeFromService(
-                                dServices[i].getYear(),
-                                dServices[i].getMonth(),
-                                dServices[i].getDay(),
-                                dServices[i].getStartSchedule(),
-                                dServices[i].getEndSchedule());
-                    }
-                }
-                if (!dServices[i].getStartSchedule2().equals(Cuadrante.SCHEDULE_NULL) &&
-                        !dServices[i].getEndSchedule2().equals(Cuadrante.SCHEDULE_NULL) &&
-                        dServices[i].getTypeDay() == 0) {
-                    //MyLog.d("main", "dentro de schedule 2 :"+ dServices[i].getStartSchedule2());
-                    f2_data_tmp = Cuadrante.getHoursToF2(
-                            db,
-                            dServices[i].getYear(),
-                            dServices[i].getMonth(),
-                            dServices[i].getDay(),
-                            dServices[i].getStartSchedule2(),
-                            dServices[i].getEndSchedule2());
-                    f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                    f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                    if (!isGuardia) {
-                        day_period2 = Cuadrante.getTimeFromService(
-                                dServices[i].getYear(),
-                                dServices[i].getMonth(),
-                                dServices[i].getDay(),
-                                dServices[i].getStartSchedule2(),
-                                dServices[i].getEndSchedule2());
-                    }
-                }
-                if (!dServices[i].getStartSchedule3().equals(Cuadrante.SCHEDULE_NULL) &&
-                        !dServices[i].getEndSchedule3().equals(Cuadrante.SCHEDULE_NULL) &&
-                        dServices[i].getTypeDay() == 0) {
-                    //MyLog.d("main", "dentro de schedule 3 :"+ dServices[i].getStartSchedule3());
-                    f2_data_tmp = Cuadrante.getHoursToF2(
-                            db,
-                            dServices[i].getYear(),
-                            dServices[i].getMonth(),
-                            dServices[i].getDay(),
-                            dServices[i].getStartSchedule3(),
-                            dServices[i].getEndSchedule3());
-                    f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                    f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                    if (!isGuardia) {
-                        day_period3 = Cuadrante.getTimeFromService(
-                                dServices[i].getYear(),
-                                dServices[i].getMonth(),
-                                dServices[i].getDay(),
-                                dServices[i].getStartSchedule3(),
-                                dServices[i].getEndSchedule3());
-                    }
-                }
-                if (!dServices[i].getStartSchedule4().equals(Cuadrante.SCHEDULE_NULL) &&
-                        !dServices[i].getEndSchedule4().equals(Cuadrante.SCHEDULE_NULL) &&
-                        dServices[i].getTypeDay() == 0) {
-                    //MyLog.d("main", "dentro de schedule 4 :"+ dServices[i].getStartSchedule4());
-                    f2_data_tmp = Cuadrante.getHoursToF2(
-                            db,
-                            dServices[i].getYear(),
-                            dServices[i].getMonth(),
-                            dServices[i].getDay(),
-                            dServices[i].getStartSchedule4(),
-                            dServices[i].getEndSchedule4());
-                    f2_data.put("indice", f2_data.get("indice") + f2_data_tmp.get("indice"));
-                    f2_data.put("hours", f2_data.get("hours") + f2_data_tmp.get("hours"));
-                    if (!isGuardia) {
-                        day_period4 = Cuadrante.getTimeFromService(
-                                dServices[i].getYear(),
-                                dServices[i].getMonth(),
-                                dServices[i].getDay(),
-                                dServices[i].getStartSchedule4(),
-                                dServices[i].getEndSchedule4());
-                    }
-                }
-                //tipo de dia, 1 -> 5.35, 2 -> 7.5, 3 -> -1 día al mes
-                //para que si el usuario pone un dia como de baja pero a la vez es festivo pues
-                //que no reste los dos horarios al computo de referencia
-                if (dServices[i].getTypeDay() > 0) {
-                    qty = type_day_qty.get(dServices[i].getTypeDay(), 0);
-                    qty++;
-                    type_day_qty.put(dServices[i].getTypeDay(), qty);
-                    //tipo de dia festivo, lo ponemos como 0 porque no existe el 0 en tipo de dia
-                } else if (dServices[i].getIsHoliday() == 1) {
-                    qty = type_day_qty.get(0, 0);
-                    //MyLog.d("refreshResume", "type_day_qty:" + type_day_qty.get(0, 0));
-                    qty++;
-                    type_day_qty.put(0, qty);
-                    //MyLog.d("refreshResume", "festivo:" + dServices[i].getDay() + " " + dServices[i].getIsHoliday() + " qty:" + qty);
-                }
-
-                int hours = day_period.getHours() + day_period2.getHours() +
-                        day_period3.getHours() + day_period4.getHours();
-                int minutes = day_period.getMinutes() +
-                        day_period2.getMinutes() + day_period3.getMinutes() +
-                        day_period4.getMinutes();
-
-                //días en sucesión de mando
-                if (dServices[i].getSuccessionCommand() > 0) {
-                    if (dServices[i].getSuccessionCommand() == 1) {//E12
-                        f2_data.put("indice", f2_data.get("indice") + 1.75);
-                        //hoursToF2 += 1.75;
-                    } else if (dServices[i].getSuccessionCommand() == 2) {//E13
-                        f2_data.put("indice", f2_data.get("indice") + 2);
-                        //hoursToF2 += 2;
-                    }
-                }
-
-                if (total_time.containsKey("hours")) {
-                    total_time.put("hours", total_time.get("hours") + hours);
-                    total_time.put("minutes", total_time.get("minutes") + minutes);
-                } else {
-                    total_time.put("hours", hours);
-                    total_time.put("minutes", minutes);
-                }
-
-                if (dServices[i].getGuardiaCombinada() > 0) {
-                    qtyGuardias++;
-                }
-            }
-        }
-
-
-        //miramos si los minutos se pueden pasar a horas
-        if (total_time.containsKey("minutes")) {
-            if (total_time.get("minutes") >= 60) {
-                //sumamos la división entre los minutos y 60
-                total_time.put("hours", total_time.get("hours") + total_time.get("minutes") / 60);
-                //el resto de minutos los ponemos como minutos
-                total_time.put("minutes", total_time.get("minutes") % 60);
-            }
-        }
-
-        //obtenemos las horas de referencia mensuales
-        double reference_hours = Cuadrante.getReferenceHours(
-                actualMonth.getActualMaximum(Calendar.DAY_OF_MONTH) - type_day_qty.get(3, 0),
-                type_day_qty.get(1, 0),
-                type_day_qty.get(2, 0),
-                type_day_qty.get(0, 0),
-                Sp.getComputingHoursPerWeek(this));
-
-
-        //txTotalTime.append(" " + total_time.get("hours") + " horas y " + total_time.get("minutes") + " minutos");
-        int minutes = (total_time.get("minutes") * 100) / 60;
-
-        //MyLog.d(TAG, "******final hours f2:" + f2_data.get("hours"));
-        //MyLog.d(TAG, "******final hours mes:" + Double.parseDouble(total_time.get("hours") + "." + minutes));
-
-        HoursInfo hoursInfo = new HoursInfo(
-                actualMonth.get(Calendar.YEAR),
-                actualMonth.get(Calendar.MONTH) + 1,
-                Double.parseDouble(total_time.get("hours") + "." + minutes),
-                reference_hours,
-                f2_data.get("indice"),
-                qtyGuardias,
-                f2_data.get("hours"));
-
-        //MyLog.d(TAG, "mes: " + hoursInfo.getMonth());
-        //MyLog.d(TAG, "horas: " + Double.parseDouble(total_time.get("hours") + "." + minutes));
-        //MyLog.d(TAG, "f2: " + hoursToF2);
-        //MyLog.d(TAG, "year:" + hoursInfo.getYear() + " month:" + hoursInfo.getMonth());
-        //MyLog.d(TAG, "hours:" + hoursInfo.getHours() + " reference:" + hoursInfo.getReference() + " f2:" + hoursInfo.getF2());
-        //MyLog.d(TAG, "guarcias:" + hoursInfo.getGuardias());
-        db.insertHours(hoursInfo);
-
-        return hoursInfo;
-    }
-
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // MyLog.d("CheckStartActivity","onActivityResult and resultCode = "+resultCode);

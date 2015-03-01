@@ -131,7 +131,8 @@ public class TypeServiceListFragment extends SherlockListFragment {
 			if(servicio.getIsDateRange() == 1){
 				String dateRange = getResources().getString(R.string.date_range);		
 				str_line_b = str_line_b + String.format(" %s |", dateRange);
-			}	
+			}
+            /*
 			if(servicio.getTypeDay() > 0){
 				switch (servicio.getTypeDay()) {
 				case 1:
@@ -145,10 +146,19 @@ public class TypeServiceListFragment extends SherlockListFragment {
 					break;					
 				}
 			}
+			*/
+            if(servicio.getTypeDay() == 1){
+                str_line_b = str_line_b + String.format(" %s |", getString(R.string.resume_deductible_day));
+            }
+            /*
 			if(servicio.getGuardiaCombinada() > 0){
 				str_line_b = str_line_b + 
 						String.format(" %s |", Cuadrante.GUARDIAS_COMBINADAS.get(servicio.getGuardiaCombinada()));				
 			}
+			*/
+            if(servicio.getGuardiaCombinada() == 1){
+                str_line_b = str_line_b + String.format(" %s |", getString(R.string.resume_is_guardia_combinada));
+            }
 			if(servicio.getAskSchedule() == 1){
 				str_line_b = str_line_b + 
 						String.format(" %s |", getString(R.string.ask_schedule));				

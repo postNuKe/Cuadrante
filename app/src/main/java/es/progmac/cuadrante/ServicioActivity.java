@@ -92,15 +92,15 @@ public class ServicioActivity extends SherlockListActivity implements
 	static final int DIALOG_ID_TEXT_COLOR = 5;
 	static final int DIALOG_ID_TYPE_DAY = 6;
 	static final int DIALOG_ID_GUARDIA_COMBINADA = 7;
-	static final int DIALOG_ID_SUCCESSION_COMMAND = 8;
-	static final int DIALOG_ID_HORARIO_INICIO = 9;
-	static final int DIALOG_ID_HORARIO_FIN = 10;
-	static final int DIALOG_ID_HORARIO_INICIO2 = 11;
-	static final int DIALOG_ID_HORARIO_FIN2 = 12;
-	static final int DIALOG_ID_HORARIO_INICIO3 = 13;
-	static final int DIALOG_ID_HORARIO_FIN3 = 14;
-	static final int DIALOG_ID_HORARIO_INICIO4 = 15;
-	static final int DIALOG_ID_HORARIO_FIN4 = 16;
+	//static final int DIALOG_ID_SUCCESSION_COMMAND = 8;
+	static final int DIALOG_ID_HORARIO_INICIO = 8;
+	static final int DIALOG_ID_HORARIO_FIN = 9;
+	static final int DIALOG_ID_HORARIO_INICIO2 = 10;
+	static final int DIALOG_ID_HORARIO_FIN2 = 11;
+	static final int DIALOG_ID_HORARIO_INICIO3 = 12;
+	static final int DIALOG_ID_HORARIO_FIN3 = 13;
+	static final int DIALOG_ID_HORARIO_INICIO4 = 14;
+	static final int DIALOG_ID_HORARIO_FIN4 = 15;
 
 	/**
 	 * Variable que guardará qué TimePicker, si horario inicio o fin, debe de
@@ -156,9 +156,9 @@ public class ServicioActivity extends SherlockListActivity implements
 					String.valueOf(Cuadrante.SERVICE_DEFAULT_BG_COLOR) },
 			{ LIST_ITEM_TYPE_SQUARE_COLOR, "Color del texto",
 					String.valueOf(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR) },
-			{ LIST_ITEM_TYPE_LIST, "Tipo de día", "0" },
-			{ LIST_ITEM_TYPE_LIST, "Guardia combinada", "0" },
-			{ LIST_ITEM_TYPE_LIST, "Sucesión de mando", "0" },
+			{ LIST_ITEM_TYPE_CHECKBOX, "Día deducible", "", "false" },
+			{ LIST_ITEM_TYPE_CHECKBOX, "Guardia combinada", "", "false" },
+			//{ LIST_ITEM_TYPE_LIST, "Sucesión de mando", "0" },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Inicio", Cuadrante.SCHEDULE_NULL },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Fin", Cuadrante.SCHEDULE_NULL },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Inicio 2", Cuadrante.SCHEDULE_NULL },
@@ -232,9 +232,15 @@ public class ServicioActivity extends SherlockListActivity implements
 							.getTextColor();				
 				}
 
-				list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = String.valueOf(tipo_servicio.getGuardiaCombinada());
-				list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(tipo_servicio.getSuccessionCommand());
-				list_items[DIALOG_ID_TYPE_DAY][2] = String.valueOf(tipo_servicio.getTypeDay());
+                String is_guardia = Cuadrante.FALSE;
+                if(tipo_servicio.getGuardiaCombinada() == 1) is_guardia = Cuadrante.TRUE;
+
+                String is_type_day = Cuadrante.FALSE;
+                if(tipo_servicio.getTypeDay() == 1) is_type_day = Cuadrante.TRUE;
+
+				list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = String.valueOf(is_guardia);
+				//list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(tipo_servicio.getSuccessionCommand());
+				list_items[DIALOG_ID_TYPE_DAY][3] = String.valueOf(is_type_day);
 				
 				Bundle extras = intent.getExtras();
 				if(extras.containsKey("SCHEDULE_START") && extras.containsKey("SCHEDULE_END")){
@@ -309,14 +315,16 @@ public class ServicioActivity extends SherlockListActivity implements
 				list_items[DIALOG_ID_TEXT_COLOR][0] = LIST_ITEM_TYPE_SQUARE_COLOR;
 			}
 			
-			String is_important = "false";
-			if (servicio.getIsImportant() == 1){
-				is_important = "true";
-			}
+			String is_important = Cuadrante.FALSE;
+			if (servicio.getIsImportant() == 1) is_important = Cuadrante.TRUE;
+            String is_guardia = Cuadrante.FALSE;
+            if(servicio.getGuardiaCombinada() == 1) is_guardia = Cuadrante.TRUE;
+            String is_type_day = Cuadrante.FALSE;
+            if(servicio.getTypeDay() == 1) is_type_day = Cuadrante.TRUE;
 
-			list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = String.valueOf(servicio.getGuardiaCombinada());
-			list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(servicio.getSuccessionCommand());
-			list_items[DIALOG_ID_TYPE_DAY][2] = String.valueOf(servicio.getTypeDay());
+			list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = String.valueOf(is_guardia);
+			//list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(servicio.getSuccessionCommand());
+			list_items[DIALOG_ID_TYPE_DAY][3] = String.valueOf(is_type_day);
 			list_items[DIALOG_ID_IS_HOLIDAY][3] = String.valueOf(is_holiday);
 			list_items[DIALOG_ID_IS_IMPORTANT][3] = String.valueOf(is_important);
 			list_items[DIALOG_ID_BG_COLOR][2] = servicio.getBgColor();
@@ -377,8 +385,9 @@ public class ServicioActivity extends SherlockListActivity implements
 			//que son vacas, baja, etc... es decir, que no hay trabajo
 			//pero queremos que guarde las horas cuando seleccionas el tipo 3, que es -1 dia
 			//natural del mes
-			int type_day = Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]);
-			if(type_day > 0 && type_day < 3){
+			//int type_day = Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]);
+            //if(type_day > 0 && type_day < 3){
+            if (list_items[DIALOG_ID_TYPE_DAY][3] == Cuadrante.TRUE){
 				list_items[DIALOG_ID_HORARIO_INICIO][2] = Cuadrante.SCHEDULE_NULL;
 				list_items[DIALOG_ID_HORARIO_FIN][2] = Cuadrante.SCHEDULE_NULL;
 				list_items[DIALOG_ID_HORARIO_INICIO2][2] = Cuadrante.SCHEDULE_NULL;
@@ -442,15 +451,14 @@ public class ServicioActivity extends SherlockListActivity implements
 	 */
 	public void saveData(){
 		int is_holiday = 0;
-		if (list_items[DIALOG_ID_IS_HOLIDAY][3] == "true")
-			is_holiday = 1;
-		else
-			is_holiday = 0;
-		
-		int is_important = 0;
-		if (list_items[DIALOG_ID_IS_IMPORTANT][3] == "true")
-			is_important = 1;
-		
+		if (list_items[DIALOG_ID_IS_HOLIDAY][3] == Cuadrante.TRUE) is_holiday = 1;
+        int is_important = 0;
+        if (list_items[DIALOG_ID_IS_IMPORTANT][3] == Cuadrante.TRUE) is_important = 1;
+        int is_guardia = 0;
+        if (list_items[DIALOG_ID_GUARDIA_COMBINADA][3] == Cuadrante.TRUE) is_guardia = 1;
+        int is_type_day = 0;
+        if (list_items[DIALOG_ID_TYPE_DAY][3] == Cuadrante.TRUE) is_type_day = 1;
+
 						
 		ServicioInfo servicio = db.getServicio(DATE_SELECTED);
 		
@@ -471,10 +479,11 @@ public class ServicioActivity extends SherlockListActivity implements
 					list_items[DIALOG_ID_HORARIO_FIN4][2],
 					list_items[DIALOG_ID_COMMENTS][2],
 					is_holiday,
-					Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
-					Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
+					is_guardia, //Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
+					is_type_day, //Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
 					is_important,
-					Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2])));
+					0 //Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2])
+            ));
 		} else {
 			servicio = db.addService(new ServicioInfo(
 					DATE_SELECTED, 
@@ -492,10 +501,11 @@ public class ServicioActivity extends SherlockListActivity implements
 					list_items[DIALOG_ID_HORARIO_FIN4][2],
 					list_items[DIALOG_ID_COMMENTS][2],
 					is_holiday,
-					Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
-					Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
+					is_guardia, //Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
+					is_type_day, //Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
 					is_important,
-					Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2])));
+                    0 //Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2])
+			));
 		}
 		//borramos los datos de la tabla hours del mes
 		Cuadrante.deleteHoursDate(mContext, DATE_SELECTED);
@@ -830,8 +840,8 @@ public class ServicioActivity extends SherlockListActivity implements
 			
 			break;
 		case DIALOG_ID_IS_HOLIDAY:
-			if (list_items[DIALOG_ID_IS_HOLIDAY][3] == "false"){
-				list_items[DIALOG_ID_IS_HOLIDAY][3] = "true";
+			if (list_items[DIALOG_ID_IS_HOLIDAY][3] == Cuadrante.FALSE){
+				list_items[DIALOG_ID_IS_HOLIDAY][3] = Cuadrante.TRUE;
 				//list_items[DIALOG_ID_BG_COLOR][2] = String.valueOf(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
 				//list_items[DIALOG_ID_TEXT_COLOR][2] = String.valueOf(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR_HOLIDAY);
 				list_items[DIALOG_ID_BG_COLOR][2] = 
@@ -843,7 +853,7 @@ public class ServicioActivity extends SherlockListActivity implements
 				list_items[DIALOG_ID_BG_COLOR][0] = LIST_ITEM_TYPE_SQUARE_COLOR_DISABLED;
 				list_items[DIALOG_ID_TEXT_COLOR][0] = LIST_ITEM_TYPE_SQUARE_COLOR_DISABLED;
 			}else{
-				list_items[DIALOG_ID_IS_HOLIDAY][3] = "false";
+				list_items[DIALOG_ID_IS_HOLIDAY][3] = Cuadrante.FALSE;
 				if(TYPE_ID > 0){
 					TipoServicioInfo typeService = db.getTipoServicio(TYPE_ID);
 					list_items[DIALOG_ID_BG_COLOR][2] = typeService.getBgColor();
@@ -861,22 +871,39 @@ public class ServicioActivity extends SherlockListActivity implements
 			listViewGenerateListAdapter();
 			break;
 		case DIALOG_ID_IS_IMPORTANT:
-			if (list_items[DIALOG_ID_IS_IMPORTANT][3] == "false"){
-				list_items[DIALOG_ID_IS_IMPORTANT][3] = "true";
+			if (list_items[DIALOG_ID_IS_IMPORTANT][3] == Cuadrante.FALSE){
+				list_items[DIALOG_ID_IS_IMPORTANT][3] = Cuadrante.TRUE;
 			}else{
-				list_items[DIALOG_ID_IS_IMPORTANT][3] = "false";
-			}					
-			
+				list_items[DIALOG_ID_IS_IMPORTANT][3] = Cuadrante.FALSE;
+			}
+
 			listViewGenerateListAdapter();
 			break;
-		}
-
+        case DIALOG_ID_GUARDIA_COMBINADA:
+            if (list_items[DIALOG_ID_GUARDIA_COMBINADA][3] == Cuadrante.FALSE){
+                list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = Cuadrante.TRUE;
+                list_items[DIALOG_ID_TYPE_DAY][3] = Cuadrante.FALSE;
+            }else{
+                list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = Cuadrante.FALSE;
+            }
+            listViewGenerateListAdapter();
+            break;
+        case DIALOG_ID_TYPE_DAY:
+            if (list_items[DIALOG_ID_TYPE_DAY][3] == Cuadrante.FALSE){
+                list_items[DIALOG_ID_TYPE_DAY][3] = Cuadrante.TRUE;
+                list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = Cuadrante.FALSE;
+            }else{
+                list_items[DIALOG_ID_TYPE_DAY][3] = Cuadrante.FALSE;
+            }
+            listViewGenerateListAdapter();
+            break;
+        }
 	}
 
 	/**
 	 * Generación de miniventanas (dialogos) dependiendo del id que se le pasa
 	 * 
-	 * @param int id número que representa un tipo de diálogo a mostrar
+	 * @param id número que representa un tipo de diálogo a mostrar
 	 */
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -1118,7 +1145,7 @@ public class ServicioActivity extends SherlockListActivity implements
 							} 
 						} 
 					}); 				
-				}else if(item.get("type") == LIST_ITEM_TYPE_LIST){
+				}/*else if(item.get("type") == LIST_ITEM_TYPE_LIST){
 					line_b.setVisibility(View.GONE);
 					spinner.setVisibility(View.VISIBLE);
 					String[] spinnerEntries = null;
@@ -1172,7 +1199,7 @@ public class ServicioActivity extends SherlockListActivity implements
 					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
 					spinner.setAdapter(adapter);
 					spinner.setSelection(Integer.valueOf(item.get("line_b")));
-				}
+				}*/
 				
 				line_a.setText(item.get("line_a"));
 				line_b.setText(item.get("line_b"));
@@ -1253,10 +1280,14 @@ public class ServicioActivity extends SherlockListActivity implements
 					list_items[DIALOG_ID_BG_COLOR][2] = tipo_servicio.getBgColor();
 					list_items[DIALOG_ID_TEXT_COLOR][2] = tipo_servicio.getTextColor();
 				}
+                String is_guardia = Cuadrante.FALSE;
+                if(tipo_servicio.getGuardiaCombinada() == 1) is_guardia = Cuadrante.TRUE;
+                String is_type_day = Cuadrante.FALSE;
+                if(tipo_servicio.getTypeDay() == 1) is_type_day = Cuadrante.TRUE;
 				
-				list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = String.valueOf(tipo_servicio.getGuardiaCombinada());
-				list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(tipo_servicio.getSuccessionCommand());
-				list_items[DIALOG_ID_TYPE_DAY][2] = String.valueOf(tipo_servicio.getTypeDay());
+				list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = String.valueOf(is_guardia);
+				//list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(tipo_servicio.getSuccessionCommand());
+				list_items[DIALOG_ID_TYPE_DAY][2] = String.valueOf(is_type_day);
 
 				list_items[DIALOG_ID_HORARIO_INICIO][2] = tipo_servicio.getStartSchedule();
 				list_items[DIALOG_ID_HORARIO_FIN][2] = tipo_servicio.getEndSchedule();
@@ -1295,16 +1326,16 @@ public class ServicioActivity extends SherlockListActivity implements
 				if (!INSIDE_ONCREATE) {
 					// MyLog.d("onItemSelected", "onItemSelected");
 					list_items[DIALOG_ID_NAME][2] = "";
-					list_items[DIALOG_ID_IS_HOLIDAY][3] = "false";
-					list_items[DIALOG_ID_IS_IMPORTANT][3] = "false";
+					list_items[DIALOG_ID_IS_HOLIDAY][3] = Cuadrante.FALSE;
+					list_items[DIALOG_ID_IS_IMPORTANT][3] = Cuadrante.FALSE;
 					list_items[DIALOG_ID_BG_COLOR][2] = 
 							String.valueOf(Sp.getServiceDefaultBgColor(mContext));
 					list_items[DIALOG_ID_TEXT_COLOR][2] = 
 							String.valueOf(Sp.getServiceDefaultTextColor(mContext));
 
-					list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = "0";
-					list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = "0";
-					list_items[DIALOG_ID_TYPE_DAY][2] = "0";
+					list_items[DIALOG_ID_GUARDIA_COMBINADA][2] = Cuadrante.FALSE;
+					//list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = "0";
+					list_items[DIALOG_ID_TYPE_DAY][2] = Cuadrante.FALSE;
 					
 					list_items[DIALOG_ID_HORARIO_INICIO][2] = Cuadrante.SCHEDULE_NULL;
 					list_items[DIALOG_ID_HORARIO_FIN][2] = Cuadrante.SCHEDULE_NULL;

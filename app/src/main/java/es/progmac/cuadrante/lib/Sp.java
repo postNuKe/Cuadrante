@@ -264,11 +264,15 @@ public class Sp {
 	public static final boolean SP_CREATE_NEW_TYPE_SERVICE_DV = true;
 
     /** Variable que guarda que formato de calendario se debe de mostrar */
-    public static final String SP_CALENDAR = "calendar";
+    public static final String SP_WORKDAY_WEEK_HOURS = "workday_week_hours";
     /** Tipo de calendario a mostrar*/
-    public static final String SP_CALENDAR_DV = "week";
+    public static final String SP_WORKDAY_WEEK_HOURS_DV = "37.5";
 
-	
+    /** Variable que guarda que computo mensual se debe mostrar, mensual, trimestral, cuatrimestral */
+    public static final String SP_WORKDAY_COMPUTING_HOURS = "workday_computing_hours";
+    /** Tipo de calendario a mostrar*/
+    public static final String SP_WORKDAY_COMPUTING_HOURS_DV = "monthly";
+
 	/**
 	 * Map que guarda los nombres de las shared_preferences y que tipo de 
 	 * dato son para usarlos después en la importación de la copia de seguridad
@@ -279,7 +283,6 @@ public class Sp {
     	SHARED_PREFERENCES.put(SP_ASK_SERVICE_24_HOURS, "boolean");		    
     	SHARED_PREFERENCES.put(SP_BACKUP_DB_AUTO, "string");
     	SHARED_PREFERENCES.put(SP_BACKUP_DB_AUTO_DATE, "string");
-        SHARED_PREFERENCES.put(SP_CALENDAR, "string");
     	SHARED_PREFERENCES.put(SP_CHANGELOG_VERSION_KEY, "int");
     	SHARED_PREFERENCES.put(SP_COMMISSIONS_DAYS_LENGTH, "int");
     	SHARED_PREFERENCES.put(SP_COMMISSIONS_DAYS_LENGTH_ACTIVE, "boolean");
@@ -324,8 +327,10 @@ public class Sp {
     	SHARED_PREFERENCES.put(SP_TYPE_SERVICE_MEDICAL_LEAVE, "string");
     	SHARED_PREFERENCES.put(SP_TYPES_SERVICES_COMISION, "string");
     	SHARED_PREFERENCES.put(SP_WIDGET_ACTIVATE, "boolean");
-    	SHARED_PREFERENCES.put(SP_WIDGET_WEEK_FIRST_DAY, "string");
-    };	
+        SHARED_PREFERENCES.put(SP_WIDGET_WEEK_FIRST_DAY, "string");
+        SHARED_PREFERENCES.put(SP_WORKDAY_WEEK_HOURS, "string");
+        SHARED_PREFERENCES.put(SP_WORKDAY_COMPUTING_HOURS, "string");
+    };
     
 
 
@@ -377,8 +382,8 @@ public class Sp {
     
     /**
      * Establece si el login se activa o no en la app
-     * @param Context context
-     * @param booelan activate
+     * @param context
+     * @param activate
      */
     public static void setLoginActivate(Context context, boolean activate){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -397,8 +402,8 @@ public class Sp {
     
     /**
      * Estable la contraseña del login
-     * @param Context context
-     * @param String password
+     * @param context
+     * @param password
      */
     public static void setLoginPassword(Context context, String password){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -417,8 +422,8 @@ public class Sp {
     
     /**
      * Estable la duración que debe de durar la sesión
-     * @param Context context
-     * @param String password
+     * @param context
+     * @param expire
      */
     public static void setLoginExpireSessionDuration(Context context, int expire){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -439,8 +444,8 @@ public class Sp {
     
     /**
      * Establece la fecha cuando se ha logeado el usuario por última vez
-     * @param Context context
-     * @param String password
+     * @param context
+     * @param date
      */
     public static void setLoginExpireSessionDate(Context context, String date){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -482,8 +487,8 @@ public class Sp {
     
     /**
      * Establece la fecha cuando se ha hecho el backup
-     * @param Context context
-     * @param String date
+     * @param context
+     * @param date
      */
     public static void setBackupDBAutoDate(Context context, String date){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -502,8 +507,8 @@ public class Sp {
     
     /**
      * Establece el que ya se haya ejecutado la app por primera vez
-     * @param Context context
-     * @param booelan value
+     * @param context
+     * @param value
      */
     public static void setIsFirstRun(Context context, boolean value){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -522,8 +527,8 @@ public class Sp {
     
     /**
      * Establece si a partir de ahora se mostrará o no la ventana de votar por la app
-     * @param Context context
-     * @param booelan activate
+     * @param context
+     * @param show
      */
     public static void setShowVoteForMe(Context context, boolean show){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -541,8 +546,8 @@ public class Sp {
 
     /**
      * Estable la duración que debe de durar la sesión
-     * @param Context context
-     * @param String password
+     * @param context
+     * @param count
      */
     public static void setNumRun(Context context, int count){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -560,8 +565,8 @@ public class Sp {
     
     /**
      * Establece el email del usuario
-     * @param Context context
-     * @param String email
+     * @param context
+     * @param email
      */
     public static void setEmail(Context context, String email){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -570,8 +575,7 @@ public class Sp {
     
     /**
      * Establece el email del usuario con el valor por defecto
-     * @param Context context
-     * @param String email
+     * @param context
      */
     public static void setEmail(Context context){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -589,8 +593,8 @@ public class Sp {
     
     /**
      * Estable el número de versión de la app
-     * @param Context context
-     * @param String password
+     * @param context
+     * @param version
      */
     public static void setChangeLogVersionKey(Context context, int version){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -618,8 +622,8 @@ public class Sp {
     
     /**
      * Establece la fecha de cuando se ha notificado el f2
-     * @param Context context
-     * @param String email
+     * @param context
+     * @param date
      */
     public static void setF2NotifyDate(Context context, String date){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -640,8 +644,8 @@ public class Sp {
 
     /**
      * Establece los días que faltan para la notificación del f2
-     * @param Context context
-     * @param String email
+     * @param context
+     * @param days
      */
     public static void setF2NotifyRestDays(Context context, String days){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -819,7 +823,7 @@ public class Sp {
     /**
      * Establece la semana de selección del Pas
      * @param context
-     * @param year
+     * @param week
      */
     public static void setPasWeek(Context context, int week){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -848,8 +852,8 @@ public class Sp {
     
     /**
      * Establece si el widget se activa o no en la app
-     * @param Context context
-     * @param booelan activate
+     * @param context
+     * @param activate
      */
     public static void setWidgetActivate(Context context, boolean activate){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -1102,7 +1106,6 @@ public class Sp {
     /**
      * Establece a 0 el último tipo de servicio usado en el calendario
      * @param context
-     * @param typeId
      */
     public static void setLastUsedTypeServiceDV(Context context){
     	PreferenceManager.getDefaultSharedPreferences(context).edit().
@@ -1129,19 +1132,21 @@ public class Sp {
     }
 
     /**
-     * Devuelve que tipo de calendario se debe de mostrar
+     * Devuelve la jornada laboral 37.5 o 40
      * @param context
      */
-    public static String getCalendar(Context context){
+    public static String getSpWorkdayWeekHours(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).
-                getString(SP_CALENDAR, SP_CALENDAR_DV);
+                getString(SP_WORKDAY_WEEK_HOURS, SP_WORKDAY_WEEK_HOURS_DV);
     }
+
     /**
-     * Establece el tipo de calendario a mostrar
+     * Devuelve el tipo de computo de la jornada laboral, mensual, trimestral, cuatrimestral
      * @param context
      */
-    public static void setCalendar(Context context, String pas){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SP_CALENDAR, pas).commit();
+    public static String getSpWorkdayComputingHours(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).
+                getString(SP_WORKDAY_COMPUTING_HOURS, SP_WORKDAY_COMPUTING_HOURS_DV);
     }
 
 

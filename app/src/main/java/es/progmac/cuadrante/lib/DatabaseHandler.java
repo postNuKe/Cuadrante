@@ -102,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			+ SERVICE_COLUMN_COMMENTS + " TEXT DEFAULT(''), " 
 			+ SERVICE_COLUMN_IS_HOLIDAY + " INTEGER DEFAULT 0, " // 0 false, 1 true
 			+ SERVICE_COLUMN_GUARDIA_COMBINADA + " INTEGER DEFAULT 0, "
-			+ SERVICE_COLUMN_TYPE_DAY + " INTEGER DEFAULT 0, "
+			+ SERVICE_COLUMN_TYPE_DAY + " INTEGER DEFAULT 0, " //0 false, 1 true
 			+ SERVICE_COLUMN_IS_IMPORTANT + " INTEGER DEFAULT 0, "
 			+ SERVICE_COLUMN_SUCCESSION_COMMAND + " INTEGER DEFAULT 0 "//0 ninguna, 1 E12, 2 E13
 			+ ");";
@@ -154,8 +154,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			TYPE_SERVICE_COLUMN_GUARDIA_COMBINADA,
 			TYPE_SERVICE_COLUMN_TYPE_DAY,
 			TYPE_SERVICE_COLUMN_SUCCESSION_COMMAND,
-			TYPE_SERVICE_COLUMN_ASK_SCHEDULE,
-			};
+			TYPE_SERVICE_COLUMN_ASK_SCHEDULE
+	};
 	
 	
 	// declared constant SQL Expression
@@ -176,7 +176,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			+ TYPE_SERVICE_COLUMN_END_SCHEDULE4 + " TEXT DEFAULT(''), "//00:00
 			+ TYPE_SERVICE_COLUMN_IS_DATE_RANGE + " INTEGER DEFAULT 0, "// 0 false, 1 true
 			+ TYPE_SERVICE_COLUMN_GUARDIA_COMBINADA + " INTEGER DEFAULT 0, "
-			+ TYPE_SERVICE_COLUMN_TYPE_DAY + " INTEGER DEFAULT 0, " //0 dia ordinario, 1 día ordinario no computable 5.35, 2 día especial no computable 7.5
+			+ TYPE_SERVICE_COLUMN_TYPE_DAY + " INTEGER DEFAULT 0, " //0 false, 1 true //0 dia ordinario, 1 día ordinario no computable 5.35, 2 día especial no computable 7.5
 			+ TYPE_SERVICE_COLUMN_SUCCESSION_COMMAND + " INTEGER DEFAULT 0, " //0 ninguna, 1 E12, 2 E13
 			+ TYPE_SERVICE_COLUMN_ASK_SCHEDULE + " INTEGER DEFAULT 0 " //0 false, 1 true
 			+ ");";
@@ -363,16 +363,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ TYPE_SERVICE_COLUMN_IS_DATE_RANGE + ", " 
 				+ TYPE_SERVICE_COLUMN_GUARDIA_COMBINADA + ", " 
 				+ TYPE_SERVICE_COLUMN_TYPE_DAY + ") ";
-		db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 4, " + Cuadrante.TYPE_DAY_NULL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"ASUNTOS PARTICULARES\", \"AP\", -9178339, -16777216, 0, 0, " + Cuadrante.TYPE_DAY_ESPECIAL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_ORDINARY + ");");
-		db.execSQL(sqlColumns + " VALUES (\"LIBRE\", \"L\", -16139282, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_NULL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, " + Cuadrante.TYPE_DAY_NULL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_ORDINARY + ");");
-		db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"LF\", -16139282, -16777216, 0, 0, " + Cuadrante.TYPE_DAY_NULL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO INCORPORACIÓN\", \"PIN\", -10448442, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_ORDINARY + ");");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO SS Y NAVIDAD\", \"PSN\", -10448442, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_ESPECIAL + ");");
-		db.execSQL(sqlColumns + " VALUES (\"PERMISO URGENTE\", \"PUR\", -10448442, -16777216, 1, 0, " + Cuadrante.TYPE_DAY_ESPECIAL + ");");
+		db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 1, 0);");
+		db.execSQL(sqlColumns + " VALUES (\"ASUNTOS PARTICULARES\", \"AP\", -9178339, -16777216, 0, 0, 1);");
+		db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, 1);");
+		db.execSQL(sqlColumns + " VALUES (\"LIBRE\", \"L\", -16139282, -16777216, 1, 0, 0);");
+		db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, 0);");
+		db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, 1);");
+		db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"LF\", -16139282, -16777216, 0, 0, 0);");
+		db.execSQL(sqlColumns + " VALUES (\"PERMISO INCORPORACIÓN\", \"PIN\", -10448442, -16777216, 1, 0, 1);");
+		db.execSQL(sqlColumns + " VALUES (\"PERMISO SS Y NAVIDAD\", \"PSN\", -10448442, -16777216, 1, 0, 1);");
+		db.execSQL(sqlColumns + " VALUES (\"PERMISO URGENTE\", \"PUR\", -10448442, -16777216, 1, 0, 1);");
 		
 		sqlColumns = "INSERT INTO " + TYPE_SERVICE_TABLE_NAME + "(" 
 				+ TYPE_SERVICE_COLUMN_TITLE + ", " 
@@ -413,11 +413,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		//las horas de referencia semanales
 		if(oldVersion < 11){
 			db.execSQL("DELETE FROM " + HOURS_TABLE_NAME);
-		}
-		if(oldVersion < 11){
 			db.execSQL(TURN_TABLE_CREATE);
 			db.execSQL(TURN_TYPE_TABLE_CREATE);
 		}
+        //Cambiar todas las guardias combinadas a valor 1, tipo de dia mayor que 0 a 1
+        if(oldVersion < 12){
+            db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
+                    SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
+                    "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
+            db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
+                    SERVICE_COLUMN_TYPE_DAY + " = '1' " +
+                    "WHERE " + SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+
+            db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
+                    TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
+                    "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+            db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
+                    TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
+                    "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+        }
 		/*
 		if(oldVersion < 2){//columna important
 			db.execSQL("ALTER TABLE " + SERVICE_TABLE_NAME + " ADD COLUMN " + SERVICE_COLUMN_IS_IMPORTANT + " INTEGER DEFAULT 0;");
@@ -588,7 +602,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	/**
 	 * Actualiza todos los servicios que tengan el type_id que se le pase a 0.
 	 * Se usa cuando se elimina un tipo de servicio.
-	 * @param Integer type_id tipo de servicio que se quiere cambiar a 0
+	 * @param type_id tipo de servicio que se quiere cambiar a 0
 	 * @return Integer número de registros actualizados
 	 */
 	public void updateServiciosto0(Integer type_id, String append_comments){
@@ -699,8 +713,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 	/** 
 	 * Actualiza los colores de todos los festivos 
-	 * @param color de fondo
-	 * @param color de texto
+	 * @param bg_color color de fondo
+	 * @param text_color color de texto
 	 * @return Integer
 	 * */
 	private Integer _updateHolidays(int bg_color, int text_color){
@@ -983,7 +997,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	/**
 	 * Encuentra los servicios que contengan en sus comentarios la frase de la
 	 * variable 'search'
-	 * @param String search
+	 * @param  search
 	 * @return List<ServicioInfo>
 	 */
 	public List<ServicioInfo> getServicesFromSearchComments(String search, String dateStart,
@@ -1556,7 +1570,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	/**
 	 * Elimina todos los hoteles de una comisión
-	 * @param long id
+	 * @param id
 	 */
 	public void deleteHotelFromComision(long id) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -1633,39 +1647,96 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		return hotel;
 
-	}	
-
-	/**
-	 * Obtiene todos los horarios del trimestre de un mes dado
-	 * @param year
-	 * @param month
-	 * @return
-	 */
-	public SparseArray<HoursInfo> getQuarterHours(int year, int month){
-		SQLiteDatabase db = this.getReadableDatabase();
-		SparseArray<HoursInfo> hours = new SparseArray<HoursInfo>();
-		
-		List<Integer> months = CuadranteDates.getQuarterMonths(month);
-		
-		Cursor cursor = db.query(HOURS_TABLE_NAME,
-				allColumnsHours, 
-				HOURS_COLUMN_YEAR + " = '" + year + "' AND (" 
-				+ HOURS_COLUMN_MONTH + " IN('" 
-						+ months.get(0) + "', '" + months.get(1) + "', '" + months.get(2) + "'))"
-						, null, null, null, HOURS_COLUMN_MONTH + " ASC");
-
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			HoursInfo hour = cursorToHours(cursor);
-			hours.put(hour.getMonth(), hour);
-			cursor.moveToNext();
-		}
-		// Make sure to close the cursor
-		cursor.close();
-		db.close();
-		return hours;
-		
 	}
+
+    /**
+     * Obtiene todos los horarios del mes dado
+     * @param year
+     * @param month
+     * @return
+     */
+    public HoursInfo getMonthHours(int year, int month){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(HOURS_TABLE_NAME,
+                allColumnsHours,
+                HOURS_COLUMN_YEAR + " = '" + year + "' AND "
+                        + HOURS_COLUMN_MONTH + " = '" + month + "'"
+                , null, null, null, HOURS_COLUMN_MONTH + " ASC");
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            HoursInfo hours = cursorToHours(cursor);
+            db.close();
+            return hours;
+        } else {
+            db.close();
+            return new HoursInfo();
+        }
+    }
+    /**
+     * Obtiene todos los horarios del trimestre de un mes dado
+     * @param year
+     * @param month
+     * @return
+     */
+    public SparseArray<HoursInfo> getQuarterHours(int year, int month){
+        SQLiteDatabase db = this.getReadableDatabase();
+        SparseArray<HoursInfo> hours = new SparseArray<HoursInfo>();
+
+        List<Integer> months = CuadranteDates.getQuarterMonths(month);
+
+        Cursor cursor = db.query(HOURS_TABLE_NAME,
+                allColumnsHours,
+                HOURS_COLUMN_YEAR + " = '" + year + "' AND ("
+                        + HOURS_COLUMN_MONTH + " IN('"
+                        + months.get(0) + "', '" + months.get(1) + "', '" + months.get(2) + "'))"
+                , null, null, null, HOURS_COLUMN_MONTH + " ASC");
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            HoursInfo hour = cursorToHours(cursor);
+            hours.put(hour.getMonth(), hour);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+        db.close();
+        return hours;
+
+    }
+
+    /**
+     * Obtiene los horarios del cuatrimestre de un mes dado
+     * @param year
+     * @param month
+     * @return
+     */
+    public SparseArray<HoursInfo> getQuarter2Hours(int year, int month){
+        SQLiteDatabase db = this.getReadableDatabase();
+        SparseArray<HoursInfo> hours = new SparseArray<HoursInfo>();
+
+        List<Integer> months = CuadranteDates.getQuarter2Months(month);
+
+        Cursor cursor = db.query(HOURS_TABLE_NAME,
+                allColumnsHours,
+                HOURS_COLUMN_YEAR + " = '" + year + "' AND ("
+                        + HOURS_COLUMN_MONTH + " IN('"
+                        + months.get(0) + "', '" + months.get(1)
+                        + "', '" + months.get(2) + "', '" + months.get(3) + "'))"
+                , null, null, null, HOURS_COLUMN_MONTH + " ASC");
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            HoursInfo hour = cursorToHours(cursor);
+            hours.put(hour.getMonth(), hour);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+        db.close();
+        return hours;
+
+    }
 	
 	/**
 	 * Graba las horas de un mes
@@ -1763,7 +1834,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	
 	/**
 	 * 
-	 * @param int turnId
+	 * @param id
 	 * @return
 	 */
 	public TurnInfo getTurn(int id) {

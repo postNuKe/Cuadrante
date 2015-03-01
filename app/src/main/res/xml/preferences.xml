@@ -30,6 +30,26 @@
             android:summary="@string/email_summary"
             android:title="@string/email" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="workday"
+        android:title="@string/workday">
+        <ListPreference
+            android:key="workday_week_hours"
+            android:defaultValue="37.5"
+            android:entries="@array/workday_week_hours_entries"
+            android:entryValues="@array/workday_week_hours_values"
+            android:summary="@string/workday_week_hours_summary"
+            android:title="@string/workday_week_hours_title" />
+        <ListPreference
+            android:key="workday_computing_hours"
+            android:defaultValue="monthly"
+            android:entries="@array/workday_computing_hours_entries"
+            android:entryValues="@array/workday_computing_hours_values"
+            android:summary="@string/workday_computing_hours_summary"
+            android:title="@string/workday_computing_hours_title" />
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:key="holidays"
         android:title="@string/holidays" >
@@ -199,6 +219,7 @@
             android:key="login"
             android:summary="@string/login_summary"
             android:title="@string/login_title" />
+        <!--
         <EditTextPreference
             android:defaultValue="0"
             android:dialogTitle="@string/computing_hours_per_week"
@@ -206,7 +227,7 @@
             android:numeric="decimal"
             android:summary="@string/computing_hours_per_week_summary"
             android:title="@string/computing_hours_per_week" />
-
+        -->
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pas_active"

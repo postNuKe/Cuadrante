@@ -27,6 +27,26 @@
         <item name="s">s</item>
     </string-array>
 
+    <string-array name="workday_week_hours_entries">
+        <item name="37.5" format="float">@string/workday_week_hours_37.5</item>
+        <item name="40" format="float">@string/workday_week_hours_40</item>
+    </string-array>
+    <string-array name="workday_week_hours_values">
+        <item name="37.5" format="float">37.5</item>
+        <item name="40">40</item>
+    </string-array>
+
+    <string-array name="workday_computing_hours_entries">
+        <item name="monthly">@string/monthly</item>
+        <item name="quarterly">@string/quarterly</item>
+        <item name="quarterly2">@string/quarterly2</item>
+    </string-array>
+    <string-array name="workday_computing_hours_values">
+        <item name="monthly">monthly</item>
+        <item name="quarterly">quarterly</item>
+        <item name="quarterly2">quarterly2</item>
+    </string-array>
+
     <string-array name="list_navigation">
         <item>Calendario</item>
         <item>Tipos</item>

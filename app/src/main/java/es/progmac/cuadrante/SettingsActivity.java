@@ -183,8 +183,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}else if(key.equals(Sp.SP_SUNDAY_COLOR_ACTIVE)){
 			Cuadrante.refreshWidget(mContext);
 		}else if(key.equals(Sp.SP_COMPUTING_HOURS_PER_WEEK)){//vaciamos la tabla de horas
-			db.destroyHoursTable();
-		}
+            db.destroyHoursTable();
+        }else if(key.equals(Sp.SP_WORKDAY_WEEK_HOURS) || key.equals(Sp.SP_WORKDAY_COMPUTING_HOURS)){//vaciamos la tabla de horas
+            db.destroyHoursTable();
+        }
 	}    
 
 	@Override

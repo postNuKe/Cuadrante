@@ -3,6 +3,7 @@ package es.progmac.cuadrante.lib;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.joda.time.Seconds;
+import org.joda.time.Weeks;
 
 import es.progmac.cuadrante.AppWidgetWeekProvider;
 import es.progmac.cuadrante.LoginActivity;
@@ -73,7 +75,7 @@ public class Cuadrante{
 	/**
 	 * Nombre de la "tabla" donde se guardan los shared preferences en el 
 	 * fichero backup xml
-	 * @see es.progmac.cuadrante.lib.DatabaseAssistant.java
+	 * @see es.progmac.cuadrante.lib.DatabaseAssistant
 	 */
 	public static final String BACKUP_DB_TABLE_NAME_SP = "shared_preferences";
     
@@ -138,9 +140,6 @@ public class Cuadrante{
 	 * un error. Mirar LoginActivity
 	 */
 	public static final int RESULT_ERROR = 11;
-	
-	
-	
 	/**
 	 * Palabra secreta que se usa para codificar la contraseña
 	 */
@@ -198,6 +197,12 @@ public class Cuadrante{
 	 * a 7.5
 	 */
 	public static final int TYPE_DAY_ESPECIAL = 2;
+
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+
+    public static final String HOURS = "hours";
+    public static final String MINUTES = "minutes";
 	
 	public static DatabaseHandler db;
 	
@@ -533,7 +538,6 @@ public class Cuadrante{
 	/**
 	 * De una cadena de texto, devuelve la parte correspondiente al número 
 	 * máximo de caracteres para las abreviaturas de servicios en el calendario
-	 * @see Sp.getLengthServiceName(context)
 	 * @param context
 	 * @param text Cadena de texto a dividir
 	 * @return
@@ -580,8 +584,8 @@ public class Cuadrante{
     /**
      * Verifica si pasados 200 ejecuciones de la aplicación se muestra un diálogo de si al usuario
      * no le importa votar por la app en google play 
-     * @param Activity
-     * @param String action OnCreate | OnPause , Action method from Activity
+     * @param activity
+     * @param action OnCreate | OnPause , Action method from Activity
      */
 	public static void voteForMe(Activity activity, String action){
 		Context context = activity.getApplicationContext();
@@ -605,7 +609,7 @@ public class Cuadrante{
 	
 	/**
 	 * Rellena la base de datos con muchos servicios para el desarrollo
-	 * @param Context
+	 * @param context
 	 */
 	public static void setDBtoFill(final Context context) {
 		final ProgressDialog pd = ProgressDialog.show(context,
@@ -658,7 +662,7 @@ public class Cuadrante{
 	
 	/**
 	 * Genera algunas ventanas de texto plano dependiendo del id del diálogo
-	 * @param Context
+	 * @param context
 	 * @param dialog_id
 	 */
     public static void showInflateDialog(Context context, int dialog_id) {
@@ -695,7 +699,7 @@ public class Cuadrante{
     
 	/**
 	 * Lo que se hará la primera vez que se instala la aplicación
-	 * @param Context
+	 * @param context
 	 */
 	public static void setFirstRun(Context context){
 		if(Sp.getIsFirstRun(context)){
@@ -779,7 +783,6 @@ public class Cuadrante{
 				endHour, endMinutes);
 
 		Duration duration = new Duration(dtStart, dtEnd);
-	
 		//si sale negativo es que la hora final es inferior a la hora
 		//inicial (22:00 - 06:00) asi que sumamos un día más a la fecha fin 
 		//para poder restarla bien y que salga las horas correctas.
@@ -1169,6 +1172,32 @@ public class Cuadrante{
 		//return round(Math.round(reference_hours*100.0)/100.0);
 		return round(doubleTwoDigits(reference_hours));	
 	}
+
+    /**
+     * Devuele las horas de referencia según la nueva O.G, si son 4 semanas 150, 5 semanas 185 horas.
+     * @param calendar
+     * @return
+     */
+    public static int getReferenceHours2(Context ctx, Calendar calendar){
+        Map<String, DateTime> aMap = CuadranteDates.getStartEndMonth(calendar);
+        int weeks = Weeks.weeksBetween(
+                aMap.get(CuadranteDates.FIRST_DAY), aMap.get(CuadranteDates.LAST_DAY)).getWeeks();
+        MyLog.d(TAG, "first:" + aMap.get(CuadranteDates.FIRST_DAY) + " last:" + aMap.get(CuadranteDates.LAST_DAY));
+        MyLog.d(TAG, "semanas:" + weeks);
+        switch (Sp.getSpWorkdayWeekHours(ctx)) {
+            case "37.5":
+                if(weeks == 4) return 150;
+                else if(weeks == 5) return 185;
+                break;
+            case "40":
+                if(weeks == 4) return 160;
+                else if(weeks == 5) return 200;
+                break;
+            default:
+                return 0;
+        }
+        return 0;
+    }
 	
 	/**
 	 * Devuelve un double con solo dos dígitos.
@@ -1240,7 +1269,7 @@ public class Cuadrante{
 	 * @param startSchedule 00:00
 	 * @param endSchedule
 	 * @param startSchedule2
-	 * @param endShedule2
+	 * @param endSchedule2
 	 * @param startSchedule3
 	 * @param endSchedule3
 	 * @param startSchedule4
@@ -1292,4 +1321,42 @@ public class Cuadrante{
 		}
 		return false;
 	}
+
+    /**
+     * Obtiene la jornada laboral diaria HOURS = 7 MINUTES = 30, u 8 y 0
+     * @param ctx
+     * @return
+     */
+    public static Map<String, Integer> getTimeWorkDate(Context ctx){
+        Map<String, Integer> aMap = new HashMap<String, Integer>();
+        switch (Sp.getSpWorkdayWeekHours(ctx)) {
+            case "37.5":
+                aMap.put(HOURS , 7);
+                aMap.put(MINUTES , 30);
+                break;
+            case "40":
+                aMap.put(HOURS , 8);
+                aMap.put(MINUTES , 0);
+                break;
+        }
+        return aMap;
+    }
+
+    /**
+     * De unos minutos devuelve las horas y minutos correspondientes
+     * @param minutes
+     * @return
+     */
+    public static Map<String, Integer> getHoursFromMinutes(int minutes){
+        Map<String, Integer> aMap = new HashMap<String, Integer>();
+        aMap.put(HOURS, 0);
+        aMap.put(MINUTES, minutes);
+        if (minutes >= 60) {
+            //sumamos la división entre los minutos y 60
+            aMap.put(HOURS, minutes / 60);
+            //el resto de minutos los ponemos como minutos
+            aMap.put(MINUTES, minutes % 60);
+        }
+        return aMap;
+    }
 }
