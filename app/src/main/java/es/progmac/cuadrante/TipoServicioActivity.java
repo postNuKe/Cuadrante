@@ -80,15 +80,15 @@ public class TipoServicioActivity extends SherlockListActivity implements
 	static final int DIALOG_ID_DEDUCTIBLE_DAY = 5;
 	static final int DIALOG_ID_GUARDIA_COMBINADA = 6;
 	//static final int DIALOG_ID_SUCCESSION_COMMAND = 7;
-	static final int DIALOG_ID_ASK_SCHEDULE = 7;
-	static final int DIALOG_ID_HORARIO_INICIO = 8;
-	static final int DIALOG_ID_HORARIO_FIN = 9;
-	static final int DIALOG_ID_HORARIO_INICIO2 = 10;
-	static final int DIALOG_ID_HORARIO_FIN2 = 11;
-	static final int DIALOG_ID_HORARIO_INICIO3 = 12;
-	static final int DIALOG_ID_HORARIO_FIN3 = 13;
-	static final int DIALOG_ID_HORARIO_INICIO4 = 14;
-	static final int DIALOG_ID_HORARIO_FIN4 = 15;
+	//static final int DIALOG_ID_ASK_SCHEDULE = 7;
+	static final int DIALOG_ID_HORARIO_INICIO = 7;
+	static final int DIALOG_ID_HORARIO_FIN = 8;
+	static final int DIALOG_ID_HORARIO_INICIO2 = 9;
+	static final int DIALOG_ID_HORARIO_FIN2 = 10;
+	static final int DIALOG_ID_HORARIO_INICIO3 = 11;
+	static final int DIALOG_ID_HORARIO_FIN3 = 12;
+	static final int DIALOG_ID_HORARIO_INICIO4 = 13;
+	static final int DIALOG_ID_HORARIO_FIN4 = 14;
 	
 	/**
 	 * Diálogo de actualizar los servicios del tipo con name, y colores
@@ -150,7 +150,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
 			//{ LIST_ITEM_TYPE_LIST, "Tipo de día", "0" },
 			//{ LIST_ITEM_TYPE_LIST, "Guardia combinada", "0" },
 			//{ LIST_ITEM_TYPE_LIST, "Sucesión de mando", "0" },
-			{ LIST_ITEM_TYPE_CHECKBOX, "Preguntar para insertar horarios", "", "false" },
+			//{ LIST_ITEM_TYPE_CHECKBOX, "Preguntar para insertar horarios", "", "false" },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Inicio", Cuadrante.SCHEDULE_NULL },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Fin", Cuadrante.SCHEDULE_NULL },
 			{ LIST_ITEM_TYPE_NORMAL_DISABLED, "Horario Inicio 2", Cuadrante.SCHEDULE_NULL },
@@ -225,7 +225,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
 			list_items[DIALOG_ID_GUARDIA_COMBINADA][3] = String.valueOf(is_guardia);
 			//list_items[DIALOG_ID_SUCCESSION_COMMAND][2] = String.valueOf(tipo_servicio.getSuccessionCommand());
 			list_items[DIALOG_ID_DEDUCTIBLE_DAY][3] = String.valueOf(is_deductible_day);
-			list_items[DIALOG_ID_ASK_SCHEDULE][3] = String.valueOf(ask_schedule);
+			//list_items[DIALOG_ID_ASK_SCHEDULE][3] = String.valueOf(ask_schedule);
 
 			list_items[DIALOG_ID_HORARIO_INICIO][2] = tipo_servicio.getStartSchedule();
 			list_items[DIALOG_ID_HORARIO_FIN][2] = tipo_servicio.getEndSchedule();
@@ -406,6 +406,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
                 list_items[DIALOG_ID_DATE_RANGE][3] = Cuadrante.FALSE;
             listViewGenerateListAdapter();
             break;
+        /*
 		case DIALOG_ID_ASK_SCHEDULE:
 			if (list_items[DIALOG_ID_ASK_SCHEDULE][3] == Cuadrante.FALSE)
 				list_items[DIALOG_ID_ASK_SCHEDULE][3] = Cuadrante.TRUE;
@@ -413,6 +414,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
 				list_items[DIALOG_ID_ASK_SCHEDULE][3] = Cuadrante.FALSE;
 			listViewGenerateListAdapter();
 			break;
+			*/
 		}
 
 	}
@@ -557,8 +559,8 @@ public class TipoServicioActivity extends SherlockListActivity implements
 		Integer is_date_range = 0;
 		if (list_items[DIALOG_ID_DATE_RANGE][3] == Cuadrante.TRUE) is_date_range = 1;
 
-        Integer ask_schedule = 0;
-        if (list_items[DIALOG_ID_ASK_SCHEDULE][3] == Cuadrante.TRUE) ask_schedule = 1;
+        //Integer ask_schedule = 0;
+        //if (list_items[DIALOG_ID_ASK_SCHEDULE][3] == Cuadrante.TRUE) ask_schedule = 1;
 
         Integer is_guardia = 0;
         if (list_items[DIALOG_ID_GUARDIA_COMBINADA][3] == Cuadrante.TRUE) is_guardia = 1;
@@ -614,7 +616,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
 					is_guardia,//Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
 					is_deductible_day,//Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
 					0,//Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2]),
-					ask_schedule));
+					0));
 		} else {
 			tipo_servicio = db.addTipoServicio(new TipoServicioInfo(
 					list_items[DIALOG_ID_TITLE][2],
@@ -633,7 +635,7 @@ public class TipoServicioActivity extends SherlockListActivity implements
 					is_guardia,//Integer.valueOf(list_items[DIALOG_ID_GUARDIA_COMBINADA][2]),
 					is_deductible_day,//Integer.valueOf(list_items[DIALOG_ID_TYPE_DAY][2]),
 					0,//Integer.valueOf(list_items[DIALOG_ID_SUCCESSION_COMMAND][2]),
-					ask_schedule));
+					0));//ask_schedule
 		}
 		// miramos si hay que añadir un tipo desde el calendario y asignarlo
 		// a un dia en concreto

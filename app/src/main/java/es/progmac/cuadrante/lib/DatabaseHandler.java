@@ -429,8 +429,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     "WHERE " + SERVICE_COLUMN_TYPE_DAY + " > '0' ");
 
             db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
-                    TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
-                    "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+                    SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
+                    "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
             db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
                     TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
                     "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
@@ -1975,29 +1975,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 		*/
 	}
-
-    /**
-     * Te pasa las guardias y tipos a 1.
-     * Para actualizar a la nueva OG del 2015 ya no son necesarios los diferentes tipos de dias
-     * y las diferentes guardias. Al actualizar la app de la 2.1 a la 3 y al importar una copia
-     * antigua de la 2.1 a la 3
-     */
-    public void updateGuardiasTypeDay(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + HOURS_TABLE_NAME);
-        db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
-                SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
-                "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
-        db.execSQL("UPDATE " + SERVICE_TABLE_NAME + " SET " +
-                SERVICE_COLUMN_TYPE_DAY + " = '1' " +
-                "WHERE " + SERVICE_COLUMN_TYPE_DAY + " > '0' ");
-
-        db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
-                SERVICE_COLUMN_GUARDIA_COMBINADA + " = '1' " +
-                "WHERE " + SERVICE_COLUMN_GUARDIA_COMBINADA + " > '0' ");
-        db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
-                TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
-                "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
-        db.close();
-    }
 }

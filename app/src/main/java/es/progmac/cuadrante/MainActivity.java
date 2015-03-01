@@ -1335,7 +1335,7 @@ public class MainActivity extends SherlockActivity {
         //obtenemos las horas del mes, trimestre o cuatrimestre
         int actualMonth = month.get(Calendar.MONTH) + 1;
         HoursInfo actualMonthInfo = new HoursInfo();
-        db.destroyHoursTable();
+        //db.destroyHoursTable();
 
         MonthlyHours monthlyHours = new MonthlyHours(mContext, db, month, actualMonth);
         actualMonthInfo = monthlyHours.getHoursInfo();

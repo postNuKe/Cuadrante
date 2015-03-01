@@ -159,10 +159,12 @@ public class TypeServiceListFragment extends SherlockListFragment {
             if(servicio.getGuardiaCombinada() == 1){
                 str_line_b = str_line_b + String.format(" %s |", getString(R.string.resume_is_guardia_combinada));
             }
+            /*
 			if(servicio.getAskSchedule() == 1){
 				str_line_b = str_line_b + 
 						String.format(" %s |", getString(R.string.ask_schedule));				
 			}
+			*/
 			if (!servicio.getStartSchedule().equals(Cuadrante.SCHEDULE_NULL)
 					|| !servicio.getEndSchedule().equals(Cuadrante.SCHEDULE_NULL)) {
 				str_line_b = str_line_b

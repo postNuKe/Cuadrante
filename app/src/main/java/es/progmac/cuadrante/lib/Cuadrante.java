@@ -53,12 +53,12 @@ public class Cuadrante{
 	/**
 	 * Para que los debug funcionen o no, ya que consumen recursos y no nos interesa en producción 
 	 */
-	public static boolean DEBUG_MODE = true;
+	public static boolean DEBUG_MODE = false;
 	//cuadrante.java
 	//layout/dialog_whatsnew.xml
 	//AndroidManifiest.xml
 	//values/strings.xml
-	public static final String APP_VERSION_DATE = "2 de noviembre de 2014";
+	public static final String APP_VERSION_DATE = "1 de marzo de 2015";
 	/**
 	 * Url donde se encuentra la sección ayuda de la app
 	 */

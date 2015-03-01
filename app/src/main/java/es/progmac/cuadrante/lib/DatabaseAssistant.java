@@ -403,7 +403,11 @@ public class DatabaseAssistant
 		    	        						type_day = Integer.parseInt(record.get(DatabaseHandler.SERVICE_COLUMN_TYPE_DAY));
 		    	        					else
 		    	        						type_day = 0;
-		    	        					if(record.get(DatabaseHandler.SERVICE_COLUMN_TYPE_DAY) != null)
+                                            //nueva OG, ya no hay diferentes guardias ni tipos
+                                            if(guardia_combinada > 0) guardia_combinada = 1;
+                                            if(type_day > 0) type_day = 1;
+
+		    	        					if(record.get(DatabaseHandler.SERVICE_COLUMN_IS_IMPORTANT) != null)
 		    	        						is_important = Integer.valueOf(record.get(DatabaseHandler.SERVICE_COLUMN_IS_IMPORTANT));
 		    	        					else 
 		    	        						is_important = 0;
@@ -477,6 +481,10 @@ public class DatabaseAssistant
 		    	        						ask_schedule = Integer.parseInt(record.get(DatabaseHandler.TYPE_SERVICE_COLUMN_ASK_SCHEDULE));
 		    	        					else
 		    	        						ask_schedule = 0;
+
+                                            //nueva OG, ya no hay diferentes guardias ni tipos
+                                            if(guardia_combinada > 0) guardia_combinada = 1;
+                                            if(type_day > 0) type_day = 1;
 		    	        				}
 		    	        				TipoServicioInfo type_service = new TipoServicioInfo(
 		    	        						Integer.valueOf(record.get(DatabaseHandler.TYPE_SERVICE_COLUMN_ID)), 
@@ -529,7 +537,9 @@ public class DatabaseAssistant
 		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_F2)), 
 		    	        						Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_GUARDIAS)),
 		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_F2_HOURS)));
-		    	        				_db2.insertHours(hours);	    	        				
+                                        //solo guardamos las horas desde el nuevo cambio de OG
+                                        if(Integer.parseInt(file_attr_dbversion ) > 11)
+		    	        				    _db2.insertHours(hours);
 		    	        			}else if(table_name.equals(DatabaseHandler.TURN_TABLE_NAME)){
 		    	        				TurnInfo turn = new TurnInfo(
 		    	        						Integer.valueOf(record.get(DatabaseHandler.TURN_COLUMN_ID)), 
@@ -543,7 +553,6 @@ public class DatabaseAssistant
 		    	        						Integer.valueOf(record.get(DatabaseHandler.TURN_TYPE_COLUMN_SALIENTE)));
 		    	        				_db2.insertTurnType(turnType);	    	        				
 		    	        			}
-                                    _db2.updateGuardiasTypeDay();
 		    	        		//shared preferences
 		    	        		}else{
 		    	        			MyLog.d("importer", "shared_preferences");
@@ -583,7 +592,7 @@ public class DatabaseAssistant
 	    	        		}	        				
 	        			}
 	        		}
-	        	}	       
+	        	}
 			} catch (SAXException e) {
 			    e.printStackTrace();
 			} catch (IOException e) {

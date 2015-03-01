@@ -30,15 +30,22 @@
 		    <TextView
 		        style="@style/TextViewH3"
 		        android:text="----------------------------------------------"/>
-		    
+
             <TextView
                 style="@style/TextViewH3"
-                android:text="Versión 2.1 - 2 de noviembre de 2014"/>        
+                android:text="Versión 3.0 - 1 de marzo de 2015"/>
+            <TextView
+                style="@style/TextViewChangelog"
+                android:text="
+- Implementado la nueva O.G de jornada laboral diciembre del 2014.\n" />
+            <TextView
+                style="@style/TextViewH3"
+                android:text="Versión 2.1 - 2 de noviembre de 2014"/>
             <TextView
                 style="@style/TextViewChangelog"
                 android:text="
 - Arreglado error por lo que no arrancaba la app.\n
-- Arreglado algunos fallos reportados por usuarios.\n" />  
+- Arreglado algunos fallos reportados por usuarios.\n" />
             <TextView
                 style="@style/TextViewH3"
                 android:text="Versión 2.0 - 2 de noviembre de 2014"/>        
