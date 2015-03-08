@@ -53,12 +53,12 @@ public class Cuadrante{
 	/**
 	 * Para que los debug funcionen o no, ya que consumen recursos y no nos interesa en producción 
 	 */
-	public static boolean DEBUG_MODE = false;
+	public static boolean DEBUG_MODE = true;
 	//cuadrante.java
 	//layout/dialog_whatsnew.xml
 	//AndroidManifiest.xml
 	//values/strings.xml
-	public static final String APP_VERSION_DATE = "1 de marzo de 2015";
+	public static final String APP_VERSION_DATE = "8 de marzo de 2015";
 	/**
 	 * Url donde se encuentra la sección ayuda de la app
 	 */
@@ -789,10 +789,19 @@ public class Cuadrante{
 		if(duration.getMillis() <= 0){
 			dtEnd = dtEnd.plusDays(1);
 			duration = new Duration(dtStart, dtEnd);
-		}	
+		}
+        Map<String, DateTime> aMap = CuadranteDates.getStartEndMonthFromDay(
+                CuadranteDates.getDateTime(CuadranteDates.formatDate(year, month, day)));
+        /*
+        MyLog.d(TAG, "--servicio:" + dtStart.toString() + " - " + dtEnd.toString());
+        MyLog.d(TAG, "--mes al que pertenece:" + aMap.get(CuadranteDates.FIRST_DAY).toString()
+                + " - " + aMap.get(CuadranteDates.LAST_DAY).toString());
+        MyLog.d(TAG, "--duracion servicio:" + duration.toPeriod().getHours() + ":" + duration.toPeriod().getMinutes());
+        */
 		//si al sumar un dia hemos cambiado de mes
-		if((dtEnd.getMonthOfYear() > dtStart.getMonthOfYear())
-				|| (dtEnd.getYear() > dtStart.getYear())){//cambio de año
+        //MyLog.d(TAG, "dtEnd:" + dtEnd.toString() + " dtLast:" + aMap.get(CuadranteDates.LAST_DAY).toString());
+        if(dtEnd.isAfter(aMap.get(CuadranteDates.LAST_DAY))){
+            //MyLog.d(TAG, "----- fecha fin servicio mayor que la fecha fin del mes");
 			if(isServicePreviousMonth){//servicio del mes pasado
 				dtStart = dtStart.plusDays(1).hourOfDay().setCopy(0)
 						.minuteOfHour().setCopy(0);						
@@ -1178,7 +1187,7 @@ public class Cuadrante{
      * @param calendar
      * @return
      */
-    public static int getReferenceHours2(Context ctx, Calendar calendar){
+    public static double getReferenceHours2(Context ctx, Calendar calendar){
         Map<String, DateTime> aMap = CuadranteDates.getStartEndMonth(calendar);
         int weeks = Weeks.weeksBetween(
                 aMap.get(CuadranteDates.FIRST_DAY), aMap.get(CuadranteDates.LAST_DAY)).getWeeks();
@@ -1187,7 +1196,7 @@ public class Cuadrante{
         switch (Sp.getSpWorkdayWeekHours(ctx)) {
             case "37.5":
                 if(weeks == 4) return 150;
-                else if(weeks == 5) return 185;
+                else if(weeks == 5) return 187.5;
                 break;
             case "40":
                 if(weeks == 4) return 160;

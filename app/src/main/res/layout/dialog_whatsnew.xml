@@ -33,7 +33,7 @@
 
             <TextView
                 style="@style/TextViewH3"
-                android:text="Versión 3.0 - 1 de marzo de 2015"/>
+                android:text="Versión 3.0 - 8 de marzo de 2015"/>
             <TextView
                 style="@style/TextViewChangelog"
                 android:text="

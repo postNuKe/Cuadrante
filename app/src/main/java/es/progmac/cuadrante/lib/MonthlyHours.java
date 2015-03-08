@@ -40,6 +40,12 @@ public class MonthlyHours {
     public static final String QUARTERLY = "quarterly";
     public static final String QUARTERLY2 = "quarterly2";
 
+    private int mQuarterTotalWeeks = 0;
+    private int mQuarterTotalDeductibleWeeks = 0;
+    private int mQuarterTotalDeductibleDays = 0;
+
+    public static final String WORKDAY_NORMAL = "37.5";
+    public static final String WORKDAY_FORTY = "40";
 
     /**
      *
@@ -99,6 +105,11 @@ public class MonthlyHours {
     private void setQuarter(){
         SparseArray<HoursInfo> quarterMonthsHours = new SparseArray<HoursInfo>();
         List<Integer> months = new ArrayList<Integer>();
+        mTotalReferenceHours = 0;
+        mTotalHours = 0;
+        mQuarterTotalWeeks = 0;
+        mQuarterTotalDeductibleWeeks = 0;
+        mQuarterTotalDeductibleDays = 0;
         switch (mWorkDayComputing){
             case QUARTERLY:
                 quarterMonthsHours = mDb.getQuarterHours(mCalendar.get(Calendar.YEAR), mActualMonth);
@@ -111,7 +122,6 @@ public class MonthlyHours {
         }
         for (Integer m : months) {
             //MyLog.d(TAG, "----------------------------------");
-            //MyLog.d(TAG, "m: " + m + " actualMonth:" + actualMonth);
             HoursInfo monthInfo = new HoursInfo();
             //MyLog.d(TAG, "mes:" + m);
             //si no existe en la bd grabado los datos del mes
@@ -120,13 +130,17 @@ public class MonthlyHours {
                 Calendar tmpMonth = (Calendar) mCalendar.clone();
                 tmpMonth.set(Calendar.MONTH, m - 1);
                 CalendarAdapter tmpAdapter = new CalendarAdapter(mContext, tmpMonth);
-                //MyLog.d(TAG, tmpMonth.get(Calendar.MONTH) + " " + tmpMonth.get(Calendar.YEAR));
+                MyLog.d(TAG, tmpMonth.get(Calendar.MONTH) + " " + tmpMonth.get(Calendar.YEAR));
                 monthInfo = setHoursInfo(tmpMonth, tmpAdapter);
             } else {
                 monthInfo = quarterMonthsHours.get(m);
             }
             mTotalReferenceHours += monthInfo.getReference();
             mTotalHours += monthInfo.getHours();
+            mQuarterTotalWeeks += monthInfo.getWeeks();
+            mQuarterTotalDeductibleWeeks += monthInfo.getDeductibleWeeks();
+            mQuarterTotalDeductibleDays += monthInfo.getDeductibleDays();
+            //MyLog.d(TAG, "mes:" + monthInfo.getMonth() + " horas:" + monthInfo.getHours() + " | weeks:" + monthInfo.getWeeks());
             if (m == mActualMonth) {
                 mActualMonthInfo = monthInfo;
             }
@@ -141,27 +155,18 @@ public class MonthlyHours {
         total_time.put(HOURS, 0);
         total_time.put(MINUTES, 0);
 
-        //MyLog.d(TAG, "actualMonth:" + actualMonth.get(Calendar.MONTH));
-        //miramos el servicio del ultimo dia del mes anterior por si tiene
         //horas pertenecientes al mes actual (22:00 - 06:00 pejem)
-        int previousMonth = actualMonth.get(Calendar.MONTH);
-        //previousMonth--;
-        int previousYear = actualMonth.get(Calendar.YEAR);
-        if (actualMonth.get(Calendar.MONTH) == 0) {
-            previousMonth = 12;
-            previousYear--;
-        }
-        //MyLog.d(TAG, "previousMonth:" + previousMonth);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(previousYear, previousMonth - 1, 1);
+        //obtenemos la fecha del ultimo dia del mes anterior
+        //tengo que poner que el mes actual la fecha de la mitad del mes para ir de seguro que
+        //sea el mes en concreto y no los primeros dias que me podria pasar a otro mes
+        actualMonth.set(actualMonth.get(Calendar.YEAR), actualMonth.get(Calendar.MONTH), 15);
+        Map<String, DateTime> monthDates = CuadranteDates.getStartEndMonthFromDay(
+                CuadranteDates.getDateTime(CuadranteDates.formatDate(actualMonth)));
         //lastServicePreviousMonth
-        ServicioInfo lSPM = mDb.getServicio(
-                CuadranteDates.formatDate(
-                        previousYear,
-                        previousMonth,
-                        calendar.getActualMaximum(Calendar.DAY_OF_MONTH)));
+        DateTime dtLSPM = monthDates.get(CuadranteDates.FIRST_DAY).minusDays(1);
+        ServicioInfo lSPM = mDb.getServicio(CuadranteDates.formatDate(dtLSPM));
         if (lSPM.getId() > 0) {
-            MyLog.d("refreshResume", "date previous service month:" + lSPM.getDate());
+            MyLog.d(TAG, "date previous service month:" + lSPM.getDate());
             Period day_period_previous = getTimeFromService(lSPM, 1, true);
             Period day_period_previous2 = getTimeFromService(lSPM, 2, true);
             Period day_period_previous3 = getTimeFromService(lSPM, 3, true);
@@ -188,51 +193,19 @@ public class MonthlyHours {
         //o 40, si no sumaria 7*7.5 = 52.5 o 60 si fuera la jornada de 40
         int numDeductibleDayWeek = 0;
         int numWeek = 0;
-
-        int[] arrayWeeks = new int[CuadranteDates.getNumWeeksMonth(actualMonth)];
+        int totalWeeks = CuadranteDates.getNumWeeksMonth(actualMonth);
+        int[] arrayWeeks = new int[totalWeeks + 1];
         int j = 0;
         // miramos todos los dias del mes si tienen servicio
         for (int i = 0; i < dServices.length; i++) {
-            MyLog.d(TAG, "total: " + dServices.length + " i:" + i);
+            //MyLog.d(TAG, "total: " + dServices.length + " i:" + i);
             if (dServices[i].getId() > 0) {// el dia tiene servicio
                 int hoursWorkingDay = 0, minutesWorkingDay = 0, hours = 0, minutes = 0;
                 Map<String, Integer> workDay = new HashMap<String, Integer>();
-                MyLog.d(TAG, "servicio:" + dServices[i].getDateTime() + " week:" + dServices[i].getDateTime().getWeekOfWeekyear());
-
-                //si cambiamos de semana mirar si la anterior semana ha habido dias deducibles y
-                //si es asi sumar las horas, si superan 5 dias solo se suma la jornada laboral
-                //maxima
-                if(numWeek != dServices[i].getDateTime().getWeekOfWeekyear() ||
-                        i == dServices.length - 1){//ultimo servicio grabado en el mes
-                    //Si es la misma semana significa que estamos a ultimo servicio del mes por
-                    //lo que mirar si este servicio es deducible
-                    if(numWeek == dServices[i].getDateTime().getWeekOfWeekyear() &&
-                            dServices[i].getTypeDay() == 1){
-                        numDeductibleDayWeek++;
-                    }
-                    if(numDeductibleDayWeek > 0) {
-                        //dependiendo si la jornada es 37.5 un dia deducible vale 7.5
-                        //si son 40 vale 8
-                        workDay = Cuadrante.getTimeWorkDate(mContext);
-                        hours = numDeductibleDayWeek * workDay.get(Cuadrante.HOURS);
-                        minutes = numDeductibleDayWeek * workDay.get(Cuadrante.MINUTES);
-                        if (numDeductibleDayWeek >= 5) {
-                            hours = workDay.get(Cuadrante.HOURS) * 5;
-                            minutes = workDay.get(Cuadrante.MINUTES) * 5;
-                        }
-                        if (total_time.containsKey(HOURS)) {
-                            total_time.put(HOURS, total_time.get(HOURS) + hours);
-                            total_time.put(MINUTES, total_time.get(MINUTES) + minutes);
-                        } else {
-                            total_time.put(HOURS, hours);
-                            total_time.put(MINUTES, minutes);
-                        }
-                        numDeductibleDayWeek = 0;
-                    }
-                    numWeek = dServices[i].getDateTime().getWeekOfWeekyear();
-                }
+                //MyLog.d(TAG, "servicio:" + dServices[i].getDateTime());
 
                 Period day_period = getTimeFromService(dServices[i], 1, false);
+                //MyLog.d(TAG, "periodo 1:" + day_period.getHours() + " minutes:" + day_period.getMinutes());
                 Period day_period2 = getTimeFromService(dServices[i], 2, false);
                 Period day_period3 = getTimeFromService(dServices[i], 3, false);
                 Period day_period4 = getTimeFromService(dServices[i], 4, false);
@@ -243,21 +216,24 @@ public class MonthlyHours {
                         day_period4.getMinutes();
 
                 if(dServices[i].getGuardiaCombinada() == 1){
+                    //MyLog.d(TAG, "Guardia hours:" + hours + " minutes:" + minutes);
                     //obtenemos la diferencia de minutes que hay entre las presenciales y las 24h
                     //del dia
                     int minLocalizado = (24*60 - ((hours * 60) + minutes)) / 4;
                     hours += minLocalizado / 60;
                     minutes += minLocalizado % 60;
                     int minTotal = hours * 60 + minutes;
+
+                    //MyLog.d(TAG, "Guardia Combinada min Totales:" + minTotal);
                     //si las horas totales del dia son inferiores a 7.5 u 8 poner que valga eso
                     switch (Sp.getSpWorkdayWeekHours(mContext)){
-                        case "37.5":
+                        case WORKDAY_NORMAL:
                             if(minTotal < 450) {
                                 hours = 7;
                                 minutes = 30;
                             }
                             break;
-                        case "40":
+                        case WORKDAY_FORTY:
                             if(minTotal < 480) {
                                 hours = 8;
                                 minutes = 0;
@@ -265,7 +241,17 @@ public class MonthlyHours {
                             break;
                     }
                 }else if (dServices[i].getTypeDay() == 1) {//dia deducible
-                    numDeductibleDayWeek++;
+                    if(numWeek != dServices[i].getDateTime().getWeekOfWeekyear()){
+                        j++;
+                        numWeek = dServices[i].getDateTime().getWeekOfWeekyear();
+                    }
+                    //si el servicio es vacaciones no contar los festivos, sabado y domingo
+                    if(dServices[i].getTypeId() != Sp.getHolidaysTypeService(mContext) ||
+                            (dServices[i].getTypeId() == Sp.getHolidaysTypeService(mContext) &&
+                                    dServices[i].getDateTime().getDayOfWeek() < 6
+                                    && dServices[i].getIsHoliday() == 0)){
+                        arrayWeeks[j]++;
+                    }
                 }
                 if (total_time.containsKey(HOURS)) {
                     total_time.put(HOURS, total_time.get(HOURS) + hours);
@@ -274,21 +260,14 @@ public class MonthlyHours {
                     total_time.put(HOURS, hours);
                     total_time.put(MINUTES, minutes);
                 }
-            }else if(i == dServices.length - 1){//ultimo dia del mes
-                //mirar si falta por grabar dias deducibles
-                //dependiendo si la jornada es 37.5 un dia deducible vale 7.5
-                //si son 40 vale 8
-                Map<String, Integer> workDay = Cuadrante.getTimeWorkDate(mContext);
-                int hours = numDeductibleDayWeek * workDay.get(Cuadrante.HOURS);
-                int minutes = numDeductibleDayWeek * workDay.get(Cuadrante.MINUTES);
-                if (numDeductibleDayWeek >= 5) {
-                    hours = workDay.get(Cuadrante.HOURS) * 5;
-                    minutes = workDay.get(Cuadrante.MINUTES) * 5;
-                }
-                total_time.put(HOURS, total_time.get(HOURS) + hours);
-                total_time.put(MINUTES, total_time.get(MINUTES) + minutes);
             }
         }
+        int numDeducWeeks = 0, numDeducDays = 0;
+        for (int i = 0; i < arrayWeeks.length; i++) {
+            if(arrayWeeks[i] >= 5) numDeducWeeks++;
+            else numDeducDays += arrayWeeks[i];
+        }
+        //MyLog.d(TAG, "semanas deducibles:" + numDeducWeeks + " dias:" + numDeducDays);
 
         //miramos si los minutos se pueden pasar a horas
         if (total_time.containsKey(MINUTES)) {
@@ -301,23 +280,22 @@ public class MonthlyHours {
         }
         int minutes = (total_time.get(MINUTES) * 100) / 60;
         double totalTimeService = Double.parseDouble(total_time.get(HOURS) + "." + minutes);
-        double totalTime = totalTimeService;
-
 
         //obtenemos las horas de referencia mensuales
-        int reference_hours = Cuadrante.getReferenceHours2(mContext, actualMonth);
-        MyLog.d(TAG, "referencia:" + reference_hours);
+        double reference_hours = Cuadrante.getReferenceHours2(mContext, actualMonth);
+        //MyLog.d(TAG, "referencia:" + reference_hours);
 
-        //HE= HPS – HJT (STP + DSP/7 – SND – DND/5)
+        //MyLog.d(TAG, "weeks:" + totalWeeks + " deducWeeks:" + numDeducWeeks + " deducDays:" + numDeducDays);
 
         HoursInfo hoursInfo = new HoursInfo(
                 actualMonth.get(Calendar.YEAR),
                 actualMonth.get(Calendar.MONTH) + 1,
-                totalTime,
+                totalTimeService,
                 reference_hours,
-                0,
-                0,
-                0);
+                0,0,0,
+                totalWeeks,
+                numDeducWeeks,
+                numDeducDays);
 
         //MyLog.d(TAG, "mes: " + hoursInfo.getMonth());
         //MyLog.d(TAG, "horas: " + Double.parseDouble(total_time.get(HOURS) + "." + minutes));
@@ -403,4 +381,97 @@ public class MonthlyHours {
     }
 
     public HoursInfo getHoursInfo(){ return mActualMonthInfo;}
+
+    /**
+     * Obtiene las horas de exceso del mes en jornada de 37.5
+     * @return
+     */
+    public double getHE(){
+        return getHE(Double.parseDouble(Sp.getSpWorkdayWeekHours(mContext)));
+    }
+    /**
+     * Obtiene las horas de exceso del mes en jornada de 40
+     * @return
+     */
+    public double getHE40(){
+        return getHE(Double.parseDouble(WORKDAY_FORTY));
+    }
+
+    /**
+     * Obtiene las horas de exceso del mes
+     * @param workdayWeekHours jornada laboral 37.5 o 40
+     * @return
+     */
+    public double getHE(double workdayWeekHours){
+        double hPS = mActualMonthInfo.getHours();
+        double hJT = workdayWeekHours;
+        int sTP = mActualMonthInfo.getWeeks();
+        int sND = mActualMonthInfo.getDeductibleWeeks();
+        int dND = mActualMonthInfo.getDeductibleDays();
+        return _getHE(hPS, hJT, sTP, sND, dND);
+    }
+
+    /**
+     * Obtiene las horas de exceso del trimestre o cuatrimestre
+     * @return
+     */
+    public double getHEQuarter(){
+        return getHEQuarter(Double.parseDouble(Sp.getSpWorkdayWeekHours(mContext)));
+    }
+
+    /**
+     * Obtiene las horas de exceso del trimestre o cuatrimestre en jornada de 40
+     * @return
+     */
+    public double getHE40Quarter(){
+        MyLog.d(TAG, "-----HE40");
+        return getHEQuarter(Double.parseDouble(WORKDAY_FORTY));
+    }
+
+    public double getHEQuarter(double workdayWeekHours){
+        switch (mWorkDayComputing){
+            case QUARTERLY:
+            case QUARTERLY2:
+                double hPS = mTotalHours;
+                double hJT = workdayWeekHours;
+                int sTP = mQuarterTotalWeeks;
+                int sND = mQuarterTotalDeductibleWeeks;
+                int dND = mQuarterTotalDeductibleDays;
+                return _getHE(hPS, hJT, sTP, sND, dND);
+        }
+        return -1;
+    }
+
+    /**
+     * Calculo de las horas de exceso
+     * @param hPS Horas prestadas de servicio en el mes
+     * @param hJT Horas jornada de trabajo (37.5 o 40)
+     * @param sTP Semanas del mes
+     * @param sND Semanas de no disponibilidad
+     * @param dND Dias deducibles sueltos (no llegan a una semana)
+     * @return
+     */
+    private double _getHE(double hPS, double hJT, int sTP, int sND, int dND){
+        //HE= HPS – HJT (STP + DSP/7 – SND – DND/5)
+        float calc = (float)sTP + 0 - sND - ((float) dND/5);
+        double hE = hPS - hJT * calc;
+        MyLog.d(TAG, "horas:" + hPS + " - " + hJT + " *(" + sTP + " + 0 - " + sND + " - (" + dND + "/5))");
+        MyLog.d(TAG, "calc:" + hPS + " - " + hJT * calc);
+        MyLog.d(TAG, "HE:" + hE);
+        return hE;
+    }
+
+    /**
+     * Devuelve la jornada laboral diaria, 7.5 u 8 horas
+     * @return
+     */
+    public static final double getWorkDay(Context ctx){
+        switch (Sp.getSpWorkdayWeekHours(ctx)){
+            case MonthlyHours.WORKDAY_NORMAL:
+                return 7.5;
+            case MonthlyHours.WORKDAY_FORTY:
+                return 8;
+        }
+        return -1;
+    }
 }

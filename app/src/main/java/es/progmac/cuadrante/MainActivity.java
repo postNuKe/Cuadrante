@@ -1311,21 +1311,35 @@ public class MainActivity extends SherlockActivity {
 
         //miramos que tipo de computo de horas se debe mostrar de mas, trimestral o cuatrimestral
         TextView txtWorkdayComputing = new TextView(getApplicationContext());
-        if(!Sp.getSpWorkdayComputingHours(mContext).equals("monthly")) {
+        if(!Sp.getSpWorkdayComputingHours(mContext).equals(MonthlyHours.MONTHLY)) {
             txtWorkdayComputing.setId(-1);
             txtWorkdayComputing.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
             String text = "";
             switch (Sp.getSpWorkdayComputingHours(mContext)) {
-                case "quarterly":
+                case MonthlyHours.QUARTERLY:
                     text = getString(R.string.total_quarter_hours);
                     break;
-                case "quarterly2":
+                case MonthlyHours.QUARTERLY2:
                     text = getString(R.string.total_quarter2_hours);
                     break;
             }
             txtWorkdayComputing.setText(Html.fromHtml("<b>" + text + "</b>"));
             layout_resume.addView(txtWorkdayComputing);
         }
+
+        TextView txtHE = new TextView(getApplicationContext());
+        txtHE.setId(-1);
+        txtHE.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
+        txtHE.setText(Html.fromHtml("<b>" + getString(R.string.resume_he) + "</b>"));
+        layout_resume.addView(txtHE);
+
+        //textview donde se mostrará los dias y horas obtenidas por exceso para el siguiente mes
+        TextView txtHE40 = new TextView(getApplicationContext());
+        txtHE40.setId(-1);
+        txtHE40.setVisibility(View.GONE);
+        txtHE40.setTextColor(Cuadrante.SERVICE_DEFAULT_TEXT_COLOR);
+        //txtHE40.setText(Html.fromHtml("<b>" + getString(R.string.resume_he) + "</b>"));
+        layout_resume.addView(txtHE40);
 
         /** Horas totales trabajadas, hours, minutes*/
         HashMap<String, Integer> total_time = new HashMap<String, Integer>();
@@ -1339,6 +1353,55 @@ public class MainActivity extends SherlockActivity {
 
         MonthlyHours monthlyHours = new MonthlyHours(mContext, db, month, actualMonth);
         actualMonthInfo = monthlyHours.getHoursInfo();
+
+        DecimalFormat dfH = new DecimalFormat("#.##");
+        txtTotalTime.append(" " +
+                String.format(
+                        getString(R.string.resume_total_time),
+                        dfH.format(actualMonthInfo.getHours())));
+        Double hE = monthlyHours.getHE();
+        Double hE40 = 0.0;
+        switch (Sp.getSpWorkdayComputingHours(mContext)){
+            case MonthlyHours.MONTHLY:
+                hE40 = monthlyHours.getHE40();
+                break;
+            case MonthlyHours.QUARTERLY:
+            case MonthlyHours.QUARTERLY2:
+                MonthlyHours quarterHours = new MonthlyHours(
+                        mContext, db, month, actualMonth, Sp.getSpWorkdayComputingHours(mContext));
+                txtWorkdayComputing.append(" " +
+                                String.format(
+                                        getString(R.string.resume_total_time),
+                                        dfH.format(quarterHours.getHours()))
+                );
+                hE = quarterHours.getHEQuarter();
+                hE40 = quarterHours.getHE40Quarter();
+                break;
+        }
+        txtHE.append(" " + dfH.format(hE));
+        if(Sp.getSpWorkdayWeekHours(mContext).equals(MonthlyHours.WORKDAY_NORMAL)){
+            MyLog.d(TAG, "he:" + hE + " hE40:" + hE40);
+            //Como HE40 es negativo, significa que no nos hemos pasado horas para compensar
+            //con días libres, por lo que cobraremos la cantidad de 12€ por cada hora de exceso
+            //de hE
+            if(hE40 <= 0){
+
+            }else{//dias libres
+                double hoursPaid = hE.intValue() - hE40.intValue();
+                txtHE.setText(Html.fromHtml("<b>" + getString(R.string.resume_he) + "</b> "+ dfH.format(hoursPaid)));
+
+                txtHE40.setVisibility(View.VISIBLE);
+                //tachamos
+                //txtHE.setPaintFlags(txtHE.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                //MyLog.d(TAG, "jornada laboral:" + MonthlyHours.getWorkDay(mContext));
+                Double division = hE40/MonthlyHours.getWorkDay(mContext);
+                //redondear hacia arriba Math.ceil((double)divident / divisor)
+                Double rest = hE40%MonthlyHours.getWorkDay(mContext);
+                MyLog.d(TAG, "division:" + division + " rest:" + rest);
+                txtHE40.setText(Html.fromHtml(String.format(getString(R.string.resume_he40),
+                        division.intValue(), rest.intValue())));
+            }
+        }
 
         ServicioInfo[] dServices = adapter.daysWithServices;
         List<TipoServicioInfo> typeServices = db.getAllTipoServicios();
@@ -1385,39 +1448,8 @@ public class MainActivity extends SherlockActivity {
             }
         }
 
-        double dif = actualMonthInfo.getHours() - actualMonthInfo.getReference();
-        DecimalFormat dfH = new DecimalFormat("#.##");
-        txtTotalTime.append(" " +
-                String.format(
-                        getString(R.string.resume_total_time),
-                        dfH.format(actualMonthInfo.getHours()),
-                        dfH.format(actualMonthInfo.getReference()),
-                        dfH.format(dif)));
-        //si sobrepasan algunos valores ponemos en rojo todo el texto
-        if (actualMonthInfo.getHours() > actualMonthInfo.getReference()
-                && actualMonthInfo.getReference() > 0) {
-            txtTotalTime.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-        }
-        //txtQuarter.append(" " + dfH.format(totalHours) + " / " + dfH.format(totalReferenceHours) + " referencia / " + dfH.format(dif) + " diferencia");
-        switch (Sp.getSpWorkdayComputingHours(mContext)){
-            case MonthlyHours.QUARTERLY:
-            case MonthlyHours.QUARTERLY2:
-                MonthlyHours quarterHours = new MonthlyHours(
-                        mContext, db, month, actualMonth, Sp.getSpWorkdayComputingHours(mContext));
-                dif = quarterHours.getHours() - quarterHours.getReferenceHours();
-                txtWorkdayComputing.append(" " +
-                        String.format(
-                                getString(R.string.resume_total_time),
-                                dfH.format(quarterHours.getHours()),
-                                dfH.format(quarterHours.getReferenceHours()),
-                                dfH.format(dif))
-                );
-                if (quarterHours.getHours() > quarterHours.getReferenceHours()
-                        && quarterHours.getReferenceHours() > 0) {
-                    txtWorkdayComputing.setTextColor(Cuadrante.SERVICE_DEFAULT_BG_COLOR_HOLIDAY);
-                }
-                break;
-        }
+
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

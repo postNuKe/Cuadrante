@@ -256,8 +256,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public static final String HOURS_COLUMN_REFERENCE = "reference";
 	public static final String HOURS_COLUMN_F2 = "f2";
 	public static final String HOURS_COLUMN_GUARDIAS = "guardias";
-	public static final String HOURS_COLUMN_F2_HOURS = "f2_hours";
-	private String[] allColumnsHours = { 
+    public static final String HOURS_COLUMN_F2_HOURS = "f2_hours";
+    public static final String HOURS_COLUMN_WEEKS = "weeks";
+    public static final String HOURS_COLUMN_DEDUCTIBLE_WEEKS = "deductible_weeks";
+    public static final String HOURS_COLUMN_DEDUCTIBLE_DAYS = "deductible_days";
+	private String[] allColumnsHours = {
 			HOURS_COLUMN_ID,
 			HOURS_COLUMN_YEAR,
 			HOURS_COLUMN_MONTH,
@@ -266,6 +269,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			HOURS_COLUMN_F2,
 			HOURS_COLUMN_GUARDIAS,
 			HOURS_COLUMN_F2_HOURS,
+            HOURS_COLUMN_WEEKS,
+            HOURS_COLUMN_DEDUCTIBLE_WEEKS,
+            HOURS_COLUMN_DEDUCTIBLE_DAYS
 	};	
 	// declared constant SQL Expression
 	private static final String HOURS_TABLE_CREATE = "CREATE TABLE "
@@ -277,7 +283,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			+ HOURS_COLUMN_REFERENCE + " NUMERIC DEFAULT(0.0), "
 			+ HOURS_COLUMN_F2 + " NUMERIC DEFAULT(0.0), "
 			+ HOURS_COLUMN_GUARDIAS + " INTEGER DEFAULT 0, "
-			+ HOURS_COLUMN_F2_HOURS + " NUMERIC DEFAULT(0.0)"
+			+ HOURS_COLUMN_F2_HOURS + " NUMERIC DEFAULT(0.0), "
+            + HOURS_COLUMN_WEEKS + " INTEGER DEFAULT 0, "
+            + HOURS_COLUMN_DEDUCTIBLE_WEEKS + " INTEGER DEFAULT 0, "
+            + HOURS_COLUMN_DEDUCTIBLE_DAYS + " INTEGER DEFAULT 0"
 			+ ");";				
 	//******************************************	
 	
@@ -357,7 +366,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(TYPE_SERVICE_TABLE_CREATE);
 		sqlColumns = "INSERT INTO " + TYPE_SERVICE_TABLE_NAME + "(" 
 				+ TYPE_SERVICE_COLUMN_TITLE + ", " 
-				+ TYPE_SERVICE_COLUMN_NAME+ ", " 
+				+ TYPE_SERVICE_COLUMN_NAME+ ", "
 				+ TYPE_SERVICE_COLUMN_BG_COLOR + ", " 
 				+ TYPE_SERVICE_COLUMN_TEXT_COLOR + ", " 
 				+ TYPE_SERVICE_COLUMN_IS_DATE_RANGE + ", " 
@@ -366,15 +375,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(sqlColumns + " VALUES (\"ASUNTOS PARTICULARES\", \"AP\", -9178339, -16777216, 0, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"DESCANSO SEMANAL\", \"DS\", -16139282, -16777216, 1, 0, 0);");
-        db.execSQL(sqlColumns + " VALUES (\"DESCANSO SINGULARIZADO\", \"DSI\", -16139282, -16777216, 1, 0, 1);");
-        db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"LF\", -16139282, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"DESCANSO SINGULARIZADO\", \"DSI\", -16139282, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"DESCANSO FESTIVO\", \"DF\", -16139282, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"DESCANSO COMPENSATORIO\", \"DC\", -16139282, -16777216, 0, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"LIBRE COMPENSATORIO\", \"LC\", -16139282, -16777216, 0, 0, 0);");
 		db.execSQL(sqlColumns + " VALUES (\"PERMISO\", \"PER\", -10448442, -16777216, 1, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, 0);");
         db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 1, 0);");
         db.execSQL(sqlColumns + " VALUES (\"GUARDIA LOCALIZACION\", \"GL\", -15454022, -1, 0, 1, 0);");
         db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, 1);");
-        db.execSQL(sqlColumns + " VALUES (\"INDISPOSICION\", \"IND\", -287128, -16777216, 1, 0, 1);");//12
+        db.execSQL(sqlColumns + " VALUES (\"INDISPOSICION\", \"IND\", -287128, -16777216, 1, 0, 1);");//13
 
 		sqlColumns = "INSERT INTO " + TYPE_SERVICE_TABLE_NAME + "(" 
 				+ TYPE_SERVICE_COLUMN_TITLE + ", " 
@@ -400,8 +410,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(TURN_TABLE_CREATE);
 		db.execSQL("INSERT INTO " + TURN_TABLE_NAME + " VALUES ('1', 'AFRICANO');");
 		db.execSQL(TURN_TYPE_TABLE_CREATE);
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '17', '0', '0');");//tarde
-		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '14', '1', '1');");//m-n
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '18', '0', '0');");//tarde
+		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '15', '1', '1');");//m-n
 		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '3', '2', '0');");//descanso semanal
 		db.execSQL("INSERT INTO " + TURN_TYPE_TABLE_NAME + " VALUES ('1', '3', '3', '0');");//descanso semanal
 	}
@@ -434,6 +444,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("UPDATE " + TYPE_SERVICE_TABLE_NAME + " SET " +
                     TYPE_SERVICE_COLUMN_TYPE_DAY + " = '1' " +
                     "WHERE " + TYPE_SERVICE_COLUMN_TYPE_DAY + " > '0' ");
+
+            //nuevos campos en la tabla hours, computo de semanas deducibles y dias deducibles
+            //sueltos
+            db.execSQL("ALTER TABLE " + HOURS_TABLE_NAME + " ADD COLUMN "
+                    + HOURS_COLUMN_WEEKS + " INTEGER DEFAULT 0;");
+            db.execSQL("ALTER TABLE " + HOURS_TABLE_NAME + " ADD COLUMN "
+                    + HOURS_COLUMN_DEDUCTIBLE_WEEKS + " INTEGER DEFAULT 0;");
+            db.execSQL("ALTER TABLE " + HOURS_TABLE_NAME + " ADD COLUMN "
+                    + HOURS_COLUMN_DEDUCTIBLE_DAYS + " INTEGER DEFAULT 0;");
+
         }
 
 		/*
@@ -1756,7 +1776,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(HOURS_COLUMN_REFERENCE, hours.getReference());
 		values.put(HOURS_COLUMN_F2, hours.getF2());
 		values.put(HOURS_COLUMN_GUARDIAS, hours.getGuardias());
-		values.put(HOURS_COLUMN_F2_HOURS, hours.getF2Hours());
+        values.put(HOURS_COLUMN_F2_HOURS, hours.getF2Hours());
+        values.put(HOURS_COLUMN_WEEKS, hours.getWeeks());
+        values.put(HOURS_COLUMN_DEDUCTIBLE_WEEKS, hours.getDeductibleWeeks());
+        values.put(HOURS_COLUMN_DEDUCTIBLE_DAYS, hours.getDeductibleDays());
 		long insertId = db.insert(HOURS_TABLE_NAME, null,
 				values);
 		Cursor cursor = db.query(HOURS_TABLE_NAME,
@@ -1792,7 +1815,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		hours.setReference(cursor.getDouble(4));
 		hours.setF2(cursor.getDouble(5));
 		hours.setGuardias(cursor.getInt(6));
-		hours.setF2Hours(cursor.getDouble(7));
+        hours.setF2Hours(cursor.getDouble(7));
+        hours.setWeeks(cursor.getInt(8));
+        hours.setDeductibleWeeks(cursor.getInt(9));
+        hours.setDeductibleDays(cursor.getInt(10));
 
 		return hours;
 

@@ -541,7 +541,7 @@ public class CuadranteDates {
 
     }
     /**
-     * De un mes devuelve la lista de todos los meses del trimestre al que pertenece
+     * De un mes devuelve la lista de todos los meses del cuatrimestre al que pertenece
      * @param month
      * @return
      */
@@ -588,10 +588,26 @@ public class CuadranteDates {
      * @return firstDay, lastDay
      */
     public static Map<String, DateTime> getStartEndMonth(Calendar calendar){
+        return _getStartEndMonth(new DateTime(calendar));
+    }
+
+    /**
+     * Obtiene las fechas de inicio y fin de un mes
+     * Map<String, DateTime> aMap = getStartEndMonth(DateTime);
+     * para contabilizar bien con el jodatime tiene que ser por ejemplo de 00:00 a 00:00 del dia
+     * siguiente se cuenta como un dia, no 00:00 a 23:59
+     * @param dt en format yyyy-mm-dd
+     * @return firstDay, lastDay
+     */
+    public static Map<String, DateTime> getStartEndMonth(DateTime dt){
+        return _getStartEndMonth(dt);
+    }
+
+
+    private static Map<String, DateTime> _getStartEndMonth(DateTime dt){
         Map<String, DateTime> aMap = new HashMap<>();
-        DateTime dtFirstDay, dtLastDay, dt2, dt = new DateTime(calendar);
+        DateTime dtFirstDay, dtLastDay;
         dt = dt.millisOfDay().withMinimumValue();
-        dt2 = dt.millisOfDay().withMaximumValue();
         dtFirstDay = new DateTime(dt).withDayOfMonth(1);
         dtLastDay = new DateTime(dt).dayOfMonth().withMaximumValue();
 
@@ -609,7 +625,6 @@ public class CuadranteDates {
         aMap.put(LAST_DAY, dtLastDay);
         return aMap;
     }
-
     /**
      * De un mes devuelve cuantas semanas tiene
      * @param calendar
@@ -619,5 +634,38 @@ public class CuadranteDates {
         Map<String, DateTime> aMap = CuadranteDates.getStartEndMonth(calendar);
         return Weeks.weeksBetween(
                 aMap.get(CuadranteDates.FIRST_DAY), aMap.get(CuadranteDates.LAST_DAY)).getWeeks();
+    }
+
+    /**
+     * De una fecha dada devuelve las fechas de inicio y fin del mes al que pertenece
+     * @param dt
+     * @return
+     */
+    public static Map<String, DateTime> getStartEndMonthFromDay(DateTime dt){
+        Map<String, DateTime> month = new HashMap<>();
+        DateTime dtFirstDay, dtLastDay;
+        dt = dt.millisOfDay().withMinimumValue();
+        dtFirstDay = new DateTime(dt).withDayOfMonth(1);
+        dtLastDay = new DateTime(dt).dayOfMonth().withMaximumValue().hourOfDay().withMaximumValue()
+                .minuteOfHour().withMaximumValue();
+
+        if(dtFirstDay.getDayOfWeek() > 4){//jueves, pasamos a la siguiente semana
+            dtFirstDay = dtFirstDay.plusWeeks(1).withDayOfWeek(1);
+        }else{//cogemos toda la semana desde el lunes, siendo del mes pasado
+            dtFirstDay = dtFirstDay.withDayOfWeek(1);
+        }
+        month.put(FIRST_DAY, dtFirstDay);
+        if(dtLastDay.getDayOfWeek() >= 4){//cogemos el domingo
+            dtLastDay = dtLastDay.withDayOfWeek(7);
+        }else{
+            dtLastDay = dtLastDay.minusWeeks(1).withDayOfWeek(7);
+        }
+        month.put(LAST_DAY, dtLastDay);
+        if(dt.isAfter(month.get(LAST_DAY))){
+            month = getStartEndMonthFromDay(dt.plusDays(15));
+        }else if(dt.isBefore(month.get(FIRST_DAY))){
+            month = getStartEndMonthFromDay(dt.minusDays(15));
+        }
+        return month;
     }
 }

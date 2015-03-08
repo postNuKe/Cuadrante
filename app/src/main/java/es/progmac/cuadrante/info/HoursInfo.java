@@ -10,24 +10,31 @@ public class HoursInfo {
 	private double reference;
 	private double f2;
 	private double f2_hours;
-	private int guardias;
-	
+    private int guardias;
+    private int mWeeks;
+    private int mDeductibleWeeks;
+    private int mDeductibleDays;
+
 	public HoursInfo() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public HoursInfo(int id, int year, int month, 
-			double hours, double reference, double f2, int guardias, double f2_hours){
-		_hoursInfo(id, year, month, hours, reference, f2, guardias, f2_hours);
+	public HoursInfo(int id, int year, int month, double hours, double reference, double f2,
+                     int guardias, double f2_hours, int weeks, int deductibleWeeks,
+                     int deductibleDays){
+		_hoursInfo(id, year, month, hours, reference, f2, guardias, f2_hours, weeks,
+                deductibleWeeks, deductibleDays);
 	}
 	
-	public HoursInfo(int year, int month, 
-			double hours, double reference, double f2, int guardias, double f2_hours){
-		_hoursInfo(0, year, month, hours, reference, f2, guardias, f2_hours);
+	public HoursInfo(int year, int month, double hours, double reference, double f2,
+                     int guardias, double f2_hours, int weeks, int deductibleWeeks, int deductibleDays){
+		_hoursInfo(0, year, month, hours, reference, f2, guardias, f2_hours, weeks,
+                deductibleWeeks, deductibleDays);
 	}
 	
-	private void _hoursInfo(int id, int year, int month, 
-			double hours, double reference, double f2, int guardias, double f2_hours){
+	private void _hoursInfo(int id, int year, int month, double hours, double reference, double f2,
+                            int guardias, double f2_hours, int weeks, int deductibleWeeks,
+                            int deductibleDays){
 		setId(id);
 		setYear(year);
 		setMonth(month);
@@ -35,7 +42,10 @@ public class HoursInfo {
 		setReference(reference);
 		setF2(f2);
 		setGuardias(guardias);
-		setF2Hours(f2_hours);
+        setF2Hours(f2_hours);
+        setWeeks(weeks);
+        setDeductibleWeeks(deductibleWeeks);
+        setDeductibleDays(deductibleDays);
 	}
 	
 	public int getId(){
@@ -93,8 +103,27 @@ public class HoursInfo {
 	public void setF2Hours(double f2_hours){
 		this.f2_hours = f2_hours;
 	}
-	
-	public double getF2Percent(){
+
+    /**
+     * Numero de semanas que tiene el mes
+     */
+    public int getWeeks(){ return mWeeks; }
+    public void setWeeks(int weeks){ this.mWeeks = weeks; }
+
+    public int getDeductibleWeeks(){ return mDeductibleWeeks; }
+    public void setDeductibleWeeks(int weeks){
+        this.mDeductibleWeeks = weeks;
+    }
+
+    public int getDeductibleDays(){
+        return mDeductibleDays;
+    }
+    public void setDeductibleDays(int days){
+        this.mDeductibleDays = days;
+    }
+
+
+    public double getF2Percent(){
 		double percent = (getF2Hours() * 100)/getHours();
 		if(percent > 0) return percent;
 		else return 0;

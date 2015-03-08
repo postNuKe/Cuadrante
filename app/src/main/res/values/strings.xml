@@ -21,7 +21,7 @@
     <string name="alert_title">Cuadrante. No has llegado al F2</string>
     <string name="alerts">A</string>
     <string name="all">Todos</string>
-    <string name="app_versionDate">1 de marzo de 2015</string>
+    <string name="app_versionDate">8 de marzo de 2015</string>
     <string name="app_versionName">3.0</string>
     <string name="app_name">Cuadrante</string>
     <string name="app_email_address">progmac.es@gmail.com</string>
@@ -242,9 +242,12 @@
     <string name="record">Historial</string>
     <string name="resume">Resumen</string>
     <string name="resume_deductible_day">Día deducible</string>
+    <string name="resume_he">Horas de exceso:</string>
+    <string name="resume_he40" formatted="false"><![CDATA[<b>Siguiente mes:</b> %s días libres - %s horas]]></string>
     <string name="resume_holidays" formatted="false">%s (gastados: %s)</string>
     <string name="resume_is_guardia_combinada">Guardia combinada</string>
-    <string name="resume_total_time" formatted="false">%s / %s referencia / %s</string>
+    <!-- <string name="resume_total_time" formatted="false">%s / %s referencia / %s</string> -->
+    <string name="resume_total_time" formatted="false">%s</string>
     <string name="resume_type_day_1">No computable 5.35</string>
     <string name="resume_type_day_2">Especial 7.5</string>
     <string name="resume_type_day_3">No computable -1 dia natural</string>
@@ -327,9 +330,9 @@
     <string name="tomorrow">Mañana</string>
     <string name="total_days">Total días:</string>
     <string name="total_f2_hours">Horas nocturnas y festivas:</string>
-    <string name="total_hours">Horas del mes:</string>
-    <string name="total_quarter_hours">Horas trimestre:</string>
-    <string name="total_quarter2_hours">Horas cuatrimestre:</string>
+    <string name="total_hours">Horas trabajadas del mes:</string>
+    <string name="total_quarter_hours">Horas trabajadas trimestre:</string>
+    <string name="total_quarter2_hours">Horas trabajadas cuatrimestre:</string>
     <string name="total_price">Precio total:</string>
     <string name="turn_mode_block">En bloque</string>
     <string name="turn_mode_date_range">Hasta fecha</string>

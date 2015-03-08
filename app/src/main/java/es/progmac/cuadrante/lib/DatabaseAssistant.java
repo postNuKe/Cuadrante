@@ -528,6 +528,7 @@ public class DatabaseAssistant
 		    	        						record.get(DatabaseHandler.HOTEL_COLUMN_LAUNDRY));
 		    	        				_db2.insertHotel(hotel);	    	        				
 		    	        			}else if(table_name.equals(DatabaseHandler.HOURS_TABLE_NAME)){
+                                        /*
 		    	        				HoursInfo hours = new HoursInfo(
 		    	        						Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_ID)), 
 		    	        						Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_YEAR)), 
@@ -536,10 +537,14 @@ public class DatabaseAssistant
 		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_REFERENCE)),
 		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_F2)), 
 		    	        						Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_GUARDIAS)),
-		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_F2_HOURS)));
+		    	        						Double.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_F2_HOURS)),
+                                                Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_DEDUCTIBLE_WEEKS)),
+                                                Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_WEEKS)),
+                                                Integer.valueOf(record.get(DatabaseHandler.HOURS_COLUMN_DEDUCTIBLE_DAYS)));
                                         //solo guardamos las horas desde el nuevo cambio de OG
                                         if(Integer.parseInt(file_attr_dbversion ) > 11)
 		    	        				    _db2.insertHours(hours);
+		    	        				    */
 		    	        			}else if(table_name.equals(DatabaseHandler.TURN_TABLE_NAME)){
 		    	        				TurnInfo turn = new TurnInfo(
 		    	        						Integer.valueOf(record.get(DatabaseHandler.TURN_COLUMN_ID)), 
