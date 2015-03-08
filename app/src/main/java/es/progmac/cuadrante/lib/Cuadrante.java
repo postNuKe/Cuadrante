@@ -53,7 +53,7 @@ public class Cuadrante{
 	/**
 	 * Para que los debug funcionen o no, ya que consumen recursos y no nos interesa en producción 
 	 */
-	public static boolean DEBUG_MODE = true;
+	public static boolean DEBUG_MODE = false;
 	//cuadrante.java
 	//layout/dialog_whatsnew.xml
 	//AndroidManifiest.xml

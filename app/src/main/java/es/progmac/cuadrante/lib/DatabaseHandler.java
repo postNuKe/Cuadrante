@@ -376,12 +376,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(sqlColumns + " VALUES (\"VACACIONES\", \"VAC\", -6100697, -16777216, 1, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"DESCANSO SEMANAL\", \"DS\", -16139282, -16777216, 1, 0, 0);");
         db.execSQL(sqlColumns + " VALUES (\"DESCANSO SINGULARIZADO\", \"DSI\", -16139282, -16777216, 0, 0, 1);");
-        db.execSQL(sqlColumns + " VALUES (\"DESCANSO FESTIVO\", \"DF\", -16139282, -16777216, 0, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"DESCANSO COMPENSATORIO\", \"DC\", -16139282, -16777216, 0, 0, 1);");
+        db.execSQL(sqlColumns + " VALUES (\"LIBRE FESTIVO\", \"DF\", -16139282, -16777216, 0, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"LIBRE COMPENSATORIO\", \"LC\", -16139282, -16777216, 0, 0, 0);");
 		db.execSQL(sqlColumns + " VALUES (\"PERMISO\", \"PER\", -10448442, -16777216, 1, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"JUICIO\", \"JUI\", -9226445, -1, 0, 0, 0);");
-        db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A0\", -15454022, -1, 0, 1, 0);");
+        db.execSQL(sqlColumns + " VALUES (\"ALERTA\", \"A\", -15454022, -1, 0, 1, 0);");
         db.execSQL(sqlColumns + " VALUES (\"GUARDIA LOCALIZACION\", \"GL\", -15454022, -1, 0, 1, 0);");
         db.execSQL(sqlColumns + " VALUES (\"BAJA\", \"BAJ\", -287128, -16777216, 1, 0, 1);");
         db.execSQL(sqlColumns + " VALUES (\"INDISPOSICION\", \"IND\", -287128, -16777216, 1, 0, 1);");//13
